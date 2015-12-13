@@ -8,11 +8,14 @@ CREATE TABLE ShareFile(
 	fileSize		int,
 	updateTime		datetime,
 	file_			varbinary(max),
-	userId			int				not null,
-	teamId			int				not null,
-	upperFolderId	int				
+	userId			int,				
+	teamId			int,			
+	upperFolderId	int,				
 	foreign key (upperFolderId) references ShareFile (fileId)
 );
+ INSERT INTO ShareFile VALUES ( 'WebApp®Ú¥Ø¿ý' , '¸ê®Æ§¨' ,null ,null ,null,null,null, null);
+
+
 
 /*
 DROP TABLE EMPLOYEES;
@@ -32,6 +35,9 @@ CREATE TABLE EMPLOYEES
       CONSTRAINT     emp_email_uk  UNIQUE (email) ,
    --   CONSTRAINT     emp_dept_fk  FOREIGN KEY (department_id) REFERENCES departments ,
    --   CONSTRAINT     emp_job_fk FOREIGN KEY (job_id) REFERENCES jobs (job_id) ,
-      CONSTRAINT     emp_manager_fk FOREIGN KEY (manager_id) REFERENCES employees)
+      CONSTRAINT     emp_manager_fk FOREIGN KEY (manager_id) REFERENCES employees (EMPLOYEE_ID))
+
+	  INSERT INTO employees VALUES ( 100, 'Steven' , 'King' , 'SKING' , '515.123.4567', '1987-06-17', 
+'AD_PRES' , 24000, NULL, NULL, 90 );
 go
 */

@@ -1,13 +1,8 @@
 package liting.model;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Date;
-
-import javax.naming.BinaryRefAddr;
-import javax.websocket.Decoder.Binary;
+import java.sql.Timestamp;
 
 public class ShareFileBean
 {
@@ -18,8 +13,8 @@ public class ShareFileBean
 //            fileSize        int,
 //            updateTime      datetime,
 //            file_           varbinary(max),
-//            userId          int             not null,
-//            teamId          int             not null,
+//            userId          int ,
+//            teamId          int ,
 //            upperFolderId   int             
 //            foreign key (upperFolderId) references ShareFile (fileId)
 //        );
@@ -27,11 +22,11 @@ public class ShareFileBean
     private String fileName; //not null:後端產生
     private String fileType; //not null:後端產生
     private int fileSize;
-    private Date updateTime;
+    private Timestamp updateTime;
     private byte[] file;
-    private int userId; //not null:從前端取得
-    private int teamId; //not null:從前端取得
-    private int upperFolderId;
+    private int userId; //從前端取得
+    private int teamId; //從前端取得
+    private int upperFolderId=1; //從前端取得
     
     
     public ShareFileBean() {
@@ -40,29 +35,21 @@ public class ShareFileBean
     public ShareFileBean(int userId,int teamId,String filePath) {
         this.userId = userId;
         this.teamId = teamId;
-        setFileName(filePath);
-        setFileType(filePath);
-        setFileSize(filePath);
-        setUpdateTime();
+        insertSetFileName(filePath);
+        insertSetFileType(filePath);
+        insertSetFileSize(filePath);
+        insertSetUpdateTime();
+    }
+    public ShareFileBean(int userId,int teamId,String folderName,int upperFolderId) {
+        this.userId = userId;
+        this.teamId = teamId;
+        this.fileName = folderName;
+        this.fileType = "資料夾";
+        this.upperFolderId = upperFolderId;
     }
 
-    public int getFileId()
-    {
-        return fileId;
-    }
-
-    //FileId SQL自動產生
-    // public void setFileId(int fileId)
-    // {
-    // this.fileId = fileId;
-    // }
-
-    public String getFileName()
-    {
-        return fileName;
-    }
-
-    private void setFileName(String filePath)
+    
+    private void insertSetFileName(String filePath)
     {
         int end = new String(filePath).lastIndexOf(".");
         int begin = new String(filePath).lastIndexOf("\\");
@@ -70,12 +57,7 @@ public class ShareFileBean
         this.fileName = filePath.substring(begin+1,end);
     }
 
-    public String getFileType()
-    {
-        return fileType;
-    }
-
-    private void setFileType(String filePath)
+    private void insertSetFileType(String filePath)
     {
         int end = new String(filePath).lastIndexOf(".");
         
@@ -83,77 +65,97 @@ public class ShareFileBean
         this.fileType =new String(this.fileType).toUpperCase();
     }
 
-    public int getFileSize()
-    {
-        return fileSize;
-    }
-
-    private void setFileSize(String filePath)
+    private void insertSetFileSize(String filePath)
     {
         File file = new File(filePath);        
         this.fileSize = (int) file.length();
     }
 
-    public Date getUpdateTime()
+    private void insertSetUpdateTime()
+    {
+//        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
+//        Date now = new Date();
+//        this.updateTime = (Date)sdfDate.format(now);
+        java.util.Date date= new java.util.Date();
+        this.updateTime =new Timestamp(date.getTime());
+    }
+
+
+     
+    
+    
+    public int getFileId()
+    {
+        return fileId;
+    }
+    public void setFileId(int fileId)
+    {
+        this.fileId = fileId;
+    }
+    public String getFileName()
+    {
+        return fileName;
+    }
+    public void setFileName(String fileName)
+    {
+        this.fileName = fileName;
+    }
+    public String getFileType()
+    {
+        return fileType;
+    }
+    public void setFileType(String fileType)
+    {
+        this.fileType = fileType;
+    }
+    public int getFileSize()
+    {
+        return fileSize;
+    }
+    public void setFileSize(int fileSize)
+    {
+        this.fileSize = fileSize;
+    }
+    public Timestamp getUpdateTime()
     {
         return updateTime;
     }
-
-    private void setUpdateTime()
+    public void setUpdateTime(Timestamp updateTime)
     {
-        this.updateTime = new Date(System.currentTimeMillis());
+        this.updateTime = updateTime;
     }
-
     public byte[] getFile()
     {
         return file;
     }
-
-    public void setFile(String filePath)
+    public void setFile(byte[] file)
     {
         this.file = file;
     }
-
     public int getUserId()
     {
         return userId;
     }
-
     public void setUserId(int userId)
     {
         this.userId = userId;
     }
-
     public int getTeamId()
     {
         return teamId;
     }
-
     public void setTeamId(int teamId)
     {
         this.teamId = teamId;
     }
-
     public int getUpperFolderId()
     {
         return upperFolderId;
     }
-
     public void setUpperFolderId(int upperFolderId)
     {
         this.upperFolderId = upperFolderId;
     }
-
-    private void smallFile(File file) throws IOException {
-        FileInputStream in = new FileInputStream(file);
-        byte[] buffer = new byte[(int) file.length()];
-        in.read(buffer);
-        
-    }
-    
-    
-    
-    
     @Override
     public String toString()
     {
@@ -162,24 +164,34 @@ public class ShareFileBean
 
     public static void main(String[] args)
     {
-        ShareFileBean file = new ShareFileBean();
+        /*ShareFileBean file = new ShareFileBean();
         String filePath = "D:\\測試test\\貓cat4.jpg";
-        file.setFileName(filePath);
+        file.insertSetFileName(filePath);
         boolean testing1 = "貓cat4".equals(file.getFileName());
         System.out.println("testing1:  "+testing1);
         
-        file.setFileType(filePath);
+        file.insertSetFileType(filePath);
         boolean testing2 = "JPG".equals(file.getFileType());
         System.out.println("testing2:  "+testing2);
         
-        file.setFileSize(filePath);
+        file.insertSetFileSize(filePath);
         System.out.println("testing3:  "+file.getFileSize());
         
-        file.setUpdateTime();
-        System.out.println("testing4:  "+file.getUpdateTime());
+        file.insertSetUpdateTime();
+        System.out.println("testing4:  "+file.getUpdateTime());*/
         
-//        boolean testing2 = "JPG".equals(file.getFileType());
-//        System.out.println("testing2:  "+testing2);
+        String filePath = "D:\\測試test\\貓cat4.jpg";
+        ShareFileBean file = new ShareFileBean(1, 1, filePath);
+        boolean testing1 = "貓cat4".equals(file.getFileName());
+        System.out.println("testing1:  "+testing1);
+        boolean testing2 = "JPG".equals(file.getFileType());
+        System.out.println("testing2:  "+testing2);
+        System.out.println("testing3:  "+file.getFileSize());
+        System.out.println("testing4:  "+file.getUpdateTime());
+        System.out.println(file.getUpperFolderId());
+        
+        
+        System.out.println("ShareFileBean main()");
     }
 
 }
