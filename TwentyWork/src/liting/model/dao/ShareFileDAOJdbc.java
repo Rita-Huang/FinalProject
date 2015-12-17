@@ -7,11 +7,15 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import liting.model.ShareFileBean;
+import liting.model.ShareFileDAO;
 
-public class ShareFileDAOJdbc implements Serializable
+public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
 {
     Connection conn;
     private void getConnection() throws SQLException
@@ -25,6 +29,72 @@ public class ShareFileDAOJdbc implements Serializable
             conn.close();
     }
     
+    
+    @Override
+    public List<ShareFileBean> getFileList(int teamId, int upperFolderId)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    private static final String insertStmt = "insert into ShareFile values(?,?,?,?,?,?,?,?)";
+    @Override
+    public ShareFileBean insertFile(int userId, int teamId, int upperFolderId,String filePath)
+    {
+        // TODO Auto-generated method stub
+        ShareFileBean bean = new ShareFileBean(userId, teamId,upperFolderId, filePath);
+//        insertFile(bean,filePath);
+        return null;
+    }
+    
+    @Override
+    public List<ShareFileBean> insertFile(int userId, int teamId,int upperFolderId, String[] filePath)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public ShareFileBean insertFolder(int userId, int teamId, int upperFolderId,String fileName)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public ShareFileBean getGroupFolderTree(int teamId)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public ShareFileBean updateFile(int fileId, int newFolderId,String fileName)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public int[] deleteFile(int[] fileId)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public void downloadFile(int fileId, String savePath)
+    {
+        // TODO Auto-generated method stub
+    }
+    @Override
+    public ShareFileBean copyFile(int fileId, int newFolderId)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public List<ShareFileBean> findFile(int teamId, String queryString,int upperFolderId)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
     public ShareFileDAOJdbc() {
         try
         {
@@ -35,17 +105,8 @@ public class ShareFileDAOJdbc implements Serializable
         }
     }
     
-    private static final String insertStmt = "insert into ShareFile values(?,?,?,?,?,?,?,?)";
-    public int insertFile(int userId,int teamId,String filePath) throws FileNotFoundException {
-        ShareFileBean bean = new ShareFileBean(userId, teamId, filePath);
-        return insertFile(bean,filePath);
-    }
     
-    public int insertFile(int userId,int teamId,String filePath,int upperFolderId) throws FileNotFoundException {
-        ShareFileBean bean = new ShareFileBean(userId, teamId, filePath);
-        bean.setUpperFolderId(upperFolderId);
-        return insertFile(bean,filePath);
-    }
+    
     
     //return 1 : insert成功
     //return -1 : insert失敗
@@ -127,6 +188,33 @@ public class ShareFileDAOJdbc implements Serializable
             e.printStackTrace();
         }
         return result;
+    }
+    private static final String selectFolderStmt = "select fileId , fileName_ , upperFolderId from ShareFile  where teamId = ? and file_ IS  NULL";
+    public List<ShareFileBean> selectFolder(int teamId){
+        List<ShareFileBean> folders = new ArrayList<ShareFileBean>();
+        ShareFileBean bean ;
+        try {
+            PreparedStatement stmt = conn.prepareStatement(selectFolderStmt);
+            stmt.setInt(1,teamId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                bean = new ShareFileBean();
+                bean.setFileId(rs.getInt(1));
+                bean.setFileName(rs.getString(2));  
+                bean.setUpperFolderId(rs.getInt(3));
+                folders.add(bean);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+        return folders;
+    }
+    
+    private static final String downloadFileStmt = "select file_ from ShareFile  where fileId = ?";
+    public ShareFileBean downloadFile(int fileId){
+        ShareFileBean bean = new ShareFileBean();
+        
+        return null;
     }
     
     public static void main(String[] args) throws FileNotFoundException, SQLException

@@ -14,8 +14,15 @@ CREATE TABLE ShareFile(
 	foreign key (upperFolderId) references ShareFile (fileId)
 );
  INSERT INTO ShareFile VALUES ( 'WebApp根目錄' , '資料夾' ,null ,null ,null,null,null, null);
-
-
+ INSERT INTO ShareFile VALUES ( 'Group1根目錄' , '資料夾' ,null ,null ,null,1,1, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2根目錄' , '資料夾' ,null ,null ,null,1,2, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2-1' , '資料夾' ,null ,null ,null,1,2, 3);
+ INSERT INTO ShareFile VALUES ( 'Group1-1' , '資料夾' ,null ,null ,null,2,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-2' , '資料夾' ,null ,null ,null,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-3' , '資料夾' ,null ,null ,null,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-1-1' , '資料夾' ,null ,null ,null,1,1, 4);
+ INSERT INTO ShareFile VALUES ( 'Group1-1-2' , '資料夾' ,null ,null ,null,2,1, 4);
+ INSERT INTO ShareFile VALUES ( 'Group1-2-1' , '資料夾' ,null ,null ,null,3,1, 5);
 
 /*
 DROP TABLE EMPLOYEES;
