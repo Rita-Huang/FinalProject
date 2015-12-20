@@ -10,7 +10,7 @@ CREATE TABLE ShareFile(
 	userId			int,				
 	teamId			int,			
 	upperFolderId	int,				
-	CONSTRAINT FK_Products_upperFolderId  foreign key (upperFolderId) references ShareFile (fileId) ON UPDATE NO ACTION
+	CONSTRAINT FK_Products_upperFolderId  foreign key (upperFolderId) references ShareFile (fileId) 
 );
  INSERT INTO ShareFile VALUES ( 'WebApp根目錄' , '資料夾' ,null ,null ,null,null, null);
  INSERT INTO ShareFile VALUES ( 'Group1根目錄' , '資料夾' ,null ,null ,1,1, 1);
