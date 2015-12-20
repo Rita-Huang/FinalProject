@@ -7,37 +7,108 @@ CREATE TABLE ShareFile(
 	fileType		varchar(10)		not null,
 	fileSize		int,
 	updateTime		datetime,
-	file_			varbinary(max),
 	userId			int,				
 	teamId			int,			
 	upperFolderId	int,				
-	foreign key (upperFolderId) references ShareFile (fileId)
+	CONSTRAINT FK_Products_upperFolderId  foreign key (upperFolderId) references ShareFile (fileId) ON UPDATE NO ACTION
 );
- INSERT INTO ShareFile VALUES ( 'WebApp根目錄' , '資料夾' ,null ,null ,null,null,null, null);
+ INSERT INTO ShareFile VALUES ( 'WebApp根目錄' , '資料夾' ,null ,null ,null,null, null);
+ INSERT INTO ShareFile VALUES ( 'Group1根目錄' , '資料夾' ,null ,null ,1,1, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2根目錄' , '資料夾' ,null ,null ,1,2, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2-1' , '資料夾' ,null ,null ,1,2, 3);
+ INSERT INTO ShareFile VALUES ( 'Group1-1' , '資料夾' ,null ,null ,2,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-2' , '資料夾' ,null ,null ,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-3' , '資料夾' ,null ,null ,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group2-1-1' , '資料夾' ,null ,null ,1,2, 4);
+ INSERT INTO ShareFile VALUES ( 'Group2-1-2' , '資料夾' ,null ,null ,2,2, 4);
+ INSERT INTO ShareFile VALUES ( 'Group1-1-1' , '資料夾' ,null ,null ,3,1, 5);--10
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 6)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 6)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 7)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 7)--17
 
 
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 4)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 4)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 8)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 9)--21
 
-/*
-DROP TABLE EMPLOYEES;
-CREATE TABLE EMPLOYEES
-    ( EMPLOYEE_ID    INT          CONSTRAINT emp_emp_id_pk PRIMARY KEY,
-      FIRST_NAME     VARCHAR(20),
-      LAST_NAME      VARCHAR(25)  CONSTRAINT emp_last_name_nn  NOT NULL,
-      EMAIL          VARCHAR(25)  CONSTRAINT emp_email_nn  NOT NULL,
-      PHONE_NUMBER   VARCHAR(20),
-      HIRE_DATE      DATE	  CONSTRAINT emp_hire_date_nn  NOT NULL,
-      JOB_ID         VARCHAR(10)  CONSTRAINT emp_job_nn  NOT NULL,
-      SALARY         INT, 
-      COMMISSION_PCT decimal(2,2) ,
-      MANAGER_ID     INT,
-      DEPARTMENT_ID  INT,
-      CONSTRAINT     emp_salary_min  CHECK (salary > 0)     ,
-      CONSTRAINT     emp_email_uk  UNIQUE (email) ,
-   --   CONSTRAINT     emp_dept_fk  FOREIGN KEY (department_id) REFERENCES departments ,
-   --   CONSTRAINT     emp_job_fk FOREIGN KEY (job_id) REFERENCES jobs (job_id) ,
-      CONSTRAINT     emp_manager_fk FOREIGN KEY (manager_id) REFERENCES employees (EMPLOYEE_ID))
+ INSERT INTO ShareFile VALUES ( 'Group3根目錄' , '資料夾' ,null ,null ,1,3, 1);
 
-	  INSERT INTO employees VALUES ( 100, 'Steven' , 'King' , 'SKING' , '515.123.4567', '1987-06-17', 
-'AD_PRES' , 24000, NULL, NULL, 90 );
-go
-*/
+ SELECT * FROM ShareFile
+
+
+ create procedure gen_folder_tree ( @v_teamId  int)
+  AS
+  BEGIN
+	 WITH FileTree (fileId, fileName_,fileType,fileSize, teamId,upperFolderId , fileLevel)AS 
+	(
+		SELECT fileId, fileName_,fileType,fileSize, teamId,upperFolderId , 1 as level
+		FROM   ShareFile
+		WHERE  fileSize IS NULL
+		AND upperFolderId=1 --IS NULL
+		AND teamId =@v_teamId
+
+		UNION ALL
+
+		SELECT shr.fileId , shr.fileName_ ,shr.fileType, shr.fileSize,shr.teamId, shr.upperFolderId, tree.fileLevel + 1
+		FROM ShareFile shr INNER JOIN FileTree tree
+		ON shr.upperFolderId  = tree.fileId 
+		WHERE  shr.fileSize IS NULL 
+	)
+	SELECT * FROM FileTree 
+	order by fileLevel 
+  END;
+
+ -- exec gen_folder_tree 1
+ 
+
+ create procedure find_file_by_fileName ( @v_fileId  int,@v_queryString nvarchar(50))
+  AS
+  BEGIN
+ WITH findFile (fileId, fileName_,fileType,fileSize,updateTime,userId, teamId,upperFolderId , fileLevel)AS 
+	(
+		SELECT fileId, fileName_,fileType,fileSize,updateTime,userId, teamId,upperFolderId , 1 as level
+		FROM   ShareFile
+		WHERE  fileId=@v_fileId
+
+		UNION ALL
+
+		SELECT shr.fileId , shr.fileName_ , shr.fileType , shr.fileSize , shr.updateTime , shr.userId,shr.teamId, shr.upperFolderId, tree.fileLevel + 1
+		FROM ShareFile shr INNER JOIN findFile tree
+		ON shr.upperFolderId  = tree.fileId 
+		
+	)
+	SELECT * FROM findFile
+	WHERE  fileName_ LIKE '%'+@v_queryString+'%' 
+	and fileLevel>1
+	order by fileLevel 
+ END;
+
+ -- exec find_file_by_fileName 2,'g'
+
+ create procedure find_delete_files ( @v_fileId  int)
+  AS
+  BEGIN
+ WITH findFile (fileId, fileLevel)AS 
+	(
+		SELECT fileId , 1 as level
+		FROM   ShareFile
+		WHERE  fileId= @v_fileId
+
+		UNION ALL
+
+		SELECT shr.fileId , tree.fileLevel + 1 
+		FROM ShareFile shr INNER JOIN findFile tree
+		ON shr.upperFolderId  = tree.fileId 
+		
+	)
+	DELETE ShareFile 
+	WHERE fileId IN(
+	SELECT fileId FROM findFile
+	)
+ END;
+  --exec find_delete_files 3

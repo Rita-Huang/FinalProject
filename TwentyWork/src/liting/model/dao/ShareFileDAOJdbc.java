@@ -4,15 +4,28 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+
+import liting.model.FolderTreeBean;
 import liting.model.ShareFileBean;
+import liting.model.ShareFileDAO;
+import sun.awt.datatransfer.DataTransferer.CharsetComparator;
 
-public class ShareFileDAOJdbc implements Serializable
+public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
 {
+    private static final long serialVersionUID = 1L;
+    
     Connection conn;
     private void getConnection() throws SQLException
     {
@@ -25,6 +38,227 @@ public class ShareFileDAOJdbc implements Serializable
             conn.close();
     }
     
+    
+    private static final String SELETE_FILE_LIST = "select * from ShareFile where upperFolderId=?";
+    @Override
+    public List<ShareFileBean> getFileList(int upperFolderId)
+    {//testing#5
+        List<ShareFileBean> fileList = new ArrayList<ShareFileBean>();
+        try
+        {
+            PreparedStatement stmt = conn.prepareStatement(SELETE_FILE_LIST);
+            stmt.setInt(1, upperFolderId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                ShareFileBean bean = new ShareFileBean();
+                bean.setFileId(rs.getInt(1));
+                bean.setFileName(rs.getString(2));
+                bean.setFileType(rs.getString(3));
+                bean.setFileSize(rs.getInt(4));
+                bean.setUpdateTime(rs.getTimestamp(5));
+                bean.setUserId(rs.getInt(6));
+                bean.setTeamId(rs.getInt(7));
+                bean.setUpperFolderId(rs.getInt(8));
+                fileList.add(bean);
+            }
+            
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return fileList;
+    }
+    
+    
+    
+    private static final String INSERT = "insert into ShareFile values(?,?,?,?,?,?,?)";
+    @Override
+    public ShareFileBean insertFile(int userId, int teamId, int upperFolderId,String filePath)
+    {//testing#1
+        ShareFileBean bean = new ShareFileBean(userId, teamId,upperFolderId, filePath);
+        return insert(bean);
+    }
+    
+    @Override
+    public List<ShareFileBean> insertFile(int userId, int teamId,int upperFolderId, String[] filePath)
+    {//testing#2
+        List<ShareFileBean> beans = new ArrayList<ShareFileBean>();
+        for(int i=0;i<filePath.length;i++) {
+            ShareFileBean bean = new ShareFileBean(userId, teamId,upperFolderId, filePath[i]);
+            beans.add(insert(bean));
+        }
+        return beans;
+    }
+    
+    
+    @Override
+    public ShareFileBean insertFolder(int userId, int teamId, int upperFolderId,String folderName)
+    {//testing#3
+        ShareFileBean bean =new ShareFileBean(userId,teamId,folderName,upperFolderId);
+        return insert(bean);
+    }
+    
+    @Override
+    public  ShareFileBean insertFolder(int userId,int teamId) 
+    {//testing#4
+        ShareFileBean bean =new ShareFileBean(userId,teamId,"Group"+teamId+"根目錄",1);
+        return insert(bean);
+    }
+    
+    private static final String FOLDER_TREE = "{call gen_folder_tree (?)}";
+    @Override
+    public List<FolderTreeBean> getGroupFolderTree(int teamId)
+    {//testing#11
+        List<FolderTreeBean> result = new ArrayList<FolderTreeBean>();
+        try
+        {
+            CallableStatement stmt=conn.prepareCall(FOLDER_TREE);
+            stmt.setInt(1, teamId);
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+            while(rs.next()) {
+                FolderTreeBean bean = new FolderTreeBean();
+              //FileTree (fileId, fileName_,fileType,fileSize, teamId,upperFolderId , fileLevel)
+                bean.setFileId(rs.getInt(1));
+                bean.setFileName(rs.getString(2));
+                bean.setUpperFolderId(rs.getInt(6));
+                bean.setFileLevel(rs.getInt(7));
+                result.add(bean);
+            }
+            
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+    private static final String UPDATE = "update ShareFile set fileName_ = ?, upperFolderId = ?  where fileId = ?";
+    @Override
+    public ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName)
+    {//testing#7
+        try
+        {
+            PreparedStatement stmt = conn.prepareStatement(UPDATE);
+            
+            if(bean.getFileSize()==0) {
+                stmt.setNString(1, newFileName);
+            }else {
+                stmt.setNString(1, newFileName+"."+bean.getFileType());
+            }
+            
+            stmt.setInt(2, newFolderId);
+            stmt.setInt(3, bean.getFileId());
+            int rs = stmt.executeUpdate();
+            if(rs==0) {
+                System.out.println("Update Fail");
+                return null;
+            }else {
+                bean.setFileName(newFileName);
+                bean.setUpperFolderId(newFolderId);
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        return bean;
+    }
+    
+    private static final String DELETE = "delete from ShareFile where fileId = ?";
+    private static final String DELETE_FOLDER = "{call find_delete_files(?)}";
+    @Override
+    public int deleteFile(ShareFileBean bean) 
+    {//testing#8
+        return deleteFile(bean.getFileId(),bean.getFileSize()==0);
+    }
+    
+    
+    
+    private int deleteFile(int fileId,boolean isFolder) 
+    {//testing#8
+        int result ;
+        try
+        {
+            if (!isFolder)
+            {
+                PreparedStatement stmt = conn.prepareStatement(DELETE);
+                stmt.setInt(1, fileId);
+                result = stmt.executeUpdate();
+                if (result == 1)//delete 成功
+                {
+                    return fileId;
+                }
+
+            } else
+            {
+             // create procedure find_delete_files ( @v_fileId int)
+                CallableStatement stmt = conn.prepareCall(DELETE_FOLDER);
+                stmt.setInt(1, fileId);
+                stmt.execute();
+                int couunt = stmt.getUpdateCount();
+                if(couunt>0) {//執行刪除成功
+                    return fileId;
+                }
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    @Override
+    public int[] deleteFile(List<ShareFileBean> bean)
+    {//testing#12
+        int[] resultset = new int[bean.size()];
+        for(int i =0;i<bean.size();i++){
+            int fileId = deleteFile(bean.get(i));
+            resultset[i]=fileId;
+        }
+        return resultset;
+    }
+    
+    @Override
+    public ShareFileBean copyFile(ShareFileBean bean, int newFolderId)
+    {//testing#10
+    	bean.setUpperFolderId(newFolderId);
+        return insert(bean);
+    }
+    
+    private static final String FIND = "{call find_file_by_fileName (?,?)}";
+    @Override
+    public List<ShareFileBean> findFileByFileName(String queryString,int upperFolderId)
+    {//testing#12
+        List<ShareFileBean> result = new ArrayList<ShareFileBean>();
+        try
+        {
+            CallableStatement stmt=conn.prepareCall(FIND);
+            stmt.setInt(1, upperFolderId);
+            stmt.setString(2, queryString);
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+            while(rs.next()) {
+                ShareFileBean bean = new ShareFileBean();
+                //findFile (fileId, fileName_,fileType,fileSize,updateTime,userId, teamId,upperFolderId , fileLevel)
+                bean.setFileId(rs.getInt(1));
+                bean.setFileName(rs.getString(2));
+                bean.setFileType(rs.getString(3));
+                bean.setFileSize(rs.getInt(4));
+                bean.setUpdateTime(rs.getTimestamp(5));
+                bean.setUserId(rs.getInt(6));
+                bean.setTeamId(rs.getInt(7));
+                bean.setUpperFolderId(rs.getInt(8));
+                result.add(bean);
+            }
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        return result;
+    }
+    
     public ShareFileDAOJdbc() {
         try
         {
@@ -35,108 +269,126 @@ public class ShareFileDAOJdbc implements Serializable
         }
     }
     
-    private static final String insertStmt = "insert into ShareFile values(?,?,?,?,?,?,?,?)";
-    public int insertFile(int userId,int teamId,String filePath) throws FileNotFoundException {
-        ShareFileBean bean = new ShareFileBean(userId, teamId, filePath);
-        return insertFile(bean,filePath);
-    }
     
-    public int insertFile(int userId,int teamId,String filePath,int upperFolderId) throws FileNotFoundException {
-        ShareFileBean bean = new ShareFileBean(userId, teamId, filePath);
-        bean.setUpperFolderId(upperFolderId);
-        return insertFile(bean,filePath);
-    }
     
-    //return 1 : insert成功
-    //return -1 : insert失敗
-    public int insertFile(ShareFileBean bean,String filePath) throws FileNotFoundException {
-        int result = -1;
+    /**
+     * 
+     * @param ShareFileBean
+     * @return ShareFileBean 會把Sql server自動產生的PK值設定回bean裡
+     */
+    private ShareFileBean insert(ShareFileBean bean) 
+    {//testing#1
         try {
-            PreparedStatement stmt = conn.prepareStatement(insertStmt);
-            
-            File f = new File(filePath);
-            FileInputStream fis = new FileInputStream(f);
+            PreparedStatement stmt = conn.prepareStatement(INSERT,Statement.RETURN_GENERATED_KEYS);
             
             stmt.setNString(1,bean.getFileName());
             stmt.setString(2, bean.getFileType());
-            stmt.setInt(3, bean.getFileSize());
-            stmt.setObject(4, bean.getUpdateTime());
-            stmt.setBinaryStream(5, fis, f.length());
-            stmt.setInt(6, bean.getUserId());
-            stmt.setInt(7, bean.getTeamId());
-            stmt.setInt(8, bean.getUpperFolderId());
-            result = stmt.executeUpdate();
             
+            if(bean.getFileSize()==0) {
+                stmt.setNull(3, java.sql.Types.INTEGER);
+                stmt.setNull(4, java.sql.Types.DATE);
+            }else {
+                stmt.setInt(3, bean.getFileSize());
+                stmt.setObject(4, bean.getUpdateTime());
+            }
+            
+            stmt.setInt(5, bean.getUserId());
+            stmt.setInt(6, bean.getTeamId());
+            stmt.setInt(7, bean.getUpperFolderId());
+            int result = stmt.executeUpdate();
+            if(result ==0) {
+                System.out.println("Creating user failed, no rows affected.");
+                return bean=null;
+            }else {
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
+                if(generatedKeys.next()) {
+                    bean.setFileId(generatedKeys.getInt(1));
+                }else {
+                    System.out.println("Creating user failed, no ID obtained.");
+                    return bean = null;
+                }
+            }
         }catch(SQLException e) {
             e.printStackTrace();
             System.out.println("catch the error: @insertFile()");
         }
-        return result;
+        return bean;
     }
     
-    public int insertFolder(int userId,int teamId,String folderName,int upperFolderId) {
-        int result = -1;
+    private static final String SELECT_BY_FILEID = "select * from ShareFile where fileId=?";
+    private ShareFileBean selectByFileId(int fileId) 
+    {//testing#6
+        ShareFileBean bean = new ShareFileBean();
         try
         {
-            ShareFileBean bean = new ShareFileBean(userId, teamId, folderName,upperFolderId);
-            PreparedStatement stmt = conn.prepareStatement(insertStmt);
-            stmt.setNString(1,bean.getFileName());
-            stmt.setString(2, bean.getFileType());
-            stmt.setNull(3, java.sql.Types.INTEGER);
-            stmt.setNull(4, java.sql.Types.DATE);
-            stmt.setNull(5, java.sql.Types.VARBINARY);
-            stmt.setInt(6, bean.getUserId());
-            stmt.setInt(7, bean.getTeamId());
-            stmt.setInt(8, bean.getUpperFolderId());
-            result = stmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-            System.out.println("catch the error: @insertFolder()");
-        }
-        return result;
-    }
-    
-    private static final String updateStmt = "update ShareFile set fileName_ = ?, upperFolderId = ?  where fileId = ?";
-    public int updateFile(String fileName,int upperFolderId,int fileId) {
-        int result = -1;
-        try
-        {
-            PreparedStatement stmt = conn.prepareStatement(updateStmt);
-            stmt.setNString(1, fileName);
-            stmt.setInt(2, upperFolderId);
-            stmt.setInt(3, fileId);
-            result = stmt.executeUpdate();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return result;
-    }
-    
-    private static final String deleteStmt = "delete from ShareFile where fileId = ?";
-    public int deleteFile(int fileId) {
-        int result = -1;
-        try
-        {
-            PreparedStatement stmt = conn.prepareStatement(deleteStmt);
+            PreparedStatement stmt = conn.prepareStatement(SELECT_BY_FILEID);
             stmt.setInt(1, fileId);
-            result = stmt.executeUpdate();
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                bean.setFileId(rs.getInt(1));
+                bean.setFileName(rs.getString(2));
+                bean.setFileType(rs.getString(3));
+                bean.setFileSize(rs.getInt(4));
+                bean.setUpdateTime(rs.getTimestamp(5));
+                bean.setUserId(rs.getInt(6));
+                bean.setTeamId(rs.getInt(7));
+                bean.setUpperFolderId(rs.getInt(8));
+            }else {
+                System.out.println("Creating user failed, no rows affected.");
+                return bean=null;
+            }
         } catch (SQLException e)
         {
             e.printStackTrace();
         }
-        return result;
+        return bean;
     }
+    
     
     public static void main(String[] args) throws FileNotFoundException, SQLException
     {
         ShareFileDAOJdbc dao = new ShareFileDAOJdbc();
-//        System.out.println(dao.insertFile(1, 1, "D:\\測試test\\貓cat4.jpg"));
-//        System.out.println(dao.insertFile(1, 1, "D:\\測試test\\貓cat4.jpg",0));
-//        System.out.println(dao.insertFolder(1, 1, "喵的勒", 1));
-        System.out.println(dao.updateFile("喵喵喵", 3, 4));
-        System.out.println(dao.deleteFile(6));
+        String  path= "C:\\測試test\\貓cat1.jpg";
+        String[] paths = {"C:\\測試test\\貓cat1.jpg","C:\\測試test\\貓cat2.jpg","C:\\測試test\\貓cat3.jpg","C:\\測試test\\貓cat4.jpg","C:\\測試test\\貓cat5.jpg","C:\\測試test\\貓cat6.jpg"};
+        
+        
+//        System.out.println(dao.insertFile(1, 1, 2, path));  //testing#1
+//        System.out.println(dao.insertFile(1, 1, 2, paths)); //testing#2
+//        System.out.println(dao.insertFolder(1, 1, 2, "喵的勒")); //testing#3
+//        System.out.println(dao.insertFolder(15,5));//testing#4
+//        
+//        List<ShareFileBean> rs = dao.getFileList(4);
+//        for(Iterator<ShareFileBean> item=rs.iterator();item.hasNext(); ) {
+//            System.out.println(item.next());
+//        }//testing#5
+//        
+//        System.out.println(dao.selectByFileId(11));//testing#6
+//        System.out.println(dao.updateFile(dao.selectByFileId(11), 3, "catcat"));//testing#7
+//        System.out.println(dao.updateFile(dao.selectByFileId(18), 2, "喵喵"));//testing#7
+//        
+//        System.out.println(dao.deleteFile(dao.selectByFileId(6)));//testing#8
+//        System.out.println(dao.deleteFile(dao.selectByFileId(11)));//testing#8
+//
+//        System.out.println(dao.copyFile(dao.selectByFileId(20), 9));//testing#10
+        
+//        List<FolderTreeBean> rs2 = dao.getGroupFolderTree(3);
+//        for(Iterator<FolderTreeBean> item=rs2.iterator();item.hasNext(); ) {
+//            System.out.println(item.next());
+//        }//testing#11
+//        
+//        List<ShareFileBean> rs4 = new ArrayList<ShareFileBean>();
+//        rs4.add(dao.selectByFileId(6));
+//        rs4.add(dao.selectByFileId(7));
+//        rs4.add(dao.selectByFileId(11));
+//        rs4.add(dao.selectByFileId(12));
+//        int[] rs4rs = dao.deleteFile(rs4);
+//        for(int e: rs4rs) {
+//            System.out.println(e);
+//        }//testing#12
+        
+
+        
+        
         dao.closeConnection();
     }
 
