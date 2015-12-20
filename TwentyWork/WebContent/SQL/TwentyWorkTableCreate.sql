@@ -12,16 +12,16 @@ CREATE TABLE ShareFile(
 	upperFolderId	int,				
 	CONSTRAINT FK_Products_upperFolderId  foreign key (upperFolderId) references ShareFile (fileId) ON UPDATE NO ACTION
 );
- INSERT INTO ShareFile VALUES ( 'WebApp�ڥؿ�' , '��Ƨ�' ,null ,null ,null,null, null);
- INSERT INTO ShareFile VALUES ( 'Group1�ڥؿ�' , '��Ƨ�' ,null ,null ,1,1, 1);
- INSERT INTO ShareFile VALUES ( 'Group2�ڥؿ�' , '��Ƨ�' ,null ,null ,1,2, 1);
- INSERT INTO ShareFile VALUES ( 'Group2-1' , '��Ƨ�' ,null ,null ,1,2, 3);
- INSERT INTO ShareFile VALUES ( 'Group1-1' , '��Ƨ�' ,null ,null ,2,1, 2);
- INSERT INTO ShareFile VALUES ( 'Group1-2' , '��Ƨ�' ,null ,null ,3,1, 2);
- INSERT INTO ShareFile VALUES ( 'Group1-3' , '��Ƨ�' ,null ,null ,3,1, 2);
- INSERT INTO ShareFile VALUES ( 'Group2-1-1' , '��Ƨ�' ,null ,null ,1,2, 4);
- INSERT INTO ShareFile VALUES ( 'Group2-1-2' , '��Ƨ�' ,null ,null ,2,2, 4);
- INSERT INTO ShareFile VALUES ( 'Group1-1-1' , '��Ƨ�' ,null ,null ,3,1, 5);--10
+ INSERT INTO ShareFile VALUES ( 'WebApp根目錄' , '資料夾' ,null ,null ,null,null, null);
+ INSERT INTO ShareFile VALUES ( 'Group1根目錄' , '資料夾' ,null ,null ,1,1, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2根目錄' , '資料夾' ,null ,null ,1,2, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2-1' , '資料夾' ,null ,null ,1,2, 3);
+ INSERT INTO ShareFile VALUES ( 'Group1-1' , '資料夾' ,null ,null ,2,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-2' , '資料夾' ,null ,null ,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-3' , '資料夾' ,null ,null ,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group2-1-1' , '資料夾' ,null ,null ,1,2, 4);
+ INSERT INTO ShareFile VALUES ( 'Group2-1-2' , '資料夾' ,null ,null ,2,2, 4);
+ INSERT INTO ShareFile VALUES ( 'Group1-1-1' , '資料夾' ,null ,null ,3,1, 5);--10
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
@@ -35,11 +35,13 @@ CREATE TABLE ShareFile(
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 4)
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 8)
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 9)--21
- INSERT INTO ShareFile VALUES ( 'Group3�ڥؿ�' , '��Ƨ�' ,null ,null ,1,3, 1);
+ INSERT INTO ShareFile VALUES ( 'Group3根目錄' , '資料夾' ,null ,null ,1,3, 1);
 
  SELECT * FROM ShareFile
+ GO
 
-
+   DROP PROCEDURE [dbo].[gen_folder_tree]
+GO
  create procedure gen_folder_tree ( @v_teamId  int)
   AS
   BEGIN
@@ -61,10 +63,11 @@ CREATE TABLE ShareFile(
 	SELECT * FROM FileTree 
 	order by fileLevel 
   END;
-
+  GO
  -- exec gen_folder_tree 1
  
-
+  DROP PROCEDURE [dbo].[find_file_by_fileName]
+GO
  create procedure find_file_by_fileName ( @v_fileId  int,@v_queryString nvarchar(50))
   AS
   BEGIN
@@ -86,9 +89,11 @@ CREATE TABLE ShareFile(
 	and fileLevel>1
 	order by fileLevel 
  END;
-
+ GO
  -- exec find_file_by_fileName 2,'g'
 
+ DROP PROCEDURE [dbo].[find_delete_files]
+GO
  create procedure find_delete_files ( @v_fileId  int)
   AS
   BEGIN
@@ -110,4 +115,5 @@ CREATE TABLE ShareFile(
 	SELECT fileId FROM findFile
 	)
  END;
+ GO
   --exec find_delete_files 3

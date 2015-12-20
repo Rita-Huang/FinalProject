@@ -348,39 +348,39 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         String[] paths = {"C:\\測試test\\貓cat1.jpg","C:\\測試test\\貓cat2.jpg","C:\\測試test\\貓cat3.jpg","C:\\測試test\\貓cat4.jpg","C:\\測試test\\貓cat5.jpg","C:\\測試test\\貓cat6.jpg"};
         
         
-//        System.out.println(dao.insertFile(1, 1, 2, path));  //testing#1
-//        System.out.println(dao.insertFile(1, 1, 2, paths)); //testing#2
-//        System.out.println(dao.insertFolder(1, 1, 2, "喵的勒")); //testing#3
-//        System.out.println(dao.insertFolder(15,5));//testing#4
-//        
-//        List<ShareFileBean> rs = dao.getFileList(4);
-//        for(Iterator<ShareFileBean> item=rs.iterator();item.hasNext(); ) {
-//            System.out.println(item.next());
-//        }//testing#5
-//        
-//        System.out.println(dao.selectByFileId(11));//testing#6
-//        System.out.println(dao.updateFile(dao.selectByFileId(11), 3, "catcat"));//testing#7
-//        System.out.println(dao.updateFile(dao.selectByFileId(18), 2, "喵喵"));//testing#7
-//        
-//        System.out.println(dao.deleteFile(dao.selectByFileId(6)));//testing#8
-//        System.out.println(dao.deleteFile(dao.selectByFileId(11)));//testing#8
-//
-//        System.out.println(dao.copyFile(dao.selectByFileId(20), 9));//testing#10
+        System.out.println(dao.insertFile(1, 1, 2, path));  //testing#1
+        System.out.println(dao.insertFile(1, 1, 2, paths)); //testing#2
+        System.out.println(dao.insertFolder(1, 1, 2, "喵的勒")); //testing#3
+        System.out.println(dao.insertFolder(15,5));//testing#4
         
-//        List<FolderTreeBean> rs2 = dao.getGroupFolderTree(3);
-//        for(Iterator<FolderTreeBean> item=rs2.iterator();item.hasNext(); ) {
-//            System.out.println(item.next());
-//        }//testing#11
-//        
-//        List<ShareFileBean> rs4 = new ArrayList<ShareFileBean>();
-//        rs4.add(dao.selectByFileId(6));
-//        rs4.add(dao.selectByFileId(7));
-//        rs4.add(dao.selectByFileId(11));
-//        rs4.add(dao.selectByFileId(12));
-//        int[] rs4rs = dao.deleteFile(rs4);
-//        for(int e: rs4rs) {
-//            System.out.println(e);
-//        }//testing#12
+        List<ShareFileBean> rs = dao.getFileList(4);
+        for(Iterator<ShareFileBean> item=rs.iterator();item.hasNext(); ) {
+            System.out.println(item.next());
+        }//testing#5
+        
+        System.out.println(dao.selectByFileId(11));//testing#6
+        System.out.println(dao.updateFile(dao.selectByFileId(11), 3, "catcat"));//testing#7
+        System.out.println(dao.updateFile(dao.selectByFileId(18), 2, "喵喵"));//testing#7
+        
+        System.out.println(dao.deleteFile(dao.selectByFileId(5)));//testing#8
+        System.out.println(dao.deleteFile(dao.selectByFileId(13)));//testing#8
+
+        System.out.println(dao.copyFile(dao.selectByFileId(20), 9));//testing#10
+        
+        List<FolderTreeBean> rs2 = dao.getGroupFolderTree(3);
+        for(Iterator<FolderTreeBean> item=rs2.iterator();item.hasNext(); ) {
+            System.out.println(item.next());
+        }//testing#11
+        
+        List<ShareFileBean> rs4 = new ArrayList<ShareFileBean>();
+        rs4.add(dao.selectByFileId(6));
+        rs4.add(dao.selectByFileId(7));
+        rs4.add(dao.selectByFileId(11));
+        rs4.add(dao.selectByFileId(12));
+        int[] rs4rs = dao.deleteFile(rs4);
+        for(int e: rs4rs) {
+            System.out.println(e);
+        }//testing#12
         
 
         
