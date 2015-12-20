@@ -2,7 +2,6 @@ package liting.model;
 
 import java.util.List;
 
-
 public interface ShareFileDAO
 {
     /**

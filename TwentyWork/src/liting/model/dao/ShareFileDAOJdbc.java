@@ -20,7 +20,6 @@ import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import liting.model.FolderTreeBean;
 import liting.model.ShareFileBean;
 import liting.model.ShareFileDAO;
-import sun.awt.datatransfer.DataTransferer.CharsetComparator;
 
 public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
 {
@@ -269,8 +268,6 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         }
     }
     
-    
-    
     /**
      * 
      * @param ShareFileBean
@@ -343,7 +340,6 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         }
         return bean;
     }
-    
     
     public static void main(String[] args) throws FileNotFoundException, SQLException
     {

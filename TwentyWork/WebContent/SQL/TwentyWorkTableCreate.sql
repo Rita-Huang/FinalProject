@@ -12,16 +12,16 @@ CREATE TABLE ShareFile(
 	upperFolderId	int,				
 	CONSTRAINT FK_Products_upperFolderId  foreign key (upperFolderId) references ShareFile (fileId) ON UPDATE NO ACTION
 );
- INSERT INTO ShareFile VALUES ( 'WebApp®Ú¥Ø¿ý' , '¸ê®Æ§¨' ,null ,null ,null,null, null);
- INSERT INTO ShareFile VALUES ( 'Group1®Ú¥Ø¿ý' , '¸ê®Æ§¨' ,null ,null ,1,1, 1);
- INSERT INTO ShareFile VALUES ( 'Group2®Ú¥Ø¿ý' , '¸ê®Æ§¨' ,null ,null ,1,2, 1);
- INSERT INTO ShareFile VALUES ( 'Group2-1' , '¸ê®Æ§¨' ,null ,null ,1,2, 3);
- INSERT INTO ShareFile VALUES ( 'Group1-1' , '¸ê®Æ§¨' ,null ,null ,2,1, 2);
- INSERT INTO ShareFile VALUES ( 'Group1-2' , '¸ê®Æ§¨' ,null ,null ,3,1, 2);
- INSERT INTO ShareFile VALUES ( 'Group1-3' , '¸ê®Æ§¨' ,null ,null ,3,1, 2);
- INSERT INTO ShareFile VALUES ( 'Group2-1-1' , '¸ê®Æ§¨' ,null ,null ,1,2, 4);
- INSERT INTO ShareFile VALUES ( 'Group2-1-2' , '¸ê®Æ§¨' ,null ,null ,2,2, 4);
- INSERT INTO ShareFile VALUES ( 'Group1-1-1' , '¸ê®Æ§¨' ,null ,null ,3,1, 5);--10
+ INSERT INTO ShareFile VALUES ( 'WebAppï¿½Ú¥Ø¿ï¿½' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,null,null, null);
+ INSERT INTO ShareFile VALUES ( 'Group1ï¿½Ú¥Ø¿ï¿½' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,1,1, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2ï¿½Ú¥Ø¿ï¿½' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,1,2, 1);
+ INSERT INTO ShareFile VALUES ( 'Group2-1' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,1,2, 3);
+ INSERT INTO ShareFile VALUES ( 'Group1-1' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,2,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-2' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group1-3' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'Group2-1-1' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,1,2, 4);
+ INSERT INTO ShareFile VALUES ( 'Group2-1-2' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,2,2, 4);
+ INSERT INTO ShareFile VALUES ( 'Group1-1-1' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,3,1, 5);--10
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
@@ -35,8 +35,7 @@ CREATE TABLE ShareFile(
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 4)
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 8)
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 9)--21
-
- INSERT INTO ShareFile VALUES ( 'Group3®Ú¥Ø¿ý' , '¸ê®Æ§¨' ,null ,null ,1,3, 1);
+ INSERT INTO ShareFile VALUES ( 'Group3ï¿½Ú¥Ø¿ï¿½' , 'ï¿½ï¿½Æ§ï¿½' ,null ,null ,1,3, 1);
 
  SELECT * FROM ShareFile
 
