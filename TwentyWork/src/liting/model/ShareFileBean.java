@@ -18,14 +18,13 @@ public class ShareFileBean
 //            foreign key (upperFolderId) references ShareFile (fileId)
 //        );
     private int fileId; //PK
-    private String fileName; //not null:後端產生
-    private String fileType; //not null:後端產生
+    private String fileName; //not null
+    private String fileType; //not null
     private int fileSize;
     private Timestamp updateTime;
-    private int userId; //從前端取得
-    private int teamId; //從前端取得
-    private int upperFolderId=1; //從前端取得
-    private String path; //前端連結要用
+    private int userId; 
+    private int teamId; 
+    private int upperFolderId=1; 
     
     /**
      * 空的建構子，沒有自動設定任何屬性
@@ -38,11 +37,7 @@ public class ShareFileBean
     /**
      * 新增檔案時使用的建構子<br>
      * 此建構子會將fileName,fileType,fileSize,updateTime,userId,teamId,upperFolderId設定好<br>
-<<<<<<< HEAD
      * 沒設定的屬性:fileId
-=======
-     * 沒設定的屬性:fileId,file,path
->>>>>>> branch 'master' of https://github.com/Rita-Huang/FinalProject.git
      * @param userId
      * @param teamId
      * @param filePath
@@ -58,14 +53,10 @@ public class ShareFileBean
     }
     
     /**
-<<<<<<< HEAD
      * 新增folder時使用的建構子<br>
      * 此建構子會將fileName,fileType,userId,teamId,upperFolderId設定好<br>
      * fileSize,updateTime屬性為Null不設定<br>
      * fileId沒設定
-=======
-     * 新增folder時使用的建構子
->>>>>>> branch 'master' of https://github.com/Rita-Huang/FinalProject.git
      * @param userId
      * @param teamId
      * @param folderName

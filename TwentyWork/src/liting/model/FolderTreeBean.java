@@ -6,11 +6,11 @@ public class FolderTreeBean
 {
     //FileTree (fileId, fileName_,fileType,fileSize, teamId,upperFolderId , fileLevel)
     private int fileId; //PK
-    private String fileName; //not null:後端產生
-    private String fileType; //not null:後端產生
+    private String fileName; 
+    private String fileType; 
     private int fileSize;
-    private int teamId; //從前端取得
-    private int upperFolderId; //從前端取得
+    private int teamId; 
+    private int upperFolderId; 
     private int fileLevel;
     public int getFileId()
     {
