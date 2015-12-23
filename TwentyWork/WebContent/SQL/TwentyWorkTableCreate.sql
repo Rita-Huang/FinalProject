@@ -5,7 +5,7 @@ DROP TABLE ShareFile;
 DROP TABLE Memember;
 CREATE TABLE Memember(
 	userId		int				IDENTITY(1,1) PRIMARY KEY,
-	username	nvarchar(35)	not null,
+	username	varchar(35)	not null,
 	email		varchar(35)		not null,
 	password_	varchar(35)		not null,
 	birth		date,
@@ -30,7 +30,7 @@ INSERT INTO Memember VALUES('Group3-Jojo','Group3.Jojo@gmail.com','j',null,null,
 DROP TABLE Team;
 CREATE TABLE Team(
 	teamId		int				IDENTITY(1,1) PRIMARY KEY,
-	teamName	nvarchar(20)	not null,
+	teamName	varchar(20)	not null,
 	teamImage	image
 );
 INSERT INTO Team VALUES('Group1',null);

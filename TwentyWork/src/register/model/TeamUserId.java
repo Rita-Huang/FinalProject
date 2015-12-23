@@ -64,4 +64,11 @@ public class TeamUserId implements java.io.Serializable
         return result;
     }
 
+    @Override
+    public String toString()
+    {
+        return "TeamUserId [userId=" + userId + ", teamId=" + teamId + "]";
+    }
+    
+    
 }

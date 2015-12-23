@@ -1,24 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015/12/23 ?U?? 06:48:20 by Hibernate Tools 4.3.1.Final -->
+<!-- Generated 2015/12/23 ?U?? 08:50:54 by Hibernate Tools 4.3.1.Final -->
 <hibernate-mapping>
-    <class name="register.model.Team" table="Team" schema="dbo" catalog="TwentyWork" optimistic-lock="version">
+    <class name="register.model.TeamBean" table="Team" schema="dbo" catalog="TwentyWork" optimistic-lock="version">
         <id name="teamId" type="int">
             <column name="teamId" />
             <generator class="assigned" />
         </id>
-        <property name="teamName" type="serializable">
-            <column name="teamName" not-null="true" />
+        <property name="teamName" type="string">
+            <column name="teamName" length="20" not-null="true" />
         </property>
         <property name="teamImage" type="binary">
             <column name="teamImage" />
         </property>
-        <set name="teamUsers" table="TeamUser" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="teamId" not-null="true" />
-            </key>
-            <one-to-many class="register.model.TeamUser" />
-        </set>
     </class>
 </hibernate-mapping>

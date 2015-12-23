@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 2015/12/23 ?U?? 06:48:20 by Hibernate Tools 4.3.1.Final -->
+<!-- Generated 2015/12/23 ?U?? 08:33:16 by Hibernate Tools 4.3.1.Final -->
 <hibernate-mapping>
-    <class name="register.model.Memember" table="Memember" schema="dbo" catalog="TwentyWork" optimistic-lock="version">
+    <class name="register.model.MememberBean" table="Memember" schema="dbo" catalog="TwentyWork" optimistic-lock="version">
         <id name="userId" type="int">
             <column name="userId" />
             <generator class="assigned" />
         </id>
-        <property name="username" type="serializable">
-            <column name="username" not-null="true" />
+        <property name="username" type="string">
+            <column name="username" length="35" not-null="true" />
         </property>
         <property name="email" type="string">
             <column name="email" length="35" not-null="true" />
@@ -29,11 +29,5 @@
         <property name="phone" type="string">
             <column name="phone" length="15" />
         </property>
-        <set name="teamUsers" table="TeamUser" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="userId" not-null="true" />
-            </key>
-            <one-to-many class="register.model.TeamUser" />
-        </set>
     </class>
 </hibernate-mapping>
