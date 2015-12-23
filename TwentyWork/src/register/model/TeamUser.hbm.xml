@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015/12/23 ?U?? 06:48:20 by Hibernate Tools 4.3.1.Final -->
+<hibernate-mapping>
+    <class name="register.model.TeamUser" table="TeamUser" schema="dbo" catalog="TwentyWork" optimistic-lock="version">
+        <composite-id name="id" class="register.model.TeamUserId">
+            <key-property name="userId" type="int">
+                <column name="userId" />
+            </key-property>
+            <key-property name="teamId" type="int">
+                <column name="teamId" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="memember" class="register.model.Memember" update="false" insert="false" fetch="select">
+            <column name="userId" not-null="true" />
+        </many-to-one>
+        <many-to-one name="team" class="register.model.Team" update="false" insert="false" fetch="select">
+            <column name="teamId" not-null="true" />
+        </many-to-one>
+        <property name="post" type="string">
+            <column name="post" length="10" />
+        </property>
+        <property name="depart" type="string">
+            <column name="depart" length="10" />
+        </property>
+        <property name="extension" type="string">
+            <column name="extension" length="15" />
+        </property>
+        <property name="activeDate" type="date">
+            <column name="activeDate" length="10" not-null="true" />
+        </property>
+        <property name="rights" type="int">
+            <column name="rights" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
