@@ -14,8 +14,10 @@
         <property name="hibernate.show_sql">true</property>
         <property name="format_sql">true</property>
         
-<!--         <mapping  resource="model/CustomerBean.hbm.xml"/> -->
-<!--         <mapping  resource="model/ProductBean.hbm.xml"/> -->
-        
+
+        <mapping resource="register/model/Memember.hbm.xml"/>
+        <mapping resource="register/model/Team.hbm.xml"/>
+        <mapping resource="register/model/TeamUser.hbm.xml"/>
+
     </session-factory>
 </hibernate-configuration>
