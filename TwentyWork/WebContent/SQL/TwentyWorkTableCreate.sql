@@ -1,4 +1,66 @@
 use TwentyWork
+DROP TABLE TeamUser;
+DROP TABLE Memember;
+CREATE TABLE Memember(
+	userId		int				IDENTITY(1,1) PRIMARY KEY,
+	username	nvarchar(35)	not null,
+	email		varchar(35)		not null,
+	password_	varchar(35)		not null,
+	birth		date,
+	userImage	image,
+	cellphone	varchar(15),
+	phone		varchar(15)
+);
+INSERT INTO Memember VALUES('Group1-Mark','group1.mark@gmail.com','m',null,null,null,null);--1
+INSERT INTO Memember VALUES('Group1-Peter','group1.peter@gmail.com','p',null,null,null,null);--2
+INSERT INTO Memember VALUES('Group1-John','group1.john@gmail.com','j',null,null,null,null);--3
+INSERT INTO Memember VALUES('Group1-Tinasha','group1.tinasha@gmail.com','t',null,null,null,null);--4
+INSERT INTO Memember VALUES('Group1-Regard','group1.regard@gmail.com','r',null,null,null,null);--5
+
+INSERT INTO Memember VALUES('Group2 Boss','Group2.Boss@gmail.com','b',null,null,null,null);--6
+INSERT INTO Memember VALUES('Group2 Candy','Group2.Candy@gmail.com','c',null,null,null,null);--7
+INSERT INTO Memember VALUES('Group2 Danny','Group2.Danny@gmail.com','d',null,null,null,null);--8
+INSERT INTO Memember VALUES('Group2 Eric','Group2.Eric@gmail.com','e',null,null,null,null);--9
+
+INSERT INTO Memember VALUES('Group3-Jojo','Group3.Jojo@gmail.com','j',null,null,null,null);--10
+
+
+DROP TABLE Team;
+CREATE TABLE Team(
+	teamId		int				IDENTITY(1,1) PRIMARY KEY,
+	teamName	nvarchar(20)	not null,
+	teamImage	image
+);
+INSERT INTO Team VALUES('Group1',null);
+INSERT INTO Team VALUES('Group2',null);
+INSERT INTO Team VALUES('Group3',null);
+
+
+CREATE TABLE TeamUser(
+	userId		int,
+	teamId		int,
+	post		varchar(10),
+	depart		varchar(10),
+	extension	varchar(15),
+	activeDate	date			not null,
+	rights		int				not null,
+	CONSTRAINT FK_userId  foreign key (userId) references Memember (userId) ,
+	CONSTRAINT FK_teamId  foreign key (teamId) references Team (teamId) ,
+	CONSTRAINT pk_teamUser PRIMARY KEY (userId,teamId)
+);
+INSERT INTO TeamUser VALUES(1,1,null,null,null,'2015-12-15',1);
+INSERT INTO TeamUser VALUES(2,1,null,null,null,'2015-12-15',1);
+INSERT INTO TeamUser VALUES(3,1,null,null,null,'2015-12-15',2);
+INSERT INTO TeamUser VALUES(4,1,null,null,null,'2015-12-15',2);
+INSERT INTO TeamUser VALUES(5,1,null,null,null,'2015-12-15',2);
+
+INSERT INTO TeamUser VALUES(6,2,null,null,null,'2015-12-16',1);
+INSERT INTO TeamUser VALUES(7,2,null,null,null,'2015-12-16',2);
+INSERT INTO TeamUser VALUES(8,2,null,null,null,'2015-12-16',2);
+INSERT INTO TeamUser VALUES(9,2,null,null,null,'2015-12-16',2);
+
+INSERT INTO TeamUser VALUES(10,3,null,null,null,'2015-12-16',1);
+
 
 DROP TABLE ShareFile;
 CREATE TABLE ShareFile(
