@@ -1,4 +1,4 @@
-package liting.model;
+package sharefile.model;
 
 import java.io.File;
 import java.sql.Date;

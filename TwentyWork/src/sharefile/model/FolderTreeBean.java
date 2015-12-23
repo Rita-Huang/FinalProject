@@ -1,6 +1,4 @@
-package liting.model;
-
-import java.sql.Timestamp;
+package sharefile.model;
 
 public class FolderTreeBean
 {
@@ -12,54 +10,36 @@ public class FolderTreeBean
     private int teamId; 
     private int upperFolderId; 
     private int fileLevel;
+    
     public int getFileId()
-    {
-        return fileId;
-    }
+    { return fileId; }
     public void setFileId(int fileId)
-    {
-        this.fileId = fileId;
-    }
+    { this.fileId = fileId; }
+    
     public String getFileName()
-    {
-        return fileName;
-    }
+    { return fileName; }
     public void setFileName(String fileName)
-    {
-        this.fileName = fileName;
-    }
+    { this.fileName = fileName; }
+    
     public String getFileType()
-    {
-        return fileType;
-    }
+    { return fileType; }
     public void setFileType(String fileType)
-    {
-        this.fileType = fileType;
-    }
+    { this.fileType = fileType; }
+    
     public int getFileSize()
-    {
-        return fileSize;
-    }
+    { return fileSize; }
     public void setFileSize(int fileSize)
-    {
-        this.fileSize = fileSize;
-    }
+    { this.fileSize = fileSize; }
+    
     public int getTeamId()
-    {
-        return teamId;
-    }
+    { return teamId; }
     public void setTeamId(int teamId)
-    {
-        this.teamId = teamId;
-    }
+    { this.teamId = teamId; }
+    
     public int getUpperFolderId()
-    {
-        return upperFolderId;
-    }
+    { return upperFolderId; }
     public void setUpperFolderId(int upperFolderId)
-    {
-        this.upperFolderId = upperFolderId;
-    }
+    { this.upperFolderId = upperFolderId; }
     public int getFileLevel()
     {
         return fileLevel;

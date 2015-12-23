@@ -1,5 +1,7 @@
 use TwentyWork
 DROP TABLE TeamUser;
+DROP TABLE ShareFile;
+
 DROP TABLE Memember;
 CREATE TABLE Memember(
 	userId		int				IDENTITY(1,1) PRIMARY KEY,
@@ -44,9 +46,9 @@ CREATE TABLE TeamUser(
 	extension	varchar(15),
 	activeDate	date			not null,
 	rights		int				not null,
-	CONSTRAINT FK_userId  foreign key (userId) references Memember (userId) ,
-	CONSTRAINT FK_teamId  foreign key (teamId) references Team (teamId) ,
-	CONSTRAINT pk_teamUser PRIMARY KEY (userId,teamId)
+	CONSTRAINT FK_TeamUser_userId  foreign key (userId) references Memember (userId) ,
+	CONSTRAINT FK_TeamUser_teamId  foreign key (teamId) references Team (teamId) ,
+	CONSTRAINT PK_TeamUser PRIMARY KEY (userId,teamId)
 );
 INSERT INTO TeamUser VALUES(1,1,null,null,null,'2015-12-15',1);
 INSERT INTO TeamUser VALUES(2,1,null,null,null,'2015-12-15',1);
@@ -54,6 +56,7 @@ INSERT INTO TeamUser VALUES(3,1,null,null,null,'2015-12-15',2);
 INSERT INTO TeamUser VALUES(4,1,null,null,null,'2015-12-15',2);
 INSERT INTO TeamUser VALUES(5,1,null,null,null,'2015-12-15',2);
 
+INSERT INTO TeamUser VALUES(1,2,null,null,null,'2015-12-15',1);
 INSERT INTO TeamUser VALUES(6,2,null,null,null,'2015-12-16',1);
 INSERT INTO TeamUser VALUES(7,2,null,null,null,'2015-12-16',2);
 INSERT INTO TeamUser VALUES(8,2,null,null,null,'2015-12-16',2);
@@ -62,7 +65,7 @@ INSERT INTO TeamUser VALUES(9,2,null,null,null,'2015-12-16',2);
 INSERT INTO TeamUser VALUES(10,3,null,null,null,'2015-12-16',1);
 
 
-DROP TABLE ShareFile;
+
 CREATE TABLE ShareFile(
 	fileId			int				IDENTITY(1,1)	PRIMARY KEY,
 	fileName_		nvarchar(50)	not null,
@@ -72,7 +75,9 @@ CREATE TABLE ShareFile(
 	userId			int,				
 	teamId			int,			
 	upperFolderId	int,				
-	CONSTRAINT FK_Products_upperFolderId  foreign key (upperFolderId) references ShareFile (fileId) 
+	CONSTRAINT FK_ShareFile_upperFolderId	foreign key (upperFolderId) references ShareFile (fileId) ,
+	CONSTRAINT FK_ShareFile_userId			foreign key (userId)		references Memember (userId) ,
+	CONSTRAINT FK_ShareFile_teamId			foreign key (teamId)		references Team (teamId) 
 );
  INSERT INTO ShareFile VALUES ( 'WebApp根目錄' , '資料夾' ,null ,null ,null,null, null);
  INSERT INTO ShareFile VALUES ( 'Group1根目錄' , '資料夾' ,null ,null ,1,1, 1);
@@ -82,22 +87,22 @@ CREATE TABLE ShareFile(
  INSERT INTO ShareFile VALUES ( 'Group1-2' , '資料夾' ,null ,null ,3,1, 2);
  INSERT INTO ShareFile VALUES ( 'Group1-3' , '資料夾' ,null ,null ,3,1, 2);
  INSERT INTO ShareFile VALUES ( 'Group2-1-1' , '資料夾' ,null ,null ,1,2, 4);
- INSERT INTO ShareFile VALUES ( 'Group2-1-2' , '資料夾' ,null ,null ,2,2, 4);
+ INSERT INTO ShareFile VALUES ( 'Group2-1-2' , '資料夾' ,null ,null ,6,2, 4);
  INSERT INTO ShareFile VALUES ( 'Group1-1-1' , '資料夾' ,null ,null ,3,1, 5);--10
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 2);
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 6)
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 6)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,2,1, 2);
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,3,1, 2);
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,4,1, 6)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,5,1, 6)
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 7)
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,1, 7)--17
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,2,1, 7)--17
 
 
  INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 4)
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 4)
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 8)
- INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,1,2, 9)--21
- INSERT INTO ShareFile VALUES ( 'Group3根目錄' , '資料夾' ,null ,null ,1,3, 1);
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,6,2, 4)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,7,2, 8)
+ INSERT INTO ShareFile VALUES ( 'catcat.jpg' , 'jpg' ,115181 ,'2015-12-18 19:31:07.680' ,8,2, 9)--21
+ INSERT INTO ShareFile VALUES ( 'Group3根目錄' , '資料夾' ,null ,null ,10,3, 1);
 
  SELECT * FROM ShareFile
  GO

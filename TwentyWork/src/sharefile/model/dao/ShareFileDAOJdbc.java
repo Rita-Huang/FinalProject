@@ -1,25 +1,10 @@
-package liting.model.dao;
+package sharefile.model.dao;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
+import java.sql.*;
+import java.util.*;
 
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-
-import liting.model.FolderTreeBean;
-import liting.model.ShareFileBean;
-import liting.model.ShareFileDAO;
+import sharefile.model.*;
 
 public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
 {
@@ -351,7 +336,7 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         System.out.println(dao.insertFile(1, 1, 2, path));  //testing#1
         System.out.println(dao.insertFile(1, 1, 2, paths)); //testing#2
         System.out.println(dao.insertFolder(1, 1, 2, "喵的勒")); //testing#3
-        System.out.println(dao.insertFolder(15,5));//testing#4
+        System.out.println(dao.insertFolder(1,1));//testing#4
         
         List<ShareFileBean> rs = dao.getFileList(4);
         for(Iterator<ShareFileBean> item=rs.iterator();item.hasNext(); ) {
