@@ -57,37 +57,49 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     
     private static final String INSERT = "insert into ShareFile values(?,?,?,?,?,?,?)";
     @Override
-    public ShareFileBean insertFile(int userId, int teamId, int upperFolderId,String filePath)
+    public ShareFileBean insert(ShareFileBean bean) 
     {//testing#1
-        ShareFileBean bean = new ShareFileBean(userId, teamId,upperFolderId, filePath);
-        return insert(bean);
-    }
-    
-    @Override
-    public List<ShareFileBean> insertFile(int userId, int teamId,int upperFolderId, String[] filePath)
-    {//testing#2
-        List<ShareFileBean> beans = new ArrayList<ShareFileBean>();
-        for(int i=0;i<filePath.length;i++) {
-            ShareFileBean bean = new ShareFileBean(userId, teamId,upperFolderId, filePath[i]);
-            beans.add(insert(bean));
+        try {
+            PreparedStatement stmt = conn.prepareStatement(INSERT,Statement.RETURN_GENERATED_KEYS);
+            
+            stmt.setNString(1,bean.getFileName());
+            stmt.setString(2, bean.getFileType());
+            
+            if(bean.getFileSize()==0) {
+                stmt.setNull(3, java.sql.Types.INTEGER);
+                stmt.setNull(4, java.sql.Types.DATE);
+            }else {
+                stmt.setInt(3, bean.getFileSize());
+                stmt.setObject(4, bean.getUpdateTime());
+            }
+            
+            stmt.setInt(5, bean.getUserId());
+            stmt.setInt(6, bean.getTeamId());
+            stmt.setInt(7, bean.getUpperFolderId());
+            int result = stmt.executeUpdate();
+            if(result ==0) {
+                System.out.println("Creating user failed, no rows affected.");
+                return bean=null;
+            }else {
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
+                if(generatedKeys.next()) {
+                    bean.setFileId(generatedKeys.getInt(1));
+                }else {
+                    System.out.println("Creating user failed, no ID obtained.");
+                    return bean = null;
+                }
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+            System.out.println("catch the error: @insertFile()");
         }
-        return beans;
+        return bean;
     }
     
     
-    @Override
-    public ShareFileBean insertFolder(int userId, int teamId, int upperFolderId,String folderName)
-    {//testing#3
-        ShareFileBean bean =new ShareFileBean(userId,teamId,folderName,upperFolderId);
-        return insert(bean);
-    }
     
-    @Override
-    public  ShareFileBean insertFolder(int userId,int teamId) 
-    {//testing#4
-        ShareFileBean bean =new ShareFileBean(userId,teamId,"Group"+teamId+"根目錄",1);
-        return insert(bean);
-    }
+    
+    
     
     private static final String FOLDER_TREE = "{call gen_folder_tree (?)}";
     @Override
@@ -152,14 +164,7 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     private static final String DELETE = "delete from ShareFile where fileId = ?";
     private static final String DELETE_FOLDER = "{call find_delete_files(?)}";
     @Override
-    public int deleteFile(ShareFileBean bean) 
-    {//testing#8
-        return deleteFile(bean.getFileId(),bean.getFileSize()==0);
-    }
-    
-    
-    
-    private int deleteFile(int fileId,boolean isFolder) 
+    public int deleteFile(int fileId,boolean isFolder) 
     {//testing#8
         int result ;
         try
@@ -190,24 +195,6 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
             e.printStackTrace();
         }
         return -1;
-    }
-    
-    @Override
-    public int[] deleteFile(List<ShareFileBean> bean)
-    {//testing#12
-        int[] resultset = new int[bean.size()];
-        for(int i =0;i<bean.size();i++){
-            int fileId = deleteFile(bean.get(i));
-            resultset[i]=fileId;
-        }
-        return resultset;
-    }
-    
-    @Override
-    public ShareFileBean copyFile(ShareFileBean bean, int newFolderId)
-    {//testing#10
-    	bean.setUpperFolderId(newFolderId);
-        return insert(bean);
     }
     
     private static final String FIND = "{call find_file_by_fileName (?,?)}";
@@ -253,49 +240,7 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         }
     }
     
-    /**
-     * 
-     * @param ShareFileBean
-     * @return ShareFileBean 會把Sql server自動產生的PK值設定回bean裡
-     */
-    private ShareFileBean insert(ShareFileBean bean) 
-    {//testing#1
-        try {
-            PreparedStatement stmt = conn.prepareStatement(INSERT,Statement.RETURN_GENERATED_KEYS);
-            
-            stmt.setNString(1,bean.getFileName());
-            stmt.setString(2, bean.getFileType());
-            
-            if(bean.getFileSize()==0) {
-                stmt.setNull(3, java.sql.Types.INTEGER);
-                stmt.setNull(4, java.sql.Types.DATE);
-            }else {
-                stmt.setInt(3, bean.getFileSize());
-                stmt.setObject(4, bean.getUpdateTime());
-            }
-            
-            stmt.setInt(5, bean.getUserId());
-            stmt.setInt(6, bean.getTeamId());
-            stmt.setInt(7, bean.getUpperFolderId());
-            int result = stmt.executeUpdate();
-            if(result ==0) {
-                System.out.println("Creating user failed, no rows affected.");
-                return bean=null;
-            }else {
-                ResultSet generatedKeys = stmt.getGeneratedKeys();
-                if(generatedKeys.next()) {
-                    bean.setFileId(generatedKeys.getInt(1));
-                }else {
-                    System.out.println("Creating user failed, no ID obtained.");
-                    return bean = null;
-                }
-            }
-        }catch(SQLException e) {
-            e.printStackTrace();
-            System.out.println("catch the error: @insertFile()");
-        }
-        return bean;
-    }
+    
     
     private static final String SELECT_BY_FILEID = "select * from ShareFile where fileId=?";
     private ShareFileBean selectByFileId(int fileId) 
@@ -333,10 +278,10 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         String[] paths = {"C:\\測試test\\貓cat1.jpg","C:\\測試test\\貓cat2.jpg","C:\\測試test\\貓cat3.jpg","C:\\測試test\\貓cat4.jpg","C:\\測試test\\貓cat5.jpg","C:\\測試test\\貓cat6.jpg"};
         
         
-        System.out.println(dao.insertFile(1, 1, 2, path));  //testing#1
-        System.out.println(dao.insertFile(1, 1, 2, paths)); //testing#2
-        System.out.println(dao.insertFolder(1, 1, 2, "喵的勒")); //testing#3
-        System.out.println(dao.insertFolder(1,1));//testing#4
+//        System.out.println(dao.insertFile(1, 1, 2, path));  //testing#1
+//        System.out.println(dao.insertFile(1, 1, 2, paths)); //testing#2
+//        System.out.println(dao.insertFolder(1, 1, 2, "喵的勒")); //testing#3
+//        System.out.println(dao.insertFolder(1,1));//testing#4
         
         List<ShareFileBean> rs = dao.getFileList(4);
         for(Iterator<ShareFileBean> item=rs.iterator();item.hasNext(); ) {
@@ -347,10 +292,10 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         System.out.println(dao.updateFile(dao.selectByFileId(11), 3, "catcat"));//testing#7
         System.out.println(dao.updateFile(dao.selectByFileId(18), 2, "喵喵"));//testing#7
         
-        System.out.println(dao.deleteFile(dao.selectByFileId(5)));//testing#8
-        System.out.println(dao.deleteFile(dao.selectByFileId(13)));//testing#8
+//        System.out.println(dao.deleteFile(dao.selectByFileId(5)));//testing#8
+//        System.out.println(dao.deleteFile(dao.selectByFileId(13)));//testing#8
 
-        System.out.println(dao.copyFile(dao.selectByFileId(20), 9));//testing#10
+//        System.out.println(dao.copyFile(dao.selectByFileId(20), 9));//testing#10
         
         List<FolderTreeBean> rs2 = dao.getGroupFolderTree(3);
         for(Iterator<FolderTreeBean> item=rs2.iterator();item.hasNext(); ) {
@@ -362,10 +307,10 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
         rs4.add(dao.selectByFileId(7));
         rs4.add(dao.selectByFileId(11));
         rs4.add(dao.selectByFileId(12));
-        int[] rs4rs = dao.deleteFile(rs4);
-        for(int e: rs4rs) {
-            System.out.println(e);
-        }//testing#12
+//        int[] rs4rs = dao.deleteFile(rs4);
+//        for(int e: rs4rs) {
+//            System.out.println(e);
+//        }//testing#12
         
 
         

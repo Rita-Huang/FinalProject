@@ -11,44 +11,11 @@ public interface ShareFileDAO
     public abstract List<ShareFileBean> getFileList(int upperFolderId);
 
     /**
-     * 新增單一檔案
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param filePath
-     * @return ShareFileBean裡所有屬性都要放
+     * 
+     * @param ShareFileBean
+     * @return ShareFileBean 會把Sql server自動產生的PK值設定回bean裡
      */
-    public abstract ShareFileBean insertFile(int userId, int teamId,int upperFolderId, String filePath);
-
-    /**
-     * 新增多個檔案
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param filePath
-     * @return ShareFileBean裡所有屬性都要放
-     */
-    public abstract List<ShareFileBean> insertFile(int userId, int teamId,int upperFolderId, String[] filePath);
-
-    /**
-     * 新增檔案夾
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param folderName
-     * @return ShareFileBean裡所有屬性都要放
-     */
-    public abstract ShareFileBean insertFolder(int userId, int teamId,int upperFolderId, String folderName);
-    
-    /**
-     * 建立新的Group User的檔案分享根目錄Folder
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param fileName
-     * @return ShareFileBean裡fileSize,updateTime屬性為Null不設定
-     */
-    public abstract ShareFileBean insertFolder(int userId,int teamId);
+    public abstract ShareFileBean insert(ShareFileBean bean); 
 
     
     /**
@@ -69,31 +36,6 @@ public interface ShareFileDAO
     public abstract ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName);
 
     
-    /**
-     * 刪除單一檔案
-     * @param fileId
-     * @return 回傳刪除的檔案Id
-     */
-    public abstract int deleteFile(ShareFileBean bean);
-
-    
-    /**
-     * 刪除多個檔案
-     * @param fileId
-     * @return 回傳刪除的檔案Id陣列
-     */
-    public abstract int[] deleteFile(List<ShareFileBean> bean);
-
-    
-
-    /**
-     * 複製檔案
-     * @param fileId
-     * @param newFolderId
-     * @return ShareFileBean裡所有屬性都要放
-     */
-    public abstract ShareFileBean copyFile(ShareFileBean bean,int newFolderId);
-
     
     /**
      * 搜尋檔案
@@ -102,6 +44,8 @@ public interface ShareFileDAO
      * @param upperFolderId
      * @return ShareFileBean裡所有屬性都要放
      */
-    public abstract  List<ShareFileBean> findFileByFileName(String queryString,int upperFolderId);
+    public abstract List<ShareFileBean> findFileByFileName(String queryString,int upperFolderId);
 
+    
+    public abstract int deleteFile(int fileId,boolean isFolder);
 }

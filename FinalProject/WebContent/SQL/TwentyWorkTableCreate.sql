@@ -1,4 +1,4 @@
-use TwentyWork
+use TwentyWork_
 DROP TABLE TeamUser;
 DROP TABLE ShareFile;
 
