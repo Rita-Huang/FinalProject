@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015/12/23 ?U?? 08:33:16 by Hibernate Tools 4.3.1.Final -->
+<hibernate-mapping>
+    <class name="register.model.MememberBean" table="Memember" schema="dbo" catalog="TwentyWork" optimistic-lock="version">
+        <id name="userId" type="int">
+            <column name="userId" />
+            <generator class="assigned" />
+        </id>
+        <property name="username" type="string">
+            <column name="username" length="35" not-null="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="35" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password_" length="35" not-null="true" />
+        </property>
+        <property name="birth" type="date">
+            <column name="birth" length="10" />
+        </property>
+        <property name="userImage" type="binary">
+            <column name="userImage" />
+        </property>
+        <property name="cellphone" type="string">
+            <column name="cellphone" length="15" />
+        </property>
+        <property name="phone" type="string">
+            <column name="phone" length="15" />
+        </property>
+    </class>
+</hibernate-mapping>
