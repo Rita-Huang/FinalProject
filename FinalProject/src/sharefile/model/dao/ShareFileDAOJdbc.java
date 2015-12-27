@@ -243,7 +243,8 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     
     
     private static final String SELECT_BY_FILEID = "select * from ShareFile where fileId=?";
-    private ShareFileBean selectByFileId(int fileId) 
+    @Override
+    public ShareFileBean selectByFileId(int fileId) 
     {//testing#6
         ShareFileBean bean = new ShareFileBean();
         try

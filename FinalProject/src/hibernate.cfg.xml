@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory >
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver:// localhost:1433;database=TwentyWork</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver:// localhost:1433;database=TwentyWork_</property>
         <property name="hibernate.connection.username">sa</property>
         <property name="hibernate.connection.password">passw0rd</property>
 <!--         <property name="hibernate.connection.datasource">java:comp/env/jdbc/xxx</property> -->
@@ -18,6 +18,8 @@
         <mapping resource="register/model/Memember.hbm.xml"/>
         <mapping resource="register/model/Team.hbm.xml"/>
         <mapping resource="register/model/TeamUser.hbm.xml"/>
-
+        <mapping resource="sharefile/model/ShareFile.hbm.xml"/>
+		<mapping resource="sharefile/model/FolderTree.hbm.xml"/>
+		
     </session-factory>
 </hibernate-configuration>

@@ -6,10 +6,10 @@ public class FolderTreeBean
     private int fileId; //PK
     private String fileName; 
     private String fileType; 
-    private int fileSize;
-    private int teamId; 
-    private int upperFolderId; 
-    private int fileLevel;
+    private Integer fileSize;
+    private Integer teamId; 
+    private Integer upperFolderId; 
+    private Integer fileLevel;
     
     public int getFileId()
     { return fileId; }
@@ -26,38 +26,34 @@ public class FolderTreeBean
     public void setFileType(String fileType)
     { this.fileType = fileType; }
     
-    public int getFileSize()
+    public Integer getFileSize()
     { return fileSize; }
-    public void setFileSize(int fileSize)
+    public void setFileSize(Integer fileSize)
     { this.fileSize = fileSize; }
     
-    public int getTeamId()
+    public Integer getTeamId()
     { return teamId; }
-    public void setTeamId(int teamId)
+    public void setTeamId(Integer teamId)
     { this.teamId = teamId; }
     
-    public int getUpperFolderId()
+    public Integer getUpperFolderId()
     { return upperFolderId; }
-    public void setUpperFolderId(int upperFolderId)
+    public void setUpperFolderId(Integer upperFolderId)
     { this.upperFolderId = upperFolderId; }
+    
     public int getFileLevel()
-    {
-        return fileLevel;
-    }
-    public void setFileLevel(int fileLevel)
-    {
-        this.fileLevel = fileLevel;
-    }
+    { return fileLevel; }
+    public void setFileLevel(Integer fileLevel)
+    { this.fileLevel = fileLevel; }
     @Override
     public String toString()
     {
-        // TODO Auto-generated method stub
-//        bean.setFileId(rs.getInt(1));
-//        bean.setFileName(rs.getString(2));
-//        bean.setUpperFolderId(rs.getInt(6));
-//        bean.setFileLevel(rs.getInt(7));
-        return "[ "+fileId+" , "+fileName+" , "+upperFolderId+" , "+fileLevel+" ]";
+        return "FolderTreeBean [fileId=" + fileId + ", fileName=" + fileName
+                + ", fileType=" + fileType + ", fileSize=" + fileSize
+                + ", teamId=" + teamId + ", upperFolderId=" + upperFolderId
+                + ", fileLevel=" + fileLevel + "]";
     }
+    
     
     
 //    public static void main(String[] args) {

@@ -48,4 +48,6 @@ public interface ShareFileDAO
 
     
     public abstract int deleteFile(int fileId,boolean isFolder);
+    
+    public abstract ShareFileBean selectByFileId(int fileId);
 }

@@ -1,8 +1,10 @@
 package sharefile.model;
 
 import java.io.File;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class ShareFileBean
 {
@@ -20,17 +22,17 @@ public class ShareFileBean
     private int fileId; //PK
     private String fileName; //not null
     private String fileType; //not null
-    private int fileSize;
+    private Integer fileSize;
     private Timestamp updateTime;
-    private int userId; 
-    private int teamId; 
+    private Integer userId; 
+    private Integer teamId; 
     private int upperFolderId=1; 
-    
+    private ShareFileBean shareFile;
+    private Set<ShareFileBean> shareFiles = new HashSet<ShareFileBean>(0);
     /**
      * 空的建構子，沒有自動設定任何屬性
      */
     public ShareFileBean() {
-//        System.out.println("PATH: ShareFile 空的建構子");
     }
     
     
@@ -123,28 +125,36 @@ public class ShareFileBean
     public String getFileType() { return fileType; }
     public void setFileType(String fileType) { this.fileType = fileType; }
     
-    public int getFileSize() { return fileSize; }
-    public void setFileSize(int fileSize) { this.fileSize = fileSize; }
+    public Integer getFileSize() { return fileSize; }
+    public void setFileSize(Integer fileSize) { this.fileSize = fileSize; }
     
     public Timestamp getUpdateTime() { return updateTime; }
     public void setUpdateTime(Timestamp updateTime) { this.updateTime = updateTime; }
     
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public Integer getUserId() { return userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
     
-    public int getTeamId() { return teamId; }
-    public void setTeamId(int teamId) { this.teamId = teamId; }
+    public Integer getTeamId() { return teamId; }
+    public void setTeamId(Integer teamId) { this.teamId = teamId; }
     
-    public int getUpperFolderId() { return upperFolderId; }
-    public void setUpperFolderId(int upperFolderId) { this.upperFolderId = upperFolderId; }
+    public Integer getUpperFolderId() { return upperFolderId; }
+    public void setUpperFolderId(Integer upperFolderId) { this.upperFolderId = upperFolderId; }
     
+    public ShareFileBean getShareFile() { return this.shareFile; }
+    public void setShareFile(ShareFileBean shareFile) { this.shareFile = shareFile; }
+    
+    public Set<ShareFileBean> getShareFiles() { return this.shareFiles; }
+    public void setShareFiles(Set<ShareFileBean> shareFiles) { this.shareFiles = shareFiles; }
     
     
     @Override
     public String toString()
     {
-        return "["+fileId+" , "+fileName+" , "+fileType+" , "+fileSize+" , "+updateTime+" , "
-                +userId+" , "+teamId+" , " +upperFolderId+"]";
+        return "ShareFile [fileId=" + fileId + ", shareFile=" + shareFile
+                + ", fileName=" + fileName + ", fileType=" + fileType
+                + ", fileSize=" + fileSize + ", updateTime=" + updateTime
+                + ", userId=" + userId + ", teamId=" + teamId + ", shareFiles="
+                + shareFiles + "]";
     }
 
     public static void main(String[] args)
