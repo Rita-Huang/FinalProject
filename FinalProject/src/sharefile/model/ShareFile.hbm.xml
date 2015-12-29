@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015/12/27 ?U?? 02:20:35 by Hibernate Tools 4.3.1.Final -->
+<hibernate-mapping>
+    <class name="sharefile.model.ShareFileBean" table="ShareFile" schema="dbo" catalog="TwentyWork_" optimistic-lock="version">
+        <id name="fileId" type="int">
+            <column name="fileId" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="shareFile" class="sharefile.model.ShareFileBean" fetch="select">
+            <column name="upperFolderId" />
+        </many-to-one>
+        <property name="fileName" type="string">
+            <column name="fileName_" length="50" not-null="true" />
+        </property>
+        <property name="fileType" type="string">
+            <column name="fileType" length="10" not-null="true" />
+        </property>
+        <property name="fileSize" type="java.lang.Integer">
+            <column name="fileSize" />
+        </property>
+        <property name="updateTime" type="timestamp">
+            <column name="updateTime" length="23" />
+        </property>
+        <property name="userId" type="java.lang.Integer">
+            <column name="userId" />
+        </property>
+        <property name="teamId" type="java.lang.Integer">
+            <column name="teamId" />
+        </property>
+        
+        <set name="shareFiles" table="ShareFile" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="upperFolderId" />
+            </key>
+            <one-to-many class="sharefile.model.ShareFileBean" />
+        </set>
+    </class>
+</hibernate-mapping>

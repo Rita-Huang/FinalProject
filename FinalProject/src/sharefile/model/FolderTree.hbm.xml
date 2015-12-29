@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015/12/27 ?U?? 02:20:35 by Hibernate Tools 4.3.1.Final -->
+<hibernate-mapping>
+    <class name="sharefile.model.FolderTreeBean" table="FileTree" schema="dbo" catalog="TwentyWork_" optimistic-lock="version">
+        <id name="fileId" type="int">
+            <column name="fileId" />
+        </id>
+        <property name="fileName" type="string">
+            <column name="fileName_" length="50" not-null="true" />
+        </property>
+        <property name="fileType" type="string">
+            <column name="fileType" length="10" not-null="true" />
+        </property>
+        <property name="fileSize" type="java.lang.Integer">
+            <column name="fileSize" />
+        </property>
+        <property name="teamId" type="java.lang.Integer">
+            <column name="teamId" />
+        </property>
+        <property name="upperFolderId" type="java.lang.Integer">
+            <column name="upperFolderId" />
+        </property>
+        <property name="fileLevel" type="java.lang.Integer">
+            <column name="fileLevel" />
+        </property>
+        </class>
+        
+</hibernate-mapping>
