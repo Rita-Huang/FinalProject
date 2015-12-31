@@ -13,14 +13,7 @@ dependencies {						//宣告dependency library
 	providedRuntime 'javax.servlet:jstl:1.2'
 	compile 'org.hibernate:hibernate-core:4.3.11.Final'
 	compile 'commons-logging:commons-logging:1.2'
-	
-	compile 'org.springframework:spring-context:4.2.4.RELEASE'
-	compile 'org.springframework:spring-web:4.2.4.RELEASE'
-	compile 'org.springframework:spring-jdbc:4.2.4.RELEASE'
-	compile 'org.springframework:spring-orm:4.2.4.RELEASE'
-	compile 'org.springframework:spring-tx:4.2.4.RELEASE'
-	
-	 runtime files('C:/lib/sqljdbc42.jar')
+
 }
 import org.gradle.plugins.ide.eclipse.model.Facet
 eclipse {

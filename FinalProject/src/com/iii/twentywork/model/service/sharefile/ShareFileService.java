@@ -121,13 +121,7 @@ public class ShareFileService
 //        bean.setUpperFolderId(newFolderId);
 //        return dao.insert(bean);
 //    }
-    
-    
-    
-    
-    
-    
-    
+
     
     public static void main(String[] args)
     {

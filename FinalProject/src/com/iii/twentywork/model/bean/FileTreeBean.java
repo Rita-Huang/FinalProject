@@ -63,5 +63,4 @@ public class FileTreeBean
 				+ ", upperFolderId=" + upperFolderId + ", fileLevel=" + fileLevel + "]";
 	}
     
-    
 }
