@@ -9,7 +9,7 @@ import com.iii.twentywork.model.bean.ShareFileBean;
 import com.iii.twentywork.model.daointerface.ShareFileDAO;
 
 
-public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
+public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
 {
     private static final long serialVersionUID = 1L;
     
@@ -27,39 +27,40 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     
     
     private static final String SELETE_FILE_LIST = "select * from ShareFile where upperFolderId=?";
-//    @Override
-    public List<ShareFileBean> getFileList(int upperFolderId)
-    {//testing#5
-        List<ShareFileBean> fileList = new ArrayList<ShareFileBean>();
-        try
-        {
-            PreparedStatement stmt = conn.prepareStatement(SELETE_FILE_LIST);
-            stmt.setInt(1, upperFolderId);
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()) {
-                ShareFileBean bean = new ShareFileBean();
-                bean.setFileId(rs.getInt(1));
-                bean.setFileName(rs.getString(2));
-                bean.setFileType(rs.getString(3));
-                bean.setFileSize(rs.getInt(4));
-                bean.setUpdateTime(rs.getTimestamp(5));
-                bean.setUserId(rs.getInt(6));
-                bean.setTeamId(rs.getInt(7));
-//                bean.setUpperFolderId(rs.getInt(8));
-                fileList.add(bean);
-            }
-            
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return fileList;
-    }
+    public Set<ShareFileBean> getFileList(int upperFolderId){return null;}
+    //    @Override
+//    public List<ShareFileBean> getFileList(int upperFolderId)
+//    {//testing#5
+//        List<ShareFileBean> fileList = new ArrayList<ShareFileBean>();
+//        try
+//        {
+//            PreparedStatement stmt = conn.prepareStatement(SELETE_FILE_LIST);
+//            stmt.setInt(1, upperFolderId);
+//            ResultSet rs = stmt.executeQuery();
+//            while(rs.next()) {
+//                ShareFileBean bean = new ShareFileBean();
+//                bean.setFileId(rs.getInt(1));
+//                bean.setFileName(rs.getString(2));
+//                bean.setFileType(rs.getString(3));
+//                bean.setFileSize(rs.getInt(4));
+//                bean.setUpdateTime(rs.getTimestamp(5));
+//                bean.setUserId(rs.getInt(6));
+//                bean.setTeamId(rs.getInt(7));
+////                bean.setUpperFolderId(rs.getInt(8));
+//                fileList.add(bean);
+//            }
+//            
+//        } catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//        }
+//        return fileList;
+//    }
     
     
     
     private static final String INSERT = "insert into ShareFile values(?,?,?,?,?,?,?)";
-    @Override
+//    @Override
     public ShareFileBean insert(ShareFileBean bean) 
     {//testing#1
         try {
@@ -105,7 +106,7 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     
     
     private static final String FOLDER_TREE = "{call gen_folder_tree (?)}";
-    @Override
+//    @Override
     public List<FileTreeBean> getGroupFolderTree(int teamId)
     {//testing#11
         List<FileTreeBean> result = new ArrayList<FileTreeBean>();
@@ -133,7 +134,7 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     }
     
     private static final String UPDATE = "update ShareFile set fileName_ = ?, upperFolderId = ?  where fileId = ?";
-    @Override
+//    @Override
     public ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName)
     {//testing#7
         try
@@ -166,7 +167,7 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     
     private static final String DELETE = "delete from ShareFile where fileId = ?";
     private static final String DELETE_FOLDER = "{call find_delete_files(?)}";
-    @Override
+//    @Override
     public int deleteFile(int fileId,boolean isFolder) 
     {//testing#8
         int result ;
@@ -201,11 +202,6 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     }
     
     
-    @Override
-	public List<FileTreeBean> findFileByFileName(String queryString, int upperFolderId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 	private static final String FIND = "{call find_file_by_fileName (?,?)}";
@@ -253,7 +249,7 @@ public class ShareFileDAOJdbc implements Serializable, ShareFileDAO
     
     
     private static final String SELECT_BY_FILEID = "select * from ShareFile where fileId=?";
-    @Override
+//    @Override
     public ShareFileBean selectByFileId(int fileId) 
     {//testing#6
         ShareFileBean bean = new ShareFileBean();

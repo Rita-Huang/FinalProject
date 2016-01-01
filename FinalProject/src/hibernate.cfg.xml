@@ -4,12 +4,12 @@
 		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory >
-        <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-<!--     net.sourceforge.jtds.jdbc.Driver     -->
-        <property name="hibernate.connection.url">jdbc:sqlserver:// localhost:1433;database=TwentyWork_</property>
-        <property name="hibernate.connection.username">sa</property>
-        <property name="hibernate.connection.password">passw0rd</property>
+<!--         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property> -->
+<!--         <property name="hibernate.connection.url">jdbc:sqlserver:// localhost:1433;database=TwentyWork_</property> -->
+<!--         <property name="hibernate.connection.username">sa</property> -->
+<!--         <property name="hibernate.connection.password">passw0rd</property> -->
 
+		<property name="connection.datasource">java:comp/env/jdbc/xxx</property>
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
         <property name="hibernate.current_session_context_class">thread</property>
 <!--         <property name="hibernate.show_sql">true</property> -->
@@ -21,6 +21,9 @@
 <!--         <mapping resource="com/iii/twentywork/model/bean/TeamUser.hbm.xml"/> -->
         <mapping resource="com/iii/twentywork/model/bean/ShareFile.hbm.xml"/>
 		<mapping resource="com/iii/twentywork/model/bean/FolderTree.hbm.xml"/>
+		<mapping  resource="com/iii/twentywork/model/bean/Team.hbm.xml"/>
+        <mapping  resource="com/iii/twentywork/model/bean/TeamUser.hbm.xml"/>
+		<mapping class="com.iii.twentywork.model.bean.UsersBean" />
 		
     </session-factory>
 </hibernate-configuration>

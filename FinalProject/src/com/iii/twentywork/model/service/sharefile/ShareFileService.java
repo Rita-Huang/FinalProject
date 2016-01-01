@@ -3,46 +3,105 @@ package com.iii.twentywork.model.service.sharefile;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iii.twentywork.model.bean.ShareFileBean;
-import com.iii.twentywork.model.dao.ShareFileDAOJdbc;
-import com.iii.twentywork.model.daointerface.ShareFileDAO;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
+import com.iii.twentywork.model.bean.FileTreeBean;
+import com.iii.twentywork.model.bean.ShareFileBean;
+import com.iii.twentywork.model.bean.TeamUserBean;
+import com.iii.twentywork.model.daointerface.ShareFileDAO;
+import com.iii.twentywork.model.daointerface.TeamUserDAO;
+
+@Component(value = "shareFileService")
 public class ShareFileService
 {
-    ShareFileDAO dao ;
+    @Autowired
+    private ShareFileDAO shareFileDAO ;
+    public void setShareFileDAO(ShareFileDAO shareFileDAO)
+    {
+        this.shareFileDAO = shareFileDAO;
+        System.out.println("ShareFileService setShareFileDAO");
+    }
     
+    public boolean checkPathInfo(String pathInfo, TeamUserBean teamUser) {
+        int teamId = teamUser.getTeam().getTeamId();
+        List<FileTreeBean> folderTree = getGroupFolderTree(teamId);
+//        System.out.println(folderTree);
+        String[] pathName = pathInfo.split("/");//取得各層folder名稱
+        
+        int folderTreeSize = folderTree.size();
+        int folderTreeMaxLevel = folderTree.get(folderTreeSize-1).getFileLevel();
+        
+//        System.out.println("into routine");
+        if(pathName.length==0 || folderTreeMaxLevel<(pathName.length-1)) {
+//            System.out.println("不用比對path"
+//                                +"  pathLevel= "+ (pathName.length-1)
+//                                +"  folderTreeMaxLevel= "+folderTreeMaxLevel);
+            return false;
+        } else
+        {
+            int folderTreeIndex = 1;// folderTreeIndex=0:folder根目錄
+            for (int pathLevel = 1; pathLevel < pathName.length; pathLevel++)
+            {
+//                System.out.println("pathLevel= " + pathLevel);
+                String pathElement = pathName[pathLevel];
+                int comparedLevel;
+                boolean isConformity=false;
+                do
+                {
+                    FileTreeBean compared = folderTree.get(folderTreeIndex);
+                 // 比對folderName
+                    if(pathElement.equals(compared.getFileName())) {
+                       isConformity = true;
+                    }
+                    folderTreeIndex++;
+                    comparedLevel = compared.getFileLevel();
+                } while (comparedLevel == pathLevel && folderTreeIndex < folderTreeSize-1);
+                if(!isConformity) {
+//                    System.out.println("找不到符合的Folder");
+//                    break;
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+    
+    
+    
+    public List<FileTreeBean> getGroupFolderTree(int teamId)
+    {//testing#1
+        return shareFileDAO.getGroupFolderTree(teamId);
+    }
+    
+    public ShareFileBean getGroupRootFolder(int teamId) {
+        return shareFileDAO.getGroupRootBean(teamId);
+    }
+    
+    
+    
+    public static void main(String[] args)
+    {
+        ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
+        SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
+        Session session = sessionFactory.getCurrentSession();
+        sessionFactory.getCurrentSession().beginTransaction();
+        
+        ShareFileService service = (ShareFileService) context.getBean("shareFileService");
+        System.out.println(service.getGroupFolderTree(201));
+        System.out.println(service.getGroupFolderTree(203));
+        
+        sessionFactory.getCurrentSession().getTransaction().commit();
+    }
     
     /**
-     * 新增單一檔案
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param filePath
-     * @return ShareFileBean裡所有屬性都要放
-     */
-//    public ShareFileBean insertFile(int userId, int teamId,int upperFolderId, String filePath) 
-//    {// testing#1
-//        ShareFileBean bean = new ShareFileBean(userId, teamId, upperFolderId,filePath);
-//
-//        return dao.insert(bean);
-//    }
-    
-    
-    
-    public void setDao(ShareFileDAO dao) {
-		this.dao = dao;
-	}
-
-
-	/**
      * 新增多個檔案
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param filePath
-     * @return ShareFileBean裡所有屬性都要放
      */
-    public List<ShareFileBean> insertFile(int userId, int teamId,int upperFolderId, String[] filePath)
+    public List<ShareFileBean> insertFile(TeamUserDAO teamUserDAO,int upperFolderId, String[] filePath)
     {//testing#2
         List<ShareFileBean> beans = new ArrayList<ShareFileBean>();
         
@@ -65,7 +124,7 @@ public class ShareFileService
     public ShareFileBean insertFolder(int userId, int teamId, int upperFolderId,String folderName)
     {//testing#3
         ShareFileBean bean =new ShareFileBean(userId,teamId,folderName,upperFolderId);
-        return dao.insert(bean);
+        return shareFileDAO.insert(bean);
     }
     
     /**
@@ -79,7 +138,7 @@ public class ShareFileService
     public  ShareFileBean insertFolder(int userId,int teamId) 
     {//testing#4
         ShareFileBean bean =new ShareFileBean(userId,teamId,"Group"+teamId+"根目錄",1);
-        return dao.insert(bean);
+        return shareFileDAO.insert(bean);
     }
     
     
@@ -90,7 +149,7 @@ public class ShareFileService
      */
     public int deleteFile(ShareFileBean bean) 
     {//testing#8
-        return dao.deleteFile(bean.getFileId(),bean.getFileSize()==0);
+        return shareFileDAO.deleteFile(bean.getFileId(),bean.getFileSize()==0);
     }
     
     
@@ -123,10 +182,6 @@ public class ShareFileService
 //    }
 
     
-    public static void main(String[] args)
-    {
-        // TODO Auto-generated method stub
-
-    }
+    
 
 }

@@ -44,6 +44,15 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return bean;
     }
     
+    private static final String SELECT_BY_TEAMID = "select * from ShareFile where teamId=? and upperFolderId=900";
+    @Override
+    public ShareFileBean getGroupRootBean(int teamId) {
+        SQLQuery query = getSession().createSQLQuery(SELECT_BY_TEAMID);
+        query.setParameter(0, teamId);
+        query.addEntity(ShareFileBean.class);
+        return (ShareFileBean) query.list();
+    }
+    
     // INSERT = "insert into ShareFile values(?,?,?,?,?,?,?)";
     @Override
     public  ShareFileBean insert(ShareFileBean bean)
@@ -55,21 +64,11 @@ public class ShareFileDAOHibernate implements ShareFileDAO
    
   //select file list :"select * from ShareFile where upperFolderId=?"
     @Override
-    public List<ShareFileBean> getFileList(int upperFolderId)
+    public Set<ShareFileBean> getFileList(int upperFolderId)
     {//testing#3
-    	System.out.println("ShareFileDAOHibernate getFileList");
+//    	System.out.println("ShareFileDAOHibernate getFileList");
         ShareFileBean bean = selectByFileId(upperFolderId);
-        if(bean!=null) {
-            Set<ShareFileBean> beans = bean.getInnerFiles();
-            List<ShareFileBean> list = new ArrayList<ShareFileBean>();
-            for (Iterator<ShareFileBean> item = beans.iterator(); item.hasNext();)
-            {
-                list.add((ShareFileBean) item.next());
-            }
-            return list;
-        }else {
-            return null;
-        }
+        return bean.getInnerFiles();
     }
     
     //create procedure gen_folder_tree ( @v_teamId  int)
@@ -139,6 +138,12 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
         Session session = sessionFactory.getCurrentSession();
         sessionFactory.getCurrentSession().beginTransaction();
+        
+        ShareFileDAO dao = (ShareFileDAO) context.getBean("shareFileDAO");
+        Set<ShareFileBean> list = dao.getFileList(900);
+        System.out.println(list);
+        System.out.println(dao.selectByFileId(902));
+        System.out.println(list.contains(dao.selectByFileId(902)));
         
       //testing#7 ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName)
 //        System.out.println("testing#7");

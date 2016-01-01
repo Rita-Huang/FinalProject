@@ -1,6 +1,7 @@
 package com.iii.twentywork.model.daointerface;
 
 import java.util.List;
+import java.util.Set;
 
 import com.iii.twentywork.model.bean.FileTreeBean;
 import com.iii.twentywork.model.bean.ShareFileBean;
@@ -10,7 +11,7 @@ public interface ShareFileDAO
     /**
      * 頁面初始化要取得的檔案列表data
      */
-    public abstract List<ShareFileBean> getFileList(int upperFolderId);
+    public abstract Set<ShareFileBean> getFileList(int upperFolderId);
 
     /**
      * 新增單一檔案
@@ -46,5 +47,7 @@ public interface ShareFileDAO
      * 用fileId select檔案
      */
     public abstract ShareFileBean selectByFileId(int fileId);
+    
+    public abstract ShareFileBean getGroupRootBean(int teamId);
    
 }

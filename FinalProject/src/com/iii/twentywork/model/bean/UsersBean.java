@@ -1,6 +1,7 @@
 package com.iii.twentywork.model.bean;
 
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -16,8 +17,9 @@ import org.springframework.stereotype.Component;
 @Entity
 @Table(name="USERS")
 @Component(value="UsersBean")
-public class UsersBean {
-	public UsersBean() {
+public class UsersBean implements Serializable{
+    private static final long serialVersionUID = 1L;
+    public UsersBean() {
 		
 	}
 	public UsersBean(String[] array) {
