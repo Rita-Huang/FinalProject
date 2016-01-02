@@ -21,6 +21,7 @@ import org.springframework.dao.support.DaoSupport;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.iii.twentywork.model.bean.CheckPathInfoBean;
 import com.iii.twentywork.model.bean.FileTreeBean;
 import com.iii.twentywork.model.bean.ShareFileBean;
 import com.iii.twentywork.model.bean.TeamUserBean;
@@ -57,22 +58,25 @@ public class ShareFileServlet extends HttpServlet {
 	  //驗證資料
         Map<String, String> errors = new HashMap<String, String>();
         request.setAttribute("errors", errors);
-        boolean isPass = shareFileService.checkPathInfo(pathInfo,teamUser);
-        if(!isPass) {
-            errors.put("pathError", "找不到此資料夾");
+        CheckPathInfoBean check = shareFileService.checkPathInfo(pathInfo,teamUser);
+        boolean isPass = check.isPass();
+        if(!isPass) {errors.put("pathError", "找不到此資料夾");}
+        request.setAttribute("folders", check.getFolders());//List<FileTreeBean>
+        
+	  //呼叫Model
+        int lastFolder = (check.getFolders().size()-1);
+        int upperFolderId = check.getFolders().get(lastFolder).getFileId();
+        List<ShareFileBean> list = shareFileService.getSortedFileList(upperFolderId);
+        request.setAttribute("list", list);
+        
+      //呼叫View
+        if(errors!=null && !errors.isEmpty()) {
+            String path = request.getContextPath();
+            response.sendRedirect(path+"/ShareFile");
+        }else {
             request.getRequestDispatcher("/shareFile/test.jsp").forward(request, response);
         }
-        
-	/*  //資料型態轉換
-	    req.getRequestDispatcher("/login/login.jsp").forward(req, resp);
-                    return;
 	    
-	  //呼叫Model
-	    
-	    for(String e:folderName) {
-	        System.out.println(e);
-	    }
-	 */   
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
