@@ -76,13 +76,12 @@ public class ShareFileService
                     if(pathElement.equals(compared.getFileName())) {
                        isConformity = true;
                        folders.add(compared);
-                       System.out.println(folders);
                     }
                     folderTreeIndex++;
                     comparedLevel = compared.getFileLevel();
                 } while (comparedLevel == pathLevel && folderTreeIndex < folderTreeSize-1);
                 if(!isConformity) {
-//                    System.out.println("找不到符合的Folder");
+                    System.out.println("找不到符合的Folder");
                     return new CheckPathInfoBean(false,folders);
                 }
             }
@@ -93,7 +92,7 @@ public class ShareFileService
     
     public List<FileTreeBean> getGroupFolderTree(int teamId)
     {//testing#1
-        System.out.println("ShareFileService.java:95-- teamId: "+teamId);
+//        System.out.println("ShareFileService.java:95-- teamId: "+teamId);
         return shareFileDAO.getGroupFolderTree(teamId);
     }
     
