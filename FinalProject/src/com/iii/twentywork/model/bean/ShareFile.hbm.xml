@@ -23,12 +23,12 @@
         <property name="updateTime" type="timestamp">
             <column name="updateTime" length="23" />
         </property>
-        <property name="userId" type="java.lang.Integer">
+        <many-to-one name="userBean" class="com.iii.twentywork.model.bean.UsersBean" fetch="select">
             <column name="userId" />
-        </property>
-        <property name="teamId" type="java.lang.Integer">
+        </many-to-one>
+        <many-to-one name="teamBean" class="com.iii.twentywork.model.bean.TeamBean" fetch="select">
             <column name="teamId" />
-        </property>
+        </many-to-one>
         <set name="innerFiles" table="ShareFile" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="upperFolderId" />

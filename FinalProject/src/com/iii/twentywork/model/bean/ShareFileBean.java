@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class ShareFileBean
 {
@@ -13,11 +15,12 @@ public class ShareFileBean
     private String fileType; //not null
     private Integer fileSize;
     private Timestamp updateTime;
-    private Integer userId; 
-    private Integer teamId; 
-//    private Integer upperFolderId; 
+    private TeamBean teamBean;
+    private UsersBean userBean;
     private ShareFileBean upperFolder;
     private Set<ShareFileBean> innerFiles = new HashSet<ShareFileBean>(0);
+    
+    
     /**
      * 空的建構子，沒有自動設定任何屬性
      */
@@ -45,8 +48,8 @@ public class ShareFileBean
      * @param filePath
      */
     public ShareFileBean(int userId,int teamId,String filePath) {
-        this.userId = userId;
-        this.teamId = teamId;
+    	userBean.setUserID(userId);
+    	teamBean.setTeamId(teamId);
 //        this.upperFolderId = upperFolderId;
         insertSetFileName(filePath);
         insertSetFileType(filePath);
@@ -65,9 +68,9 @@ public class ShareFileBean
      * @param upperFolderId
      */
     public ShareFileBean(int userId,int teamId,String folderName,int upperFolderId) {
-        this.userId = userId;
-        this.teamId = teamId;
-        this.fileName = folderName;
+    	userBean.setUserID(userId);
+    	teamBean.setTeamId(teamId);
+    	this.fileName = folderName;
         this.fileType = "資料夾";
 //        this.upperFolderId = upperFolderId;
     }
@@ -131,16 +134,15 @@ public class ShareFileBean
     public Timestamp getUpdateTime() { return updateTime; }
     public void setUpdateTime(Timestamp updateTime) { this.updateTime = updateTime; }
     
-    public Integer getUserId() { return userId; }
-    public void setUserId(Integer userId) { this.userId = userId; }
-    
-    public Integer getTeamId() { return teamId; }
-    public void setTeamId(Integer teamId) { this.teamId = teamId; }
-    
-//    public Integer getUpperFolderId() { return upperFolderId; }
-//    public void setUpperFolderId(Integer upperFolderId) { this.upperFolderId = upperFolderId; }
-    
-    public ShareFileBean getUpperFolder() { return this.upperFolder; }
+    @Autowired
+    public TeamBean getTeamBean() { return teamBean; }
+	public void setTeamBean(TeamBean team) { this.teamBean = team;}
+
+	@Autowired
+	public UsersBean getUserBean() { return userBean;}
+	public void setUserBean(UsersBean user) { this.userBean = user;	}
+
+	public ShareFileBean getUpperFolder() { return this.upperFolder; }
     public void setUpperFolder(ShareFileBean upperFolder) { this.upperFolder = upperFolder; }
     
     public Set<ShareFileBean> getInnerFiles() { return this.innerFiles; }
@@ -154,9 +156,9 @@ public class ShareFileBean
     {
         return "ShareFileBean [fileId=" + fileId + ", fileName=" + fileName
                 + ", fileType=" + fileType + ", fileSize=" + fileSize
-                + ", updateTime=" + updateTime + ", userId=" + userId
-                + ", teamId=" + teamId 
-               ;// + ", upperFolder.getFileId()=" + upperFolder.getFileId() + "]";
+                + ", updateTime=" + updateTime + ", userId=" + userBean.getUserID()
+                + ", teamId=" + teamBean.getTeamId(); 
+               // + ", upperFolder.getFileId()=" + upperFolder.getFileId() + "]";
     }
 
 

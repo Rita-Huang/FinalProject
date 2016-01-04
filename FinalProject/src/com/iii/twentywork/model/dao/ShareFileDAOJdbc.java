@@ -12,7 +12,7 @@ import com.iii.twentywork.model.daointerface.ShareFileDAO;
 public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
 {
     private static final long serialVersionUID = 1L;
-    
+   /* 
     Connection conn;
     private void getConnection() throws SQLException
     {
@@ -28,39 +28,39 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
     
     private static final String SELETE_FILE_LIST = "select * from ShareFile where upperFolderId=?";
     public Set<ShareFileBean> getFileList(int upperFolderId){return null;}
-    //    @Override
-//    public List<ShareFileBean> getFileList(int upperFolderId)
-//    {//testing#5
-//        List<ShareFileBean> fileList = new ArrayList<ShareFileBean>();
-//        try
-//        {
-//            PreparedStatement stmt = conn.prepareStatement(SELETE_FILE_LIST);
-//            stmt.setInt(1, upperFolderId);
-//            ResultSet rs = stmt.executeQuery();
-//            while(rs.next()) {
-//                ShareFileBean bean = new ShareFileBean();
-//                bean.setFileId(rs.getInt(1));
-//                bean.setFileName(rs.getString(2));
-//                bean.setFileType(rs.getString(3));
-//                bean.setFileSize(rs.getInt(4));
-//                bean.setUpdateTime(rs.getTimestamp(5));
-//                bean.setUserId(rs.getInt(6));
-//                bean.setTeamId(rs.getInt(7));
-////                bean.setUpperFolderId(rs.getInt(8));
-//                fileList.add(bean);
-//            }
-//            
-//        } catch (SQLException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        return fileList;
-//    }
+        @Override
+    public List<ShareFileBean> getFileList(int upperFolderId)
+    {//testing#5
+        List<ShareFileBean> fileList = new ArrayList<ShareFileBean>();
+        try
+        {
+            PreparedStatement stmt = conn.prepareStatement(SELETE_FILE_LIST);
+            stmt.setInt(1, upperFolderId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                ShareFileBean bean = new ShareFileBean();
+                bean.setFileId(rs.getInt(1));
+                bean.setFileName(rs.getString(2));
+                bean.setFileType(rs.getString(3));
+                bean.setFileSize(rs.getInt(4));
+                bean.setUpdateTime(rs.getTimestamp(5));
+                bean.setUserId(rs.getInt(6));
+                bean.setTeamId(rs.getInt(7));
+//                bean.setUpperFolderId(rs.getInt(8));
+                fileList.add(bean);
+            }
+            
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return fileList;
+    }
     
     
     
     private static final String INSERT = "insert into ShareFile values(?,?,?,?,?,?,?)";
-//    @Override
+    @Override
     public ShareFileBean insert(ShareFileBean bean) 
     {//testing#1
         try {
@@ -79,7 +79,7 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
             
             stmt.setInt(5, bean.getUserId());
             stmt.setInt(6, bean.getTeamId());
-//            stmt.setInt(7, bean.getUpperFolderId());
+            stmt.setInt(7, bean.getUpperFolderId());
             int result = stmt.executeUpdate();
             if(result ==0) {
                 System.out.println("Creating user failed, no rows affected.");
@@ -106,7 +106,7 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
     
     
     private static final String FOLDER_TREE = "{call gen_folder_tree (?)}";
-//    @Override
+    @Override
     public List<FileTreeBean> getGroupFolderTree(int teamId)
     {//testing#11
         List<FileTreeBean> result = new ArrayList<FileTreeBean>();
@@ -134,7 +134,7 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
     }
     
     private static final String UPDATE = "update ShareFile set fileName_ = ?, upperFolderId = ?  where fileId = ?";
-//    @Override
+    @Override
     public ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName)
     {//testing#7
         try
@@ -155,7 +155,7 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
                 return null;
             }else {
                 bean.setFileName(newFileName);
-//                bean.setUpperFolderId(newFolderId);
+                bean.setUpperFolderId(newFolderId);
             }
         } catch (SQLException e)
         {
@@ -167,7 +167,7 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
     
     private static final String DELETE = "delete from ShareFile where fileId = ?";
     private static final String DELETE_FOLDER = "{call find_delete_files(?)}";
-//    @Override
+    @Override
     public int deleteFile(int fileId,boolean isFolder) 
     {//testing#8
         int result ;
@@ -205,7 +205,7 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
 
 
 	private static final String FIND = "{call find_file_by_fileName (?,?)}";
-    /*public List<ShareFileBean> findFileByFileName(String queryString,int upperFolderId)
+    //public List<ShareFileBean> findFileByFileName(String queryString,int upperFolderId)
     {//testing#12
         List<ShareFileBean> result = new ArrayList<ShareFileBean>();
         try
@@ -235,7 +235,7 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
         }
         return result;
     }
-    */
+   
     public ShareFileDAOJdbc() {
         try
         {
@@ -309,20 +309,20 @@ public class ShareFileDAOJdbc implements Serializable//, ShareFileDAO
             System.out.println(item.next());
         }//testing#11
         
-//        List<ShareFileBean> rs4 = new ArrayList<ShareFileBean>();
-//        rs4.add(dao.selectByFileId(6));
-//        rs4.add(dao.selectByFileId(7));
-//        rs4.add(dao.selectByFileId(11));
-//        rs4.add(dao.selectByFileId(12));
-//        int[] rs4rs = dao.deleteFile(rs4);
-//        for(int e: rs4rs) {
-//            System.out.println(e);
-//        }//testing#12
+        List<ShareFileBean> rs4 = new ArrayList<ShareFileBean>();
+        rs4.add(dao.selectByFileId(6));
+        rs4.add(dao.selectByFileId(7));
+        rs4.add(dao.selectByFileId(11));
+        rs4.add(dao.selectByFileId(12));
+        int[] rs4rs = dao.deleteFile(rs4);
+        for(int e: rs4rs) {
+            System.out.println(e);
+        }//testing#12
         
 
         
         
         dao.closeConnection();
     }
-
+*/
 }

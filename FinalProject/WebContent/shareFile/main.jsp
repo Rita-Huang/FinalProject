@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="../css/table.css" />
+<link rel="stylesheet" type="text/css" href="css/table.css" />
 <title>ShareFile</title>
 </head>
 <body>
@@ -13,7 +13,7 @@ Hello<br>
 userID:${teamUserBean.users.userID}<br>
 userName:${teamUserBean.users.userName}<br>
 groupID:${teamUserBean.team.teamId}<br>
-error:${errors.pathError }<br>
+error:${errors.pathError}<br>
 
 <br>
 <table>
@@ -41,8 +41,12 @@ error:${errors.pathError }<br>
 		<tr>
 			<td>fileId</td>
 			<td>fileName</td>
+			<td>fileType</td>
 			<td>updateTime</td>
 			<td>userId</td>
+			<td>userName</td>
+			<td>teamId</td>
+			<td>teamName</td>
 		</tr>
 	</thead>
 	<tbody>
@@ -51,19 +55,18 @@ error:${errors.pathError }<br>
 			<tr>    
 				<td>${fileList.fileId}</td>
 				<td>${fileList.fileName}</td>
+				<td>${fileList.fileType}</td>
 				<td>${fileList.updateTime}</td>
-				<td>${fileList.userId}</td>
+				<td>${fileList.userBean.userID}</td>
+				<td>${fileList.userBean.userName}</td>
+				<td>${fileList.teamBean.teamId}</td>
+				<td>${fileList.teamBean.teamName}</td>
 			</tr>
 		</c:forEach>
 		</c:if>
 	</tbody>
 </table>
 
-<!-- request.setAttribute("folders", check.getFolders());//List<FileTreeBean> -->
-<!-- request.setAttribute("list", list);  //List<ShareFileBean>    -->
-<%-- <c:forEach var="fileTreeBean" items="${folders}"> --%>
-
-<%-- </c:forEach> --%>
 
 
 

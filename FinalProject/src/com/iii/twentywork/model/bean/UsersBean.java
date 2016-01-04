@@ -16,7 +16,7 @@ import javax.persistence.Transient;
 import org.springframework.stereotype.Component;
 @Entity
 @Table(name="USERS")
-@Component(value="UsersBean")
+@Component(value="usersBean")
 public class UsersBean implements Serializable{
     private static final long serialVersionUID = 1L;
     public UsersBean() {
