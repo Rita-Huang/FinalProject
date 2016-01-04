@@ -62,19 +62,22 @@ public class ShareFileServlet extends HttpServlet {
         boolean isPass = check.isPass();
         if(!isPass) {errors.put("pathError", "找不到此資料夾");}
         request.setAttribute("folders", check.getFolders());//List<FileTreeBean>
-        
+        System.out.println("ShareFileServlet.java:65--List<FileTreeBean> folders="+check.getFolders()); 
 	  //呼叫Model
         int lastFolder = (check.getFolders().size()-1);
+        System.out.println("ShareFileServlet.java:68--lastFolder="+lastFolder);        
         int upperFolderId = check.getFolders().get(lastFolder).getFileId();
-        List<ShareFileBean> list = shareFileService.getSortedFileList(upperFolderId);
-        request.setAttribute("list", list);
+        System.out.println("ShareFileServlet.java:70--upperFolderId="+upperFolderId); 
+        List<ShareFileBean> fileList = shareFileService.getSortedFileList(upperFolderId);
+        System.out.println("ShareFileServlet.java:70--List<ShareFileBean> list ="+fileList);
+        request.setAttribute("fileList", fileList);  //List<ShareFileBean>
         
       //呼叫View
         if(errors!=null && !errors.isEmpty()) {
             String path = request.getContextPath();
             response.sendRedirect(path+"/ShareFile");
         }else {
-            request.getRequestDispatcher("/shareFile/test.jsp").forward(request, response);
+            request.getRequestDispatcher("/shareFile/main.jsp").forward(request, response);
         }
 	    
 	}

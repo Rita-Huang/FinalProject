@@ -35,6 +35,7 @@ public class ShareFileService
     public CheckPathInfoBean checkPathInfo(String pathInfo, TeamUserBean teamUser) 
     {//test#2
         int teamId = teamUser.getTeam().getTeamId();
+        System.out.println("ShareFileService.java:38-- teamId: "+teamId);
         List<FileTreeBean> folderTree = getGroupFolderTree(teamId);
         List<FileTreeBean> folders = new ArrayList<FileTreeBean>();
         folders.add(folderTree.get(0));//group root folder
@@ -64,7 +65,7 @@ public class ShareFileService
             int folderTreeIndex = 1;// folderTreeIndex=0:folder根目錄
             for (int pathLevel = 1; pathLevel < pathName.length; pathLevel++)
             {
-                System.out.println("pathLevel= " + pathLevel);
+//                System.out.println("pathLevel= " + pathLevel);
                 String pathElement = pathName[pathLevel];
                 int comparedLevel;
                 boolean isConformity=false;
@@ -92,6 +93,7 @@ public class ShareFileService
     
     public List<FileTreeBean> getGroupFolderTree(int teamId)
     {//testing#1
+        System.out.println("ShareFileService.java:95-- teamId: "+teamId);
         return shareFileDAO.getGroupFolderTree(teamId);
     }
     
