@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="http://localhost:8080/FinalProject/css/table.css" />
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/table.css" />
 <title>ShareFile</title>
 </head>
 <body>
@@ -16,26 +16,20 @@ groupID:${teamUserBean.team.teamId}<br>
 error:${errors.pathError}<br>
 <hr>
 <div>
+<c:set var="path" value="<%= request.getContextPath() %>" />
 	<c:forEach var="fileTree" items="${folders}">
 	<c:choose>
 		<c:when test="${fileTree.fileLevel ==0}">
-			<a href = "http://localhost:8080/FinalProject/ShareFile/">ShareFile</a>
+			<a href = "${path}">ShareFile</a>
 		</c:when>
 		<c:otherwise>
-			 > ${fileTree.fileName}
+			<c:set var="path" value="${path}/${fileTree.fileName}" />
+			 > <a href = "${path}">${fileTree.fileName}</a>
 		</c:otherwise>
 	</c:choose>
 	</c:forEach>
 </div>
 <br>
-<br><br>
-Request Context Path: <%= request.getContextPath() %><br>
-Request URI:          <%= request.getRequestURI() %><br>
-Session URI:          <%= session.getAttribute("requestURI") %><br>
-Request URL:          <%= request.getRequestURL() %><br>
-PathInfo:          <%= request.getPathInfo() %><br>
-session.requestURI:${session.requestURI}
-<%-- <c:set var="requestURI" value="${session.requestURI}" /> --%>
 <table>
 	<thead>
 		<tr>
@@ -57,7 +51,7 @@ session.requestURI:${session.requestURI}
 				
 				<td>
 				<c:choose>
-					<c:when test="${fileList.fileType == '資料夾'}"><a href = "<%= session.getAttribute("requestURI") %>/${fileList.fileName}">${fileList.fileName}</a></c:when>
+					<c:when test="${fileList.fileType == '資料夾'}"><a href = "${requestURI}/${fileList.fileName}">${fileList.fileName}</a></c:when>
 					<c:otherwise>${fileList.fileName}</c:otherwise>
 				</c:choose>
 				</td>
