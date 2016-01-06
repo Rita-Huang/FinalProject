@@ -9,6 +9,7 @@
 <body>
 	<div class="fancy">
 		<h4>Choose File to Upload in Server</h4>
+		<%= request.getContextPath() %>
 		<form action="<%= request.getContextPath() %>/shareFile/fileUpload" method="post" enctype="multipart/form-data">
 			<input type="file" name="file" multiple/> 
 			<input type="submit" value="upload" />

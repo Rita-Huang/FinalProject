@@ -1,7 +1,5 @@
 package com.iii.twentywork.model.dao;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +13,10 @@ import org.springframework.stereotype.Component;
 
 import com.iii.twentywork.model.bean.FileTreeBean;
 import com.iii.twentywork.model.bean.ShareFileBean;
+import com.iii.twentywork.model.bean.TeamUserBean;
+import com.iii.twentywork.model.bean.TeamUserIdBean;
 import com.iii.twentywork.model.daointerface.ShareFileDAO;
+import com.iii.twentywork.model.daointerface.TeamUserDAO;
 
 @Component(value = "shareFileDAO")
 public class ShareFileDAOHibernate implements ShareFileDAO
@@ -24,7 +25,7 @@ public class ShareFileDAOHibernate implements ShareFileDAO
     private SessionFactory sessionFactory;
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        System.out.println("ShareFileDAOHibernate setSessionFactory");
+//        System.out.println("ShareFileDAOHibernate setSessionFactory");
     }
     
     public Session getSession() {
@@ -62,7 +63,8 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return selectByFileId(pk);//;
     }
    
-  //select file list :"select * from ShareFile where upperFolderId=?"
+    //vvvvvvvv
+    //select file list :"select * from ShareFile where upperFolderId=?"
     @Override
     public Set<ShareFileBean> getFileList(int upperFolderId)
     {//testing#3
@@ -71,6 +73,7 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return bean.getInnerFiles();
     }
     
+    //vvvvvvvv
     //create procedure gen_folder_tree ( @v_teamId  int)
     private static final String FOLDER_TREE = "{ call gen_folder_tree (?) }";
     @Override
@@ -140,10 +143,29 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         sessionFactory.getCurrentSession().beginTransaction();
         
         ShareFileDAO dao = (ShareFileDAO) context.getBean("shareFileDAO");
-        Set<ShareFileBean> list = dao.getFileList(900);
-        System.out.println(list);
-        System.out.println(dao.selectByFileId(902));
-        System.out.println(list.contains(dao.selectByFileId(902)));
+        TeamUserDAO teamUserDAO=(TeamUserDAO) context.getBean("teamUserDAO");
+        ShareFileBean bean = new ShareFileBean();
+        //100,200,"New Text Document - Copy - Copy - Copy.txt",904
+        String filePath = "New Text Document - Copy - Copy - Copy.txt";
+        TeamUserBean teamUserBean = teamUserDAO.select(new TeamUserIdBean(100,200)) ;
+        ShareFileBean shareFileBean = dao.selectByFileId(904);
+        bean.setTeamBean(teamUserBean.getTeam());;
+        bean.setUserBean(teamUserBean.getUsers());
+        bean.insertSetFileName(filePath);
+        bean.insertSetFileSize(filePath);
+        bean.insertSetFileType(filePath);
+        bean.insertSetUpdateTime();
+        bean.setUpperFolder(shareFileBean);;
+        System.out.println("bean:" +bean);
+        ShareFileBean result =  dao.insert(bean);
+        System.out.println("resutl: " +result);
+        
+        
+//        ShareFileDAO dao = (ShareFileDAO) context.getBean("shareFileDAO");
+//        Set<ShareFileBean> list = dao.getFileList(900);
+//        System.out.println(list);
+//        System.out.println(dao.selectByFileId(902));
+//        System.out.println(list.contains(dao.selectByFileId(902)));
         
       //testing#7 ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName)
 //        System.out.println("testing#7");

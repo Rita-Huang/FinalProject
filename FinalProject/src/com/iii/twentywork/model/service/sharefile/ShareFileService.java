@@ -1,11 +1,18 @@
 package com.iii.twentywork.model.service.sharefile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +119,29 @@ public class ShareFileService
         return list;
     }
     
+    
+  //testing#4
+//	public ShareFileBean insertFile(int userID,int teamId,String filePath,int folderId) {
+    public ShareFileBean insertFile(TeamUserBean teamUser,String fileName,ShareFileBean	upperFolder){
+		ShareFileBean bean = new ShareFileBean();
+//		System.out.println("userID:"+userID);
+//		System.out.println("teamId:"+teamId);
+//		System.out.println("filePath:"+filePath);
+//		System.out.println("folderId:"+folderId);
+//		ShareFileBean bean = new ShareFileBean( userID, teamId, filePath, folderId);
+		bean.setTeamBean(teamUser.getTeam());
+        bean.setUserBean(teamUser.getUsers());
+        bean.insertSetFileName(fileName);
+        bean.insertSetFileSize(fileName);
+        bean.insertSetFileType(fileName);
+        bean.insertSetUpdateTime();
+        bean.setUpperFolder(upperFolder);
+		ShareFileBean bean_back = shareFileDAO.insert(bean);
+		System.out.println(bean_back);
+		return bean_back;//shareFileDAO.insert(bean);
+	}
+    
+    
     public static void main(String[] args)
     {
         ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
@@ -122,8 +152,8 @@ public class ShareFileService
         ShareFileService service = (ShareFileService) context.getBean("shareFileService");
         
         
-      
-      //testing#1
+        		
+        		//      testing#1
 //        System.out.println(service.getGroupFolderTree(201));
 //        System.out.println(service.getGroupFolderTree(203));
       //test#2  
@@ -152,91 +182,6 @@ public class ShareFileService
     public ShareFileBean getGroupRootFolder(int teamId) {
         return shareFileDAO.getGroupRootBean(teamId);
     }
-    
-    
-    /**
-     * 新增多個檔案
-     */
-    public List<ShareFileBean> insertFile(TeamUserDAO teamUserDAO,int upperFolderId, String[] filePath)
-    {//testing#2
-        List<ShareFileBean> beans = new ArrayList<ShareFileBean>();
-        
-//        for(int i=0;i<filePath.length;i++) {
-//            ShareFileBean bean = new ShareFileBean (userId, teamId,upperFolderId, filePath[i]);
-//            beans.add(dao.insert(bean));
-//        }
-        return beans;
-    }
-    
-    
-    /**
-     * 新增檔案夾
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param folderName
-     * @return ShareFileBean裡所有屬性都要放
-     */
-    public ShareFileBean insertFolder(int userId, int teamId, int upperFolderId,String folderName)
-    {//testing#3
-        ShareFileBean bean =new ShareFileBean(userId,teamId,folderName,upperFolderId);
-        return shareFileDAO.insert(bean);
-    }
-    
-    /**
-     * 建立新的Group User的檔案分享根目錄Folder
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param fileName
-     * @return ShareFileBean裡fileSize,updateTime屬性為Null不設定
-     */
-    public  ShareFileBean insertFolder(int userId,int teamId) 
-    {//testing#4
-        ShareFileBean bean =new ShareFileBean(userId,teamId,"Group"+teamId+"根目錄",1);
-        return shareFileDAO.insert(bean);
-    }
-    
-    
-    /**
-     * 刪除單一檔案
-     * @param fileId
-     * @return 回傳刪除的檔案Id
-     */
-    public int deleteFile(ShareFileBean bean) 
-    {//testing#8
-        return shareFileDAO.deleteFile(bean.getFileId(),bean.getFileSize()==0);
-    }
-    
-    
-    /**
-     * 刪除多個檔案
-     * @param fileId
-     * @return 回傳刪除的檔案Id陣列
-     */
-    public int[] deleteFile(List<ShareFileBean> bean)
-    {//testing#12
-        int[] resultset = new int[bean.size()];
-        for(int i =0;i<bean.size();i++){
-            int fileId = deleteFile(bean.get(i));
-            resultset[i]=fileId;
-        }
-        return resultset;
-    }
-    
-    
-    /**
-     * 複製檔案
-     * @param fileId
-     * @param newFolderId
-     * @return ShareFileBean裡所有屬性都要放
-     */
-//    public ShareFileBean copyFile(ShareFileBean bean, int newFolderId)
-//    {//testing#10
-//        bean.setUpperFolderId(newFolderId);
-//        return dao.insert(bean);
-//    }
-
     
     
 

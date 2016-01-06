@@ -1,6 +1,7 @@
 package com.iii.twentywork.model.bean;
 
 import java.io.File;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,8 +9,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-public class ShareFileBean
+public class ShareFileBean implements Serializable
 {
+	private static final long serialVersionUID = 1L;
     private Integer fileId; //PK
     private String fileName; //not null
     private String fileType; //not null
@@ -27,30 +29,23 @@ public class ShareFileBean
     public ShareFileBean() {
     }
     
-    /*
-    private int fileId; //PK
-  -  private String fileName; //not null
-  -  private String fileType; //not null
-  -  private Integer fileSize;
-  -  private Timestamp updateTime;
-  v  private Integer userId; 
-  v  private Integer teamId; 
-    private ShareFileBean upperFolder;
-  x  private Set<ShareFileBean> innerFiles
-     * */
     /**
      * Hibernate版本<br>
      * 新增檔案時使用的建構子<br>
-     * 此建構子會將fileName,fileType,fileSize,updateTime,userId,teamId,upperFolderId設定好<br>
-     * 沒設定的屬性:fileId,upperFolder
+     * 此建構子會將fileName,fileType,fileSize,updateTime,userId,teamId,upperFolder設定好<br>
+     * 沒設定的屬性:fileId
      * @param userId
      * @param teamId
      * @param filePath
      */
-    public ShareFileBean(int userId,int teamId,String filePath) {
-    	userBean.setUserID(userId);
+    public ShareFileBean(int userID,int teamId,String filePath,int folderId) {
+//    public ShareFileBean(TeamUserBean teamUser,String filePath,ShareFileBean upperFolderBean) {
+//    	this.userBean = teamUser.getUsers();
+//    	this.teamBean = teamUser.getTeam();
+//        this.upperFolder = upperFolderBean;
+    	userBean.setUserID(userID); 
     	teamBean.setTeamId(teamId);
-//        this.upperFolderId = upperFolderId;
+    	upperFolder.setFileId(folderId);
         insertSetFileName(filePath);
         insertSetFileType(filePath);
         insertSetFileSize(filePath);
@@ -67,19 +62,19 @@ public class ShareFileBean
      * @param folderName
      * @param upperFolderId
      */
-    public ShareFileBean(int userId,int teamId,String folderName,int upperFolderId) {
-    	userBean.setUserID(userId);
-    	teamBean.setTeamId(teamId);
-    	this.fileName = folderName;
-        this.fileType = "資料夾";
-//        this.upperFolderId = upperFolderId;
-    }
+//    public ShareFileBean(int userId,int teamId,String folderName,int upperFolderId) {
+//    	userBean.setUserID(userId);
+//    	teamBean.setTeamId(teamId);
+//    	this.fileName = folderName;
+//        this.fileType = "資料夾";
+////        this.upperFolderId = upperFolderId;
+//    }
 
     /**
      * 從filePath擷取檔案名稱(包含副檔名)，設定為fileName
      * @param filePath
      */
-    private void insertSetFileName(String filePath)
+    public void insertSetFileName(String filePath)
     {
         int begin = new String(filePath).lastIndexOf("\\");
         this.fileName = filePath.substring(begin+1);
@@ -89,7 +84,7 @@ public class ShareFileBean
      * 從filePath擷取副檔名，改成全大寫，設定為fileType
      * @param filePath
      */
-    private void insertSetFileType(String filePath)
+    public void insertSetFileType(String filePath)
     {
         int end = new String(filePath).lastIndexOf(".");
         this.fileType =new String(filePath.substring(end+1)).toLowerCase();
@@ -100,7 +95,7 @@ public class ShareFileBean
      * 從filePath讀取檔案，計算檔案size，單位:byte，設定為fileSize
      * @param filePath
      */
-    private void insertSetFileSize(String filePath)
+    public void insertSetFileSize(String filePath)
     {
         File file = new File(filePath);        
         this.fileSize = (int) file.length();
@@ -109,7 +104,7 @@ public class ShareFileBean
     /**
      * 取得當下系統時間，設定為updateTime
      */
-    private void insertSetUpdateTime()
+    public void insertSetUpdateTime()
     {
         java.util.Date date= new java.util.Date();
         this.updateTime =new Timestamp(date.getTime());
@@ -193,5 +188,6 @@ public class ShareFileBean
         
         System.out.println("ShareFileBean main()");
     }
+
 
 }

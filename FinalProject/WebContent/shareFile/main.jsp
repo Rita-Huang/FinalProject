@@ -103,26 +103,26 @@
 </table>
 </div>
 
-<!-- <div> -->
-<!-- <table class="table"> -->
-<!-- 	<thead> -->
-<!-- 		<tr> -->
-<!-- 			<td>FileID</td> -->
-<!-- 			<td>FileName</td> -->
-<!-- 			<td>FileLevel</td> -->
-<!-- 		</tr> -->
-<!-- 	</thead> -->
-<!-- 	<tbody> -->
-<%-- 		<c:forEach var="fileTree" items="${folders}"> --%>
-<!-- 			<tr> -->
-<%-- 				<td>${fileTree.fileId}</td> --%>
-<%-- 				<td>${fileTree.fileName}</td> --%>
-<%-- 				<td>${fileTree.fileLevel}</td> --%>
-<!-- 			</tr> -->
-<%-- 		</c:forEach> --%>
-<!-- 	</tbody> -->
-<!-- </table> -->
-<!-- </div> -->
+<div>
+<table class="table">
+	<thead>
+		<tr>
+			<td>FileID</td>
+			<td>FileName</td>
+			<td>FileLevel</td>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach var="fileTree" items="${folders}">
+			<tr>
+				<td>${fileTree.fileId}</td>
+				<td>${fileTree.fileName}</td>
+				<td>${fileTree.fileLevel}</td>
+			</tr>
+		</c:forEach>
+	</tbody>
+</table>
+</div>
 
 
 </body>

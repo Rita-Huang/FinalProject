@@ -32,7 +32,9 @@ public class OpenSessionInViewFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		try {
 			sessionFactory.getCurrentSession().beginTransaction();
+			System.out.println("OpenSessionInViewFilter--beginTransaction");
 			chain.doFilter(request, response);
+			System.out.println("OpenSessionInViewFilter--commit");
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		} catch(Throwable e) {
 			e.printStackTrace();
