@@ -61,7 +61,7 @@ public class ShareFileServlet extends HttpServlet {
 	    String servletPath = request.getServletPath();
 	    TeamUserBean teamUser =(TeamUserBean) session.getAttribute("teamUserBean");
         
-	    System.out.println("++++++++++++++pathInfo: "+pathInfo+"++++++++++++++servletPath: "+servletPath);
+	    System.out.println("ShareFileServlet--Line64++++++++++++++pathInfo: "+pathInfo+"++++++++++++++servletPath: "+servletPath);
 //	    System.out.println(teamUser);
 	    if(servletPath.equals("/ShareFile"))
         {//取得頁面列表功能
@@ -71,7 +71,7 @@ public class ShareFileServlet extends HttpServlet {
                 CheckPathInfoBean check = shareFileService.checkPathInfo(pathInfo,teamUser);
                 boolean isPass = check.isPass();
                 if(!isPass) {
-                    System.out.println("找不到此資料夾");
+                    System.out.println("ShareFileServlet -- Line74--找不到此資料夾");
                     errors.put("pathError", "找不到此資料夾");}
                 
                 

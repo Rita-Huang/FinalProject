@@ -53,8 +53,11 @@ public class ShareFileService
         String[] pathName = pathInfo.split("/");//取得各層folder名稱
         int folderTreeSize = folderTree.size();
         int folderTreeMaxLevel = folderTree.get(folderTreeSize-1).getFileLevel();
-        
-        if(pathName.length==0) //測過web
+//        System.out.println("folderTree:");
+//        for(Object i:folderTree){
+//        	System.out.println(i);
+//        }
+        if(pathName.length==0) 
         {//pathInfo="/"  pathName=[]
 //            System.out.println("不用比對path1:pathName.length==0"
 //                                +"  pathLevel= "+ (pathName.length-1)
@@ -69,21 +72,22 @@ public class ShareFileService
         }else
         {//比對各階層目錄名稱
             int folderTreeIndex = 1;// folderTreeIndex=0:folder根目錄
+            FileTreeBean compared = folderTree.get(folderTreeIndex);
             for (int pathLevel = 1; pathLevel < pathName.length; pathLevel++)
             {
 //                System.out.println("pathLevel= " + pathLevel);
                 String pathElement = pathName[pathLevel];
+//                System.out.println("+++pathElement="+pathElement);
                 int comparedLevel;
                 boolean isConformity=false;
                 do
-                {
-                    FileTreeBean compared = folderTree.get(folderTreeIndex);
-                 // 比對folderName
+                {// 比對folderName
                     if(pathElement.equals(compared.getFileName())) {
                        isConformity = true;
                        folders.add(compared);
                     }
                     folderTreeIndex++;
+                    compared = folderTree.get(folderTreeIndex);
                     comparedLevel = compared.getFileLevel();
                 } while (comparedLevel == pathLevel && folderTreeIndex < folderTreeSize-1);
                 if(!isConformity) {

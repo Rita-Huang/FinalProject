@@ -14,12 +14,17 @@
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 <%-- <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/table.css" /> --%>
 	
-<style> 
-.padding{ 
+<style>
+.padding {
 	padding-left: 30px;
 	padding-right: 30px;
-	padding-top:5px;} 
+	padding-top: 5px;
+}
 
+.padding2 {
+	padding-left: 15px;
+	padding-right: 15px;
+}
 </style>
 
 
@@ -34,12 +39,13 @@
 <body>
 
 <div  class='padding'>
-	Hello<br>
-	userID:${teamUserBean.users.userID}<br>
-	userName:${teamUserBean.users.userName}<br>
-	groupID:${teamUserBean.team.teamId}<br>
-	error:${errors.pathError}<br>
-	fileUploadMessage:${message}<br>
+	<table ><tr>
+		<td class='padding2'>Hello</td>
+		<td class='padding2'>userID:${teamUserBean.users.userID}</td>
+		<td class='padding2'>userName:${teamUserBean.users.userName}</td>
+		<td class='padding2'>groupID:${teamUserBean.team.teamId}</td>
+	</tr></table>
+	<br>fileUploadMessage:${message}<br>
 </div>
 <hr>
 <div   class='padding'>
@@ -79,7 +85,10 @@
 	<tbody>
 		<c:if test="${! empty fileList}">
 		<c:forEach var="fileList" items="${fileList}">
-			<tr>    
+			<c:choose>
+				<c:when test="${fileList.fileType == '資料夾'}"><tr id="folder${fileList.fileId}"></c:when>
+			    <c:otherwise><tr id="file${fileList.fileId}"></c:otherwise>
+			</c:choose>
 				<td>${fileList.fileId}</td>
 				
 				<td>
