@@ -1,5 +1,6 @@
 package com.iii.twentywork.controller.sharefile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
@@ -33,7 +37,7 @@ import com.iii.twentywork.model.service.user.LoginService;
 /**
  * Servlet implementation class ShareFileMainPageServlet
  */
-@WebServlet("/ShareFile/*")
+@WebServlet({"/ShareFile/*","/shareFile/fileUpload"})
 public class ShareFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -46,38 +50,72 @@ public class ShareFileServlet extends HttpServlet {
         ServletContext application = this.getServletContext();
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(application);
         this.shareFileService = (ShareFileService) context.getBean("shareFileService");
-        System.out.println("ShareFileServlet--1.init-shareFileService");
+//        System.out.println("ShareFileServlet--1.init-shareFileService");
     }
-
+    private static final String UPLOAD_DIRECTORY="C:\\userFileUpload";
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	  //接收資料
+		//接收資料
 	    HttpSession session = request.getSession();
 	    String pathInfo = request.getPathInfo();
-	    TeamUserBean teamUser =(TeamUserBean) session.getAttribute("teamUserBean");
-	  
-	  //驗證資料
-        Map<String, String> errors = new HashMap<String, String>();
-        request.setAttribute("errors", errors);
-        CheckPathInfoBean check = shareFileService.checkPathInfo(pathInfo,teamUser);
-        boolean isPass = check.isPass();
-        if(!isPass) {errors.put("pathError", "找不到此資料夾");}
-        request.setAttribute("folders", check.getFolders());//List<FileTreeBean>
-	  //呼叫Model
-        int lastFolder = (check.getFolders().size()-1);
-        int upperFolderId = check.getFolders().get(lastFolder).getFileId();
-        List<ShareFileBean> fileList = shareFileService.getSortedFileList(upperFolderId);
-        request.setAttribute("fileList", fileList);  //List<ShareFileBean>
-        
-      //呼叫View
-        if(errors!=null && !errors.isEmpty()) {
-            String path = request.getContextPath();
-            response.sendRedirect(path+"/ShareFile");
-        }else {
-        	String uri = request.getRequestURI();
-            session.setAttribute("requestURI", uri);
-            request.getRequestDispatcher("/shareFile/main.jsp").forward(request, response);
-        }
+	    String servletPath = request.getServletPath();
+	    System.out.println("++++++++++++++pathInfo: "+pathInfo);
+	    System.out.println("++++++++++++++servletPath: "+servletPath);
 	    
+	    if(servletPath.equals("/shareFile/fileUpload"))
+	    {
+	    	System.out.println("ShareFileServlet--");
+	    	String requestURI =(String) session.getAttribute("requestURI");
+		    
+		    if(ServletFileUpload.isMultipartContent(request)) {
+		        try {
+		            List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+		        
+		            for(FileItem item:multiparts) {
+		                if(!item.isFormField()) {
+		                    String name = new File(item.getName()).getName();
+		                    item.write(new File(UPLOAD_DIRECTORY+File.separator+name));
+		                }
+		            }
+		            
+		            //File uploaded successfully
+		            session.setAttribute("message", "File Uploaded Successfully");
+		        }catch (Exception e) {
+		        	session.setAttribute("message", "File Upload Failed due to "+e);
+		        }
+		    }else {
+		    	session.setAttribute("message", "Sorry this Servlet only handles file upload request");
+		    }
+		    response.sendRedirect(requestURI);
+	    }else if(servletPath.equals("/ShareFile"))
+	    {
+			TeamUserBean teamUser =(TeamUserBean) session.getAttribute("teamUserBean");
+			  
+			  //驗證資料
+		        Map<String, String> errors = new HashMap<String, String>();
+		        request.setAttribute("errors", errors);
+		        CheckPathInfoBean check = shareFileService.checkPathInfo(pathInfo,teamUser);
+		        boolean isPass = check.isPass();
+		        if(!isPass) {
+		        	System.out.println("找不到此資料夾");
+		        	errors.put("pathError", "找不到此資料夾");}
+		        request.setAttribute("folders", check.getFolders());//List<FileTreeBean>
+			  //呼叫Model
+		        int lastFolder = (check.getFolders().size()-1);
+		        int upperFolderId = check.getFolders().get(lastFolder).getFileId();
+		        List<ShareFileBean> fileList = shareFileService.getSortedFileList(upperFolderId);
+		        request.setAttribute("fileList", fileList);  //List<ShareFileBean>
+		        
+		      //呼叫View
+		        if(errors!=null && !errors.isEmpty()) {
+		            String path = request.getContextPath();
+		            response.sendRedirect(path+"/ShareFile");
+		        }else {
+		        	String uri = request.getRequestURI();
+		        	System.out.println("ShareFileServlet--Line77--session.setAttribute(\"requestURI\", uri)="+uri);
+		            session.setAttribute("requestURI", uri);
+		            request.getRequestDispatcher("/shareFile/main.jsp").forward(request, response);
+		        }
+			}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

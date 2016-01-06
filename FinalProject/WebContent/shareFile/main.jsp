@@ -5,21 +5,49 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/table.css" />
 <title>ShareFile</title>
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/bootstrap/bootstrap.min.css">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.easing-1.3.pack.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<link rel="stylesheet" href="<%= request.getContextPath() %>/css/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+<%-- <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/table.css" /> --%>
+	
+<style> 
+.padding{ 
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top:5px;} 
+
+</style>
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("a#insertFile").fancybox();
+	})
+</script>
+
+
 </head>
 <body>
-Hello<br>
-userID:${teamUserBean.users.userID}<br>
-userName:${teamUserBean.users.userName}<br>
-groupID:${teamUserBean.team.teamId}<br>
-error:${errors.pathError}<br>
+
+<div  class='padding'>
+	Hello<br>
+	userID:${teamUserBean.users.userID}<br>
+	userName:${teamUserBean.users.userName}<br>
+	groupID:${teamUserBean.team.teamId}<br>
+	error:${errors.pathError}<br>
+	fileUploadMessage:${message}<br>
+</div>
 <hr>
-<div>
+<div   class='padding'>
 <c:set var="path" value="<%= request.getContextPath() %>" />
 	<c:forEach var="fileTree" items="${folders}">
 	<c:choose>
 		<c:when test="${fileTree.fileLevel ==0}">
+			<c:set var="path" value="${path}/ShareFile" />
 			<a href = "${path}">ShareFile</a>
 		</c:when>
 		<c:otherwise>
@@ -30,7 +58,12 @@ error:${errors.pathError}<br>
 	</c:forEach>
 </div>
 <br>
-<table>
+<div   class='padding'>
+	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="upload file" src="<%= request.getContextPath() %>/image/cloud148.png" /></a>
+</div>
+<br>
+<div   class='padding'>
+<table class="table">
 	<thead>
 		<tr>
 			<td>fileId</td>
@@ -68,26 +101,28 @@ error:${errors.pathError}<br>
 		</c:if>
 	</tbody>
 </table>
+</div>
 
-<table>
-	<thead>
-		<tr>
-			<td>FileID</td>
-			<td>FileName</td>
-			<td>FileLevel</td>
-		</tr>
-	</thead>
-	<tbody>
-		<c:forEach var="fileTree" items="${folders}">
-			<tr>
-				<td>${fileTree.fileId}</td>
-				<td>${fileTree.fileName}</td>
-				<td>${fileTree.fileLevel}</td>
-			</tr>
-		</c:forEach>
-	</tbody>
-</table>
-
+<!-- <div> -->
+<!-- <table class="table"> -->
+<!-- 	<thead> -->
+<!-- 		<tr> -->
+<!-- 			<td>FileID</td> -->
+<!-- 			<td>FileName</td> -->
+<!-- 			<td>FileLevel</td> -->
+<!-- 		</tr> -->
+<!-- 	</thead> -->
+<!-- 	<tbody> -->
+<%-- 		<c:forEach var="fileTree" items="${folders}"> --%>
+<!-- 			<tr> -->
+<%-- 				<td>${fileTree.fileId}</td> --%>
+<%-- 				<td>${fileTree.fileName}</td> --%>
+<%-- 				<td>${fileTree.fileLevel}</td> --%>
+<!-- 			</tr> -->
+<%-- 		</c:forEach> --%>
+<!-- 	</tbody> -->
+<!-- </table> -->
+<!-- </div> -->
 
 
 </body>

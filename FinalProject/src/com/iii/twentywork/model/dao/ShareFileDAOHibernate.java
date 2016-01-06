@@ -77,7 +77,6 @@ public class ShareFileDAOHibernate implements ShareFileDAO
     public List<FileTreeBean> getGroupFolderTree(int teamId)
     {//testing#4
 //    	System.out.println("ShareFileDAOHibernate -- getGroupFolderTree ");
-    	System.out.println("ShareFileDAOHibernate.java:80-- teamId: "+teamId);
         SQLQuery query = getSession().createSQLQuery(FOLDER_TREE);
         query.setParameter(0, teamId);
         query.addEntity(FileTreeBean.class);

@@ -29,24 +29,24 @@ public class LoginFilter implements Filter {
 	public void destroy() {	}
 
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		System.out.println("LoginFilter --Line47--doFilter");
+//		System.out.println("LoginFilter --Line47--doFilter");
 		
 	    HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		HttpSession session = request.getSession();
 		String servletPath = request.getServletPath();
-		System.out.println("LoginFilter -- Line53 -- servletPath:"+servletPath);
+//		System.out.println("LoginFilter -- Line53 -- servletPath:"+servletPath);
         UsersBean bean = (UsersBean) session.getAttribute("LoginOK");
         if (bean == null)
         {// 還沒Login
-            System.out.println("LoginFilter --Line56--mustLogin--還沒Login");
+//            System.out.println("LoginFilter --Line56--mustLogin--還沒Login");
             String uri = request.getRequestURI();
             session.setAttribute("requestURI", uri);
             String path = request.getContextPath();
             response.sendRedirect(path + "/login/login.jsp");
         } else
         {
-            System.out.println("LoginFilter --Line63--mustLogin--已經Login");
+//            System.out.println("LoginFilter --Line63--mustLogin--已經Login");
             chain.doFilter(request, response);
         }
 	}

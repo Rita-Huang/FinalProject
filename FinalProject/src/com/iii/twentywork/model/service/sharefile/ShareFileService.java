@@ -32,14 +32,13 @@ public class ShareFileService
         System.out.println("ShareFileService setShareFileDAO");
     }
     
-    public CheckPathInfoBean checkPathInfo(String pathInfo, TeamUserBean teamUser) 
-    {//test#2
+  //testing#2
+    public CheckPathInfoBean checkPathInfo(String pathInfo, TeamUserBean teamUser)  {
         int teamId = teamUser.getTeam().getTeamId();
-        System.out.println("ShareFileService.java:38-- teamId: "+teamId);
         List<FileTreeBean> folderTree = getGroupFolderTree(teamId);
         List<FileTreeBean> folders = new ArrayList<FileTreeBean>();
         folders.add(folderTree.get(0));//group root folder
-        System.out.println("ShareFileService--CheckPathInfoBean--"+folderTree);
+//        System.out.println("ShareFileService--CheckPathInfoBean--"+folderTree);
         if(pathInfo==null) { //測過web
 //            System.out.println("pathInfo==null");
             return new CheckPathInfoBean(true,folders);               
@@ -81,7 +80,7 @@ public class ShareFileService
                     comparedLevel = compared.getFileLevel();
                 } while (comparedLevel == pathLevel && folderTreeIndex < folderTreeSize-1);
                 if(!isConformity) {
-                    System.out.println("找不到符合的Folder");
+//                    System.out.println("找不到符合的Folder");
                     return new CheckPathInfoBean(false,folders);
                 }
             }
@@ -89,19 +88,14 @@ public class ShareFileService
             return new CheckPathInfoBean(true,folders);
         }
     }
-    
+  //testing#1
     public List<FileTreeBean> getGroupFolderTree(int teamId)
-    {//testing#1
-//        System.out.println("ShareFileService.java:95-- teamId: "+teamId);
+    {
         return shareFileDAO.getGroupFolderTree(teamId);
     }
-    
-    public ShareFileBean getGroupRootFolder(int teamId) {
-        return shareFileDAO.getGroupRootBean(teamId);
-    }
-    
+  //testing#3 
     public List<ShareFileBean> getSortedFileList(int upperFolderId)
-    {//test#3 
+    {
         Set<ShareFileBean> set = shareFileDAO.getFileList(upperFolderId);
         List<ShareFileBean> list = new ArrayList<ShareFileBean>(set);
         Collections.sort (list , new Comparator< ShareFileBean >(){
@@ -127,9 +121,8 @@ public class ShareFileService
         
         ShareFileService service = (ShareFileService) context.getBean("shareFileService");
         
-      //test#3  
-        List<ShareFileBean> list = service.getSortedFileList(901);
-        for(int i = 0; i<list.size(); i++) {System.out.println(list.get(i));}
+        
+      
       //testing#1
 //        System.out.println(service.getGroupFolderTree(201));
 //        System.out.println(service.getGroupFolderTree(203));
@@ -140,41 +133,26 @@ public class ShareFileService
 //        beanChild.setTeamId(200);
 //        teamUser.setTeam(beanChild);
 //        CheckPathInfoBean bean = service. checkPathInfo(pathInfo, teamUser); 
-//        System.out.println("---test#2-1---");
 //        System.out.println(pathInfo);
 //        System.out.println(bean.isPass());
 //        for( int i = 0; i < bean.getFolders() .size (); i++ ) {
 //            Object o = bean.getFolders() .get (i );
 //            System .out . println( "Object = " + o) ;
 //        }
-//        pathInfo = "/Group1-1/";
-//        CheckPathInfoBean bean = service. checkPathInfo(pathInfo, teamUser); 
-//        System.out.println("---test#2-2---");
-//        System.out.println(pathInfo);
-//        System.out.println(bean.isPass());
-//        for( int i = 0; i < bean.getFolders() .size (); i++ ) {
-//            Object o = bean.getFolders() .get (i );
-//            System .out . println( "Object = " + o) ;
-//        }
-//        pathInfo = null;
-//        CheckPathInfoBean bean = service. checkPathInfo(pathInfo, teamUser); 
-//        System.out.println("---test#2-3---");
-//        System.out.println(pathInfo);
-//        System.out.println(bean.isPass());
-//        for( int i = 0; i < bean.getFolders() .size (); i++ ) {
-//            Object o = bean.getFolders() .get (i );
-//            System .out . println( "Object = " + o) ;
-//        }
-//        pathInfo = "/Group1-1/xxxx";
-//        CheckPathInfoBean bean = service. checkPathInfo(pathInfo, teamUser); 
-//        System.out.println("---test#2-4---");
-//        System.out.println(pathInfo);
-//        System.out.println(bean.isPass());
+      //test#3  
+//        List<ShareFileBean> list = service.getSortedFileList(901);
+//        for(int i = 0; i<list.size(); i++) {System.out.println(list.get(i));}
 
         
         
         sessionFactory.getCurrentSession().getTransaction().commit();
     }
+    
+    
+    public ShareFileBean getGroupRootFolder(int teamId) {
+        return shareFileDAO.getGroupRootBean(teamId);
+    }
+    
     
     /**
      * 新增多個檔案
