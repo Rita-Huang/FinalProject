@@ -118,28 +118,13 @@ public class ShareFileService
         });
         return list;
     }
-    
-    
   //testing#4
-//	public ShareFileBean insertFile(int userID,int teamId,String filePath,int folderId) {
-    public ShareFileBean insertFile(TeamUserBean teamUser,String fileName,ShareFileBean	upperFolder){
-		ShareFileBean bean = new ShareFileBean();
-//		System.out.println("userID:"+userID);
-//		System.out.println("teamId:"+teamId);
-//		System.out.println("filePath:"+filePath);
-//		System.out.println("folderId:"+folderId);
-//		ShareFileBean bean = new ShareFileBean( userID, teamId, filePath, folderId);
-		bean.setTeamBean(teamUser.getTeam());
-        bean.setUserBean(teamUser.getUsers());
-        bean.insertSetFileName(fileName);
-        bean.insertSetFileSize(fileName);
-        bean.insertSetFileType(fileName);
-        bean.insertSetUpdateTime();
-        bean.setUpperFolder(upperFolder);
-		ShareFileBean bean_back = shareFileDAO.insert(bean);
-		System.out.println(bean_back);
-		return bean_back;//shareFileDAO.insert(bean);
+    public ShareFileBean insertFile(TeamUserBean teamUser,String fileName,int upperFolderId){
+    	ShareFileBean upperFolder = shareFileDAO.selectByFileId(upperFolderId);
+		ShareFileBean bean = new ShareFileBean(teamUser,fileName,upperFolder);
+		return shareFileDAO.insert(bean);
 	}
+    
     
     
     public static void main(String[] args)
@@ -153,7 +138,7 @@ public class ShareFileService
         
         
         		
-        		//      testing#1
+      //testing#1
 //        System.out.println(service.getGroupFolderTree(201));
 //        System.out.println(service.getGroupFolderTree(203));
       //test#2  

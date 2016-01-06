@@ -54,6 +54,8 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return (ShareFileBean) query.list();
     }
     
+    
+    //vvvvvvvv
     // INSERT = "insert into ShareFile values(?,?,?,?,?,?,?)";
     @Override
     public  ShareFileBean insert(ShareFileBean bean)

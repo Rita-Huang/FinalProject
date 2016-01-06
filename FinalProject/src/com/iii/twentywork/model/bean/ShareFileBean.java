@@ -30,22 +30,16 @@ public class ShareFileBean implements Serializable
     }
     
     /**
+     * vvvvvvvvv
      * Hibernate版本<br>
      * 新增檔案時使用的建構子<br>
      * 此建構子會將fileName,fileType,fileSize,updateTime,userId,teamId,upperFolder設定好<br>
      * 沒設定的屬性:fileId
-     * @param userId
-     * @param teamId
-     * @param filePath
      */
-    public ShareFileBean(int userID,int teamId,String filePath,int folderId) {
-//    public ShareFileBean(TeamUserBean teamUser,String filePath,ShareFileBean upperFolderBean) {
-//    	this.userBean = teamUser.getUsers();
-//    	this.teamBean = teamUser.getTeam();
-//        this.upperFolder = upperFolderBean;
-    	userBean.setUserID(userID); 
-    	teamBean.setTeamId(teamId);
-    	upperFolder.setFileId(folderId);
+    public ShareFileBean(TeamUserBean teamUser,String filePath,ShareFileBean upperFolder) {
+    	this.setTeamBean(teamUser.getTeam());
+    	this.setUserBean(teamUser.getUsers());
+    	this.setUpperFolder(upperFolder);
         insertSetFileName(filePath);
         insertSetFileType(filePath);
         insertSetFileSize(filePath);
@@ -71,6 +65,7 @@ public class ShareFileBean implements Serializable
 //    }
 
     /**
+     * vvvvvvvvv
      * 從filePath擷取檔案名稱(包含副檔名)，設定為fileName
      * @param filePath
      */
@@ -81,6 +76,7 @@ public class ShareFileBean implements Serializable
     }
 
     /**
+     * vvvvvvvvv
      * 從filePath擷取副檔名，改成全大寫，設定為fileType
      * @param filePath
      */
@@ -92,6 +88,7 @@ public class ShareFileBean implements Serializable
 
     
     /**
+     * vvvvvvvvv
      * 從filePath讀取檔案，計算檔案size，單位:byte，設定為fileSize
      * @param filePath
      */
@@ -102,6 +99,7 @@ public class ShareFileBean implements Serializable
     }
 
     /**
+     * vvvvvvvvv
      * 取得當下系統時間，設定為updateTime
      */
     public void insertSetUpdateTime()
@@ -153,7 +151,6 @@ public class ShareFileBean implements Serializable
                 + ", fileType=" + fileType + ", fileSize=" + fileSize
                 + ", updateTime=" + updateTime + ", userId=" + userBean.getUserID()
                 + ", teamId=" + teamBean.getTeamId(); 
-               // + ", upperFolder.getFileId()=" + upperFolder.getFileId() + "]";
     }
 
 

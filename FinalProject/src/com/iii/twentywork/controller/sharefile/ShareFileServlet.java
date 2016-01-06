@@ -79,6 +79,7 @@ public class ShareFileServlet extends HttpServlet {
                 int lastFolder = (check.getFolders().size()-1);
                 int upperFolderId = check.getFolders().get(lastFolder).getFileId();
                 List<ShareFileBean> fileList = shareFileService.getSortedFileList(upperFolderId);
+                session.setAttribute("upperFolderId", upperFolderId); //int
                 session.setAttribute("fileList", fileList);  //List<ShareFileBean>
                 session.setAttribute("folders", check.getFolders());//List<FileTreeBean>
                 
@@ -101,28 +102,22 @@ public class ShareFileServlet extends HttpServlet {
 	    	System.out.println("ShareFileServlet--Line99--servletPath.equals(\"/shareFile/fileUpload\")");
 	    	String requestURI =(String) session.getAttribute("requestURI");
 //	        List<FileTreeBean> folders = (List<FileTreeBean>) session.getAttribute("folders");  
-	    	List<ShareFileBean> fileList = (List<ShareFileBean>) session.getAttribute("fileList");
+	    	int upperFolderId = (int) session.getAttribute("upperFolderId");
 //
 			if (ServletFileUpload.isMultipartContent(request)) {
 					try {
-						System.out.println("hello123");
 						List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 
 						for (FileItem item : multiparts)
 						{
 						    if (!item.isFormField())
 						    {
-						    	System.out.println("hello456");
 						        String fileName = new File(item.getName()).getName();
-						        ShareFileBean bean = shareFileService.insertFile(teamUser, fileName,fileList.get(0).getUpperFolder());
-						        System.out.println("bean="+bean);
-						        System.out.println(UPLOAD_DIRECTORY + File.separator);
-						        System.out.println(""+bean.getFileId()+"."+bean.getFileType());
+						        ShareFileBean bean = shareFileService.insertFile(teamUser, fileName,upperFolderId);
 						        item.write(new File(UPLOAD_DIRECTORY+File.separator+bean.getFileId()+"."+bean.getFileType()));
 						    }
 						}
 						session.setAttribute("message", "File Uploaded Successfully");
-//					
 					} catch ( Exception e) {
 						session.setAttribute("message", "File Upload Failed due to " + e);
 						e.printStackTrace();
@@ -131,7 +126,6 @@ public class ShareFileServlet extends HttpServlet {
 			} else {
 				session.setAttribute("message", "Sorry this Servlet only handles file upload request");
 			}
-//	    	
 		    response.sendRedirect(requestURI);
 	    }
 	    
