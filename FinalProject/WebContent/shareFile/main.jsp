@@ -8,6 +8,7 @@
 <title>ShareFile</title>
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/bootstrap/bootstrap.min.css">
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath() %>/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
@@ -37,10 +38,16 @@
     -moz-box-sizing: content-box !important;
     box-sizing: content-box !important;
 }
-.icon{
+.iconNotDisplay{
 	display:none;
 }
+.iconShow{
+}
 
+.listBackground{
+	background-color: #DFFFDF;
+}
+ 
 </style>
 
 
@@ -76,14 +83,15 @@
 </div>
 <br>
 <!-- icon -->
+<input type="button" id="buttonToggle" value="toggle">
 <div   class='padding'>
 	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="Upload" src="<%= request.getContextPath() %>/image/fileUploadcloud148.png" /></a>
 	<img id="NewFolder" alt ="New Folder" title ="New Folder"  src="<%= request.getContextPath() %>/image/newfolder15.png"  />
-	<img id="iconDownload" class="icon" alt ="Download" title ="Download"  src="<%= request.getContextPath() %>/image/fileDownloadCloud134.png" />
-	<img id="iconCopy" class="icon" alt ="Copy" title ="Copy"  src="<%= request.getContextPath() %>/image/copyfile19857.png" />
-	<img id="iconDelete" class="icon" alt ="Delete" title ="Delete"  src="<%= request.getContextPath() %>/image/delete84453783.png" />
-	<img id="iconRename" class="icon" alt ="Rename" title ="Rename"   src="<%= request.getContextPath() %>/image/renameedit42.png" />
-	<img id="iconMove" class="icon" alt ="Move" title ="Move"   src="<%= request.getContextPath() %>/image/movesend2.png" />
+	<img id="iconDownload" class="iconNotDisplay" alt ="Download" title ="Download"  src="<%= request.getContextPath() %>/image/fileDownloadCloud134.png" />
+	<img id="iconCopy" class="iconNotDisplay" alt ="Copy" title ="Copy"  src="<%= request.getContextPath() %>/image/copyfile19857.png" />
+	<img id="iconDelete" class="iconNotDisplay" alt ="Delete" title ="Delete"  src="<%= request.getContextPath() %>/image/delete84453783.png" />
+	<img id="iconRename" class="iconNotDisplay" alt ="Rename" title ="Rename"   src="<%= request.getContextPath() %>/image/renameedit42.png" />
+	<img id="iconMove" class="iconNotDisplay" alt ="Move" title ="Move"   src="<%= request.getContextPath() %>/image/movesend2.png" />
 	
 </div>
 <br>
@@ -106,7 +114,7 @@
 		<c:if test="${! empty fileList}">
 		<c:forEach var="fileList" items="${fileList}">
 			<c:choose>
-				<c:when test="${fileList.fileType == '資料夾'}"><tr id="folder${fileList.fileId}"></c:when>
+				<c:when test="${fileList.fileType == '資料夾'}"><tr id="folder${fileList.fileId}" ></c:when>
 			    <c:otherwise><tr id="file${fileList.fileId}"></c:otherwise>
 			</c:choose>
 				<td>${fileList.fileId}</td>
@@ -163,13 +171,24 @@
 // 	   <tr id="file922">
 	$(function(){
 		$("a#insertFile").fancybox();
-		$('tr[id^="folder"]').click(function(){
-// 			alert('folder');
-		});
-		$('tr[id^="file"]').click(function(){
-// 			alert('file');
-		});
-	
+		$('tr[id^="folder"]').click(showIcon);
+		$('tr[id^="file"]').click(showIcon);
+		$("td > a").click(removeIcon);
+		
+		function showIcon(){
+			if($('img[id^="icon"]').hasClass('iconNotDisplay')){
+	 			 $('img[id^="icon"]').removeClass('iconNotDisplay');
+	 			 
+	 		 }else{
+	 			 $('img[id^="icon"]').addClass('iconNotDisplay');
+	 		 }
+		 }
+		function removeIcon(){
+			if($('img[id^="icon"]').hasClass('iconNotDisplay')){
+	 			 $('img[id^="icon"]').removeClass('iconNotDisplay');
+	 			 
+	 		 }
+		 }
 	});
 </script>
 </body>
