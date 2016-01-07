@@ -53,7 +53,7 @@ public class ShareFileServlet extends HttpServlet {
         this.shareFileService = (ShareFileService) context.getBean("shareFileService");
 //        System.out.println("ShareFileServlet--1.init-shareFileService");
     }
-    private static final String UPLOAD_DIRECTORY="D:\\userFileUpload";
+    private static final String UPLOAD_DIRECTORY="C:\\userFileUpload";
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//接收資料
 	    HttpSession session = request.getSession();

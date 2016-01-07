@@ -87,8 +87,12 @@ public class ShareFileService
                        folders.add(compared);
                     }
                     folderTreeIndex++;
+                    if(folderTree.size()!=folderTreeIndex){
                     compared = folderTree.get(folderTreeIndex);
                     comparedLevel = compared.getFileLevel();
+                    }else{
+                    	break;
+                    }
                 } while (comparedLevel == pathLevel && folderTreeIndex < folderTreeSize-1);
                 if(!isConformity) {
 //                    System.out.println("找不到符合的Folder");

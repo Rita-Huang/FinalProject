@@ -85,6 +85,7 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         SQLQuery query = getSession().createSQLQuery(FOLDER_TREE);
         query.setParameter(0, teamId);
         query.addEntity(FileTreeBean.class);
+//        System.out.println(query.list());
         return query.list();
     }
 
@@ -144,23 +145,23 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         Session session = sessionFactory.getCurrentSession();
         sessionFactory.getCurrentSession().beginTransaction();
         
-        ShareFileDAO dao = (ShareFileDAO) context.getBean("shareFileDAO");
-        TeamUserDAO teamUserDAO=(TeamUserDAO) context.getBean("teamUserDAO");
-        ShareFileBean bean = new ShareFileBean();
-        //100,200,"New Text Document - Copy - Copy - Copy.txt",904
-        String filePath = "New Text Document - Copy - Copy - Copy.txt";
-        TeamUserBean teamUserBean = teamUserDAO.select(new TeamUserIdBean(100,200)) ;
-        ShareFileBean shareFileBean = dao.selectByFileId(904);
-        bean.setTeamBean(teamUserBean.getTeam());;
-        bean.setUserBean(teamUserBean.getUsers());
-        bean.insertSetFileName(filePath);
-        bean.insertSetFileSize(filePath);
-        bean.insertSetFileType(filePath);
-        bean.insertSetUpdateTime();
-        bean.setUpperFolder(shareFileBean);;
-        System.out.println("bean:" +bean);
-        ShareFileBean result =  dao.insert(bean);
-        System.out.println("resutl: " +result);
+//        ShareFileDAO dao = (ShareFileDAO) context.getBean("shareFileDAO");
+//        TeamUserDAO teamUserDAO=(TeamUserDAO) context.getBean("teamUserDAO");
+//        ShareFileBean bean = new ShareFileBean();
+//        //100,200,"New Text Document - Copy - Copy - Copy.txt",904
+//        String filePath = "New Text Document - Copy - Copy - Copy.txt";
+//        TeamUserBean teamUserBean = teamUserDAO.select(new TeamUserIdBean(100,200)) ;
+//        ShareFileBean shareFileBean = dao.selectByFileId(904);
+//        bean.setTeamBean(teamUserBean.getTeam());;
+//        bean.setUserBean(teamUserBean.getUsers());
+//        bean.insertSetFileName(filePath);
+//        bean.insertSetFileSize(filePath);
+//        bean.insertSetFileType(filePath);
+//        bean.insertSetUpdateTime();
+//        bean.setUpperFolder(shareFileBean);;
+//        System.out.println("bean:" +bean);
+//        ShareFileBean result =  dao.insert(bean);
+//        System.out.println("resutl: " +result);
         
         
 //        ShareFileDAO dao = (ShareFileDAO) context.getBean("shareFileDAO");

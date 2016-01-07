@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 <%-- <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/table.css" /> --%>
 	
+	
 <style>
 .padding {
 	padding-left: 30px;
@@ -25,14 +26,23 @@
 	padding-left: 15px;
 	padding-right: 15px;
 }
+#fancybox-wrap {
+	padding: 0px;
+}
+
+#fancybox-wrap *,
+#fancybox-wrap *:before,
+#fancybox-wrap *:after {
+    -webkit-box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    box-sizing: content-box !important;
+}
+.icon{
+	display:none;
+}
+
 </style>
 
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("a#insertFile").fancybox();
-	})
-</script>
 
 
 </head>
@@ -48,6 +58,7 @@
 	<br>fileUploadMessage:${message}<br>
 </div>
 <hr>
+<!-- path -->
 <div   class='padding'>
 <c:set var="path" value="<%= request.getContextPath() %>" />
 	<c:forEach var="fileTree" items="${folders}">
@@ -64,10 +75,19 @@
 	</c:forEach>
 </div>
 <br>
+<!-- icon -->
 <div   class='padding'>
-	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="upload file" src="<%= request.getContextPath() %>/image/cloud148.png" /></a>
+	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="Upload" src="<%= request.getContextPath() %>/image/fileUploadcloud148.png" /></a>
+	<img id="NewFolder" alt ="New Folder" title ="New Folder"  src="<%= request.getContextPath() %>/image/newfolder15.png"  />
+	<img id="iconDownload" class="icon" alt ="Download" title ="Download"  src="<%= request.getContextPath() %>/image/fileDownloadCloud134.png" />
+	<img id="iconCopy" class="icon" alt ="Copy" title ="Copy"  src="<%= request.getContextPath() %>/image/copyfile19857.png" />
+	<img id="iconDelete" class="icon" alt ="Delete" title ="Delete"  src="<%= request.getContextPath() %>/image/delete84453783.png" />
+	<img id="iconRename" class="icon" alt ="Rename" title ="Rename"   src="<%= request.getContextPath() %>/image/renameedit42.png" />
+	<img id="iconMove" class="icon" alt ="Move" title ="Move"   src="<%= request.getContextPath() %>/image/movesend2.png" />
+	
 </div>
 <br>
+<!-- file list -->
 <div   class='padding'>
 <table class="table">
 	<thead>
@@ -112,6 +132,7 @@
 </table>
 </div>
 
+<!-- folders -->
 <div>
 <table class="table">
 	<thead>
@@ -134,5 +155,22 @@
 </div>
 
 
+
+<script >
+// 	$(document).ready(function() {
+		
+// 	});
+// 	   <tr id="file922">
+	$(function(){
+		$("a#insertFile").fancybox();
+		$('tr[id^="folder"]').click(function(){
+// 			alert('folder');
+		});
+		$('tr[id^="file"]').click(function(){
+// 			alert('file');
+		});
+	
+	});
+</script>
 </body>
 </html>
