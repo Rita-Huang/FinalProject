@@ -13,7 +13,6 @@
 <script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-<%-- <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/table.css" /> --%>
 	
 	
 <style>
@@ -83,7 +82,6 @@
 </div>
 <br>
 <!-- icon -->
-<input type="button" id="buttonToggle" value="toggle">
 <div   class='padding'>
 	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="Upload" src="<%= request.getContextPath() %>/image/fileUploadcloud148.png" /></a>
 	<img id="NewFolder" alt ="New Folder" title ="New Folder"  src="<%= request.getContextPath() %>/image/newfolder15.png"  />
@@ -118,10 +116,10 @@
 			    <c:otherwise><tr id="file${fileList.fileId}"></c:otherwise>
 			</c:choose>
 				<td>${fileList.fileId}</td>
-				
+<%-- 				"#" --%>
 				<td>
 				<c:choose>
-					<c:when test="${fileList.fileType == '資料夾'}"><a href = "${requestURI}/${fileList.fileName}">${fileList.fileName}</a></c:when>
+					<c:when test="${fileList.fileType == '資料夾'}"><a href ="${requestURI}/${fileList.fileName}"  class='trtda'>${fileList.fileName}</a></c:when>
 					<c:otherwise>${fileList.fileName}</c:otherwise>
 				</c:choose>
 				</td>
@@ -165,28 +163,21 @@
 
 
 <script >
-// 	$(document).ready(function() {
-		
-// 	});
-// 	   <tr id="file922">
 	$(function(){
 		$("a#insertFile").fancybox();
-		$('tr[id^="folder"]').click(showIcon);
-		$('tr[id^="file"]').click(showIcon);
-		$("td > a").click(removeIcon);
+		$('tr[id^="folder"]').click(showIcon);//
+		$('tr[id^="file"]').click(showIcon);//
 		
 		function showIcon(){
-			if($('img[id^="icon"]').hasClass('iconNotDisplay')){
-	 			 $('img[id^="icon"]').removeClass('iconNotDisplay');
-	 			 
-	 		 }else{
+			if($(this).hasClass('listBackground')){
+	 			 $(this).removeClass('listBackground');
 	 			 $('img[id^="icon"]').addClass('iconNotDisplay');
-	 		 }
-		 }
-		function removeIcon(){
-			if($('img[id^="icon"]').hasClass('iconNotDisplay')){
+	 		 }else{
+	 			 if($('tr[id^="f"]').hasClass('listBackground')){
+	 				$('tr[id^="f"]').removeClass('listBackground');
+	 			 }
+	 			 $(this).addClass('listBackground');
 	 			 $('img[id^="icon"]').removeClass('iconNotDisplay');
-	 			 
 	 		 }
 		 }
 	});
