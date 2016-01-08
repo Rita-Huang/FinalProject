@@ -133,7 +133,9 @@ public class ShareFileService
 		return shareFileDAO.insert(bean);
 	}
     
-    
+    public int deleteFile(int fileId, boolean isFolder){
+    	return shareFileDAO.deleteFile(fileId,isFolder);
+    }
     
     public static void main(String[] args)
     {

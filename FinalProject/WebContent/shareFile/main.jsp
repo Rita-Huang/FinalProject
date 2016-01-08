@@ -167,7 +167,6 @@
 		$("a#insertFile").fancybox();
 		$('tr[id^="folder"]').click(showIcon);//
 		$('tr[id^="file"]').click(showIcon);//
-		
 		function showIcon(){
 			if($(this).hasClass('listBackground')){
 	 			 $(this).removeClass('listBackground');
@@ -180,6 +179,26 @@
 	 			 $('img[id^="icon"]').removeClass('iconNotDisplay');
 	 		 }
 		 }
+		
+		$('#iconDelete').click(deletefile);
+		function deletefile(){
+			$.ajax({
+				  'type':'get', //post、delete、put
+				  'url':'shareFile/deletefile',
+				  'dataType':'json',  //json、script、html
+				  'data':{},
+				  'success':function(data){
+					//data 就是一個XML DOM 
+					$(data).find("Category").each(function(){
+						//$(this) -> 表示Category物件
+						console.log($(this).children("CategoryID").text());
+						console.log($(this).children("CategoryName").text());
+					})
+				  }
+				  
+				  
+			  });
+		}
 	});
 </script>
 </body>

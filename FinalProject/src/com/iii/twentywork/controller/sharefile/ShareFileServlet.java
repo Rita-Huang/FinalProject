@@ -35,10 +35,7 @@ import com.iii.twentywork.model.daointerface.TeamUserDAO;
 import com.iii.twentywork.model.service.sharefile.ShareFileService;
 import com.iii.twentywork.model.service.user.LoginService;
 
-/**
- * Servlet implementation class ShareFileMainPageServlet
- */
-@WebServlet({"/ShareFile/*","/shareFile/fileUpload"})
+@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile"})
 public class ShareFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -96,7 +93,6 @@ public class ShareFileServlet extends HttpServlet {
                     return;
                 }
             }
-	    
 	    else if(servletPath.equals("/shareFile/fileUpload"))
 	    {//檔案上傳功能
 	    	System.out.println("ShareFileServlet--Line99--servletPath.equals(\"/shareFile/fileUpload\")");
@@ -107,7 +103,6 @@ public class ShareFileServlet extends HttpServlet {
 			if (ServletFileUpload.isMultipartContent(request)) {
 					try {
 						List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-
 						for (FileItem item : multiparts)
 						{
 						    if (!item.isFormField())
@@ -122,14 +117,20 @@ public class ShareFileServlet extends HttpServlet {
 						session.setAttribute("message", "File Upload Failed due to " + e);
 						e.printStackTrace();
 					}
-					
 			} else {
 				session.setAttribute("message", "Sorry this Servlet only handles file upload request");
 			}
 		    response.sendRedirect(requestURI);
 	    }
 	    
+	    else if(servletPath.equals("/shareFile/deletefile"))
+	    {//刪除檔案功能
+	    	
+	    }
 	    
+	    else{
+	    	System.out.println("What the Hall");
+	    }
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
