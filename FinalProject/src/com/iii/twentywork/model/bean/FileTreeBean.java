@@ -2,8 +2,9 @@ package com.iii.twentywork.model.bean;
 
 import java.sql.Timestamp;
 
-public class FileTreeBean
+public class FileTreeBean implements java.io.Serializable
 {
+    private static final long serialVersionUID = 1L;
     //findFile (fileId, fileName_,fileType,fileSize,updateTime,userId, teamId,upperFolderId , fileLevel)
     private int fileId; //PK
     private String fileName; 

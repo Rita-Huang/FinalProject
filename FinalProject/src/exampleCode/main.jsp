@@ -165,8 +165,8 @@
 <script >
 	$(function(){
 		$("a#insertFile").fancybox();
-		$('tr[id^="folder"]').click(showIcon);
-		$('tr[id^="file"]').click(showIcon);
+		$('tr[id^="folder"]').click(showIcon);//
+		$('tr[id^="file"]').click(showIcon);//
 		function showIcon(){
 			if($(this).hasClass('listBackground')){
 	 			 $(this).removeClass('listBackground');
@@ -189,20 +189,20 @@
 			 console.log(session);
 			console.log(JSON.stringify(session));
 			$.ajax({
-				  'type':'post', 
+				  'type':'post', //post、delete、put
 				  'url':'<%= request.getContextPath() %>/shareFile/deletefile',
-				  'dataType':'json',  
+				  'dataType':'json',  //json、script、html
 				  'data':{list:JSON.stringify(session)},
 				  'success':function(data){
-					  console.log("here is response");
-					  console.log(data)
-					  $.each(data,function(i,product){
-						  console.log(product.fileID);
-						  $('#'+product.fileID).remove();
-					  })
+					//data 就是一個XML DOM 
+// 					$(data).find("Category").each(function(){
+// 						//$(this) -> 表示Category物件
+// 						console.log($(this).children("CategoryID").text());
+// 						console.log($(this).children("CategoryName").text());
+// 					})
 				  }
-			  });//end of $.ajax({ 
-		}//end of function deletefile(){
+			  });
+		}
 	});
 </script>
 </body>

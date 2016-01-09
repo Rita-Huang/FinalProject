@@ -1,12 +1,10 @@
-package com.iii.twentywork.controller.sharefile;
+package exampleCode;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +23,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
@@ -39,7 +36,6 @@ import com.iii.twentywork.model.bean.TeamUserIdBean;
 import com.iii.twentywork.model.daointerface.TeamUserDAO;
 import com.iii.twentywork.model.service.sharefile.ShareFileService;
 
-@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile"})
 public class ShareFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -133,29 +129,53 @@ public class ShareFileServlet extends HttpServlet {
 	    	String fileIdList = request.getParameter("list");
 	    	System.out.println("ShareFileServlet--fileIdList="+fileIdList);//{"list":[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]}
 	    	
+//	    	JSONObject is a java.util.Map
+//          JSONArray is a java.util.List
 	    	JSONObject myjson = new JSONObject(fileIdList);
-            JSONArray valArray = myjson.toJSONArray(myjson.names()); //getValue Key對應的Value
-            System.out.println("ShareFileServlet--LV1 Value:"+valArray);// [[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]]
+
+	    	JSONArray nameArray = myjson.names();//getKey  // ["list"]
+            System.out.println("LV1 Key:"+nameArray);
+            JSONArray valArray = myjson.toJSONArray(nameArray); //getValue Key對應的Value
+            System.out.println("LV1 Value:"+valArray);// [[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]]
+            
             JSONArray lv2Array = (JSONArray)valArray.get(0);
             System.out.println(lv2Array);//[{"fileID":"folder905"},{"fileID":"folder906"},{"fileID":"file922"}]
+            
+            JSONObject e = lv2Array.getJSONObject(0);
+            System.out.println("LV2 Key:"+e.names());//LV2 Key:["fileID"]
+            JSONArray nextLevelArray = e.toJSONArray(e.names());
+            System.out.println("LV2 Value:"+nextLevelArray);//LV2 Value:["folder904"]
             
             List<String> list = new ArrayList<String>();
             for(int i=0;i<lv2Array.length();i++) {
                 JSONObject element = lv2Array.getJSONObject(i);
                 JSONArray fileId = element.toJSONArray(element.names());
+                System.out.println(fileId);//["file911"]
                 System.out.println(fileId.get(0));//file911
                 list.add((String) fileId.get(0));
             }
-            System.out.println("ShareFileServlet--arrayList:"+list);//arrayList:[folder904, folder905, folder906, file911]
-            List<Map<String, String>> result = shareFileService.deleteFileFunction(list) ;
+            System.out.println("arrayList:"+list);
+            
+//            for(Iterator<JSONArray> )
+            
+//	    	JSONObject nextLevel = myjson.getJSONObject("list");
+//	    	JSONArray nextLevelName =nextLevel.names();
+//	    	System.out.println("LV2 Key:"+nextLevelName);
+//	    	JSONArray nextLevelArray = nextLevel.toJSONArray(nextLevelName); //getValue Key對應的Value
+//            System.out.println("LV2 Value:"+nextLevelArray);
+            
+	    	
+	    	
             
             
-            String jsonString = JSONValue.toJSONString(result); 
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println(jsonString);
-            System.out.println(jsonString);                  
             
+//            for (int i = 0; i < valArray.length(); i++)
+//            {
+//                String p = nameArray.getString(i) + "," + valArray.getString(i);
+//                System.out.println(p);
+//            }
+//	          int fileId=-1;
+//	            boolean isFolder;
 	    }
 	    
 	    else{

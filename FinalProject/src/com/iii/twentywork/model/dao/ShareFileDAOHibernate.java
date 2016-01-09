@@ -106,6 +106,9 @@ public class ShareFileDAOHibernate implements ShareFileDAO
     
     private static final String DELETE = "delete from ShareFile where fileId = ?";
     private static final String DELETE_FOLDER = "{call find_delete_files(?)}";
+    /**
+     * 回傳fileId或是folderId
+     */
     @Override
     public int deleteFile(int fileId, boolean isFolder)
     {//testing#6

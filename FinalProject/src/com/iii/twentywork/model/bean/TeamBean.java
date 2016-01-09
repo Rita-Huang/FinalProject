@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 @Component(value="teamBean")
 public class TeamBean implements java.io.Serializable
 {
+    private static final long serialVersionUID = 1L;
 
     @Override
     public String toString()

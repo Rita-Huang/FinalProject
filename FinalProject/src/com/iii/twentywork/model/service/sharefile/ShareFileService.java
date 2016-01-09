@@ -1,18 +1,14 @@
 package com.iii.twentywork.model.service.sharefile;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +19,8 @@ import org.springframework.stereotype.Component;
 import com.iii.twentywork.model.bean.CheckPathInfoBean;
 import com.iii.twentywork.model.bean.FileTreeBean;
 import com.iii.twentywork.model.bean.ShareFileBean;
-import com.iii.twentywork.model.bean.TeamBean;
 import com.iii.twentywork.model.bean.TeamUserBean;
 import com.iii.twentywork.model.daointerface.ShareFileDAO;
-import com.iii.twentywork.model.daointerface.TeamUserDAO;
 
 @Component(value = "shareFileService")
 public class ShareFileService
@@ -137,6 +131,38 @@ public class ShareFileService
     	return shareFileDAO.deleteFile(fileId,isFolder);
     }
     
+    public List<Map<String, String>> deleteFileFunction(List<String> fileIdList) {
+        int fileId=-1;
+        Boolean isFolder=null;
+        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        for (String e : fileIdList)
+        {
+            System.out.println(e);
+            if (e.startsWith("file"))
+            {
+                fileId = Integer.parseInt(e.substring(4));
+                isFolder = false;
+            } else if (e.startsWith("folder"))
+            {
+                fileId = Integer.parseInt(e.substring(6));
+                isFolder = true;
+            } else
+            {
+                System.out.println("wrong entiry!!!!");
+            }
+            int resultId = shareFileDAO.deleteFile(fileId,isFolder);
+            System.out.println(fileId+","+isFolder+","+resultId);
+            if(resultId == fileId) {
+                Map<String, String> m1 = new HashMap<String, String>();       
+                m1.put("fileID",e);   
+                result.add(m1);
+            }else {
+                System.out.println("delete fail!!!");
+            }
+        }
+        return result;
+    }
+    
     public static void main(String[] args)
     {
         ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
@@ -145,9 +171,15 @@ public class ShareFileService
         sessionFactory.getCurrentSession().beginTransaction();
         
         ShareFileService service = (ShareFileService) context.getBean("shareFileService");
+//        ShareFileService service = new ShareFileService();//{"fileID":["file917","file918","file919"]}
+        List<String> fileIdList = new ArrayList<String>();
+        fileIdList.add("folder906");
+        fileIdList.add("file922");
+        fileIdList.add("file930");
         
-        
-        		
+        System.out.println(fileIdList);
+        service.deleteFileFunction(fileIdList);
+//       
       //testing#1
 //        System.out.println(service.getGroupFolderTree(201));
 //        System.out.println(service.getGroupFolderTree(203));
