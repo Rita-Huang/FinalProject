@@ -55,11 +55,7 @@ public class ShareFileService_old_version{}
      * @param folderName
      * @return ShareFileBean裡所有屬性都要放
      */
-//    public ShareFileBean insertFolder(int userId, int teamId, int upperFolderId,String folderName)
-//    {//testing#3
-//        ShareFileBean bean =new ShareFileBean(userId,teamId,folderName,upperFolderId);
-//        return dao.insert(bean);
-//    }
+//   
     
     /**
      * 建立新的Group User的檔案分享根目錄Folder

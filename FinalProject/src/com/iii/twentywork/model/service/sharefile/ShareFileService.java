@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -120,17 +121,17 @@ public class ShareFileService
         });
         return list;
     }
-  //testing#4
+  //Web testing pass
     public ShareFileBean insertFile(TeamUserBean teamUser,String fileName,int upperFolderId){
     	ShareFileBean upperFolder = shareFileDAO.selectByFileId(upperFolderId);
 		ShareFileBean bean = new ShareFileBean(teamUser,fileName,upperFolder);
 		return shareFileDAO.insert(bean);
 	}
-    
+  //Child of testing#4 
     public int deleteFile(int fileId, boolean isFolder){
     	return shareFileDAO.deleteFile(fileId,isFolder);
     }
-    
+  //testing#4   
     public List<Map<String, String>> deleteFileFunction(List<String> fileIdList) {
         int fileId=-1;
         Boolean isFolder=null;
@@ -162,6 +163,39 @@ public class ShareFileService
         }
         return result;
     }
+   
+  //Web testing pass  (Old testing#3)
+	public ShareFileBean insertFolder(TeamUserBean teamUser, String folderName, int upperFolderId) {
+		ShareFileBean upperFolder = shareFileDAO.selectByFileId(upperFolderId);
+		ShareFileBean bean = new ShareFileBean(teamUser,folderName,upperFolder,true);
+		return shareFileDAO.insert(bean);
+	}
+    
+	public String beanConvert2JSON(ShareFileBean bean,boolean isFolder){
+		List<Map<String, String>>  list = new ArrayList<Map<String, String>>();
+  		 Map<String, String> m1 = new HashMap<String, String>();  
+  		 
+  		 m1.put("fileId",bean.getFileId().toString());   
+  		 m1.put("fileName", bean.getFileName()); 
+  		 m1.put("fileType",bean.getFileType()); 
+  		 
+  		 if(bean.getUpdateTime()==null){
+  			m1.put("updateTime", "-");
+  		 }else{
+  			m1.put("updateTime", bean.getUpdateTime().toString());
+  		 }
+  		 Integer userId = bean.getUserBean().getUserID();
+  		 Integer teamId = bean.getTeamBean().getTeamId();
+   		 m1.put("userId",userId.toString() ); 
+   		 m1.put("userName",bean.getUserBean().getUserName() ); 
+ 		 m1.put("teamId",teamId.toString()); 
+ 		 m1.put("teamName",bean.getTeamBean().getTeamName()); 
+  		 
+  		list.add(m1);
+  	 
+   	String jsonString = JSONValue.toJSONString(list); 
+   	return jsonString;
+	}
     
     public static void main(String[] args)
     {
@@ -170,15 +204,7 @@ public class ShareFileService
         Session session = sessionFactory.getCurrentSession();
         sessionFactory.getCurrentSession().beginTransaction();
         
-        ShareFileService service = (ShareFileService) context.getBean("shareFileService");
-//        ShareFileService service = new ShareFileService();//{"fileID":["file917","file918","file919"]}
-        List<String> fileIdList = new ArrayList<String>();
-        fileIdList.add("folder906");
-        fileIdList.add("file922");
-        fileIdList.add("file930");
-        
-        System.out.println(fileIdList);
-        service.deleteFileFunction(fileIdList);
+//        ShareFileService service = (ShareFileService) context.getBean("shareFileService");
 //       
       //testing#1
 //        System.out.println(service.getGroupFolderTree(201));
@@ -200,7 +226,14 @@ public class ShareFileService
 //        List<ShareFileBean> list = service.getSortedFileList(901);
 //        for(int i = 0; i<list.size(); i++) {System.out.println(list.get(i));}
 
-        
+      //testing#4
+//        ShareFileService service = new ShareFileService();//{"fileID":["file917","file918","file919"]}
+//        List<String> fileIdList = new ArrayList<String>();
+//        fileIdList.add("folder906");
+//        fileIdList.add("file922");
+//        fileIdList.add("file930");
+//        System.out.println(fileIdList);
+//        service.deleteFileFunction(fileIdList);
         
         sessionFactory.getCurrentSession().getTransaction().commit();
     }

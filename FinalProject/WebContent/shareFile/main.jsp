@@ -46,9 +46,15 @@
 .listBackground{
 	background-color: #DFFFDF;
 }
+.table{
+	text-align: center;
+}
  
 </style>
-
+<script>
+window.onload = function () {
+}
+</script>
 
 
 </head>
@@ -65,7 +71,7 @@
 </div>
 <hr>
 <!-- path -->
-<div   class='padding'>
+<div   class='padding' id = navPath>
 <c:set var="path" value="<%= request.getContextPath() %>" />
 	<c:forEach var="fileTree" items="${folders}">
 	<c:choose>
@@ -83,8 +89,8 @@
 <br>
 <!-- icon -->
 <div   class='padding'>
-	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="Upload" src="<%= request.getContextPath() %>/image/fileUploadcloud148.png" /></a>
-	<img id="NewFolder" alt ="New Folder" title ="New Folder"  src="<%= request.getContextPath() %>/image/newfolder15.png"  />
+	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="Upload" title ="Upload" src="<%= request.getContextPath() %>/image/fileUploadcloud148.png" /></a>
+	<a id="NewFolder"  href="<%= request.getContextPath() %>/shareFile/newFolder.jsp"><img alt ="New Folder" title ="New Folder"  src="<%= request.getContextPath() %>/image/newfolder15.png"  /></a>
 	<img id="iconDownload" class="iconNotDisplay" alt ="Download" title ="Download"  src="<%= request.getContextPath() %>/image/fileDownloadCloud134.png" />
 	<img id="iconCopy" class="iconNotDisplay" alt ="Copy" title ="Copy"  src="<%= request.getContextPath() %>/image/copyfile19857.png" />
 	<img id="iconDelete" class="iconNotDisplay" alt ="Delete" title ="Delete"  src="<%= request.getContextPath() %>/image/delete84453783.png" />
@@ -108,36 +114,35 @@
 			<td>teamName</td>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody id = "fileList">
 		<c:if test="${! empty fileList}">
 		<c:forEach var="fileList" items="${fileList}">
 			<c:choose>
-				<c:when test="${fileList.fileType == '資料夾'}"><tr id="folder${fileList.fileId}" ></c:when>
-			    <c:otherwise><tr id="file${fileList.fileId}"></c:otherwise>
+				<c:when test="${fileList.fileType == '資料夾'}">
+					<tr id="folder${fileList.fileId}" >
+					<td>${fileList.fileId}</td>
+					<td><a href ="${requestURI}/${fileList.fileName}"  class='trtda'>${fileList.fileName}</a></td>
+					<td>${fileList.fileType}</td>
+					<td>-</td>
+				</c:when>
+			    <c:otherwise>
+			    	<tr id="file${fileList.fileId}">
+			    	<td>${fileList.fileId}</td>
+			    	<td>${fileList.fileName}</td>
+			    	<td>${fileList.fileType}</td>
+			    	<td>${fileList.updateTime}</td>
+			    </c:otherwise>
 			</c:choose>
-				<td>${fileList.fileId}</td>
-<%-- 				"#" --%>
-				<td>
-				<c:choose>
-					<c:when test="${fileList.fileType == '資料夾'}"><a href ="${requestURI}/${fileList.fileName}"  class='trtda'>${fileList.fileName}</a></c:when>
-					<c:otherwise>${fileList.fileName}</c:otherwise>
-				</c:choose>
-				</td>
-				
-				<td>${fileList.fileType}</td>
-				<td>${fileList.updateTime}</td>
 				<td>${fileList.userBean.userID}</td>
 				<td>${fileList.userBean.userName}</td>
 				<td>${fileList.teamBean.teamId}</td>
 				<td>${fileList.teamBean.teamName}</td>
-				<td>${session.requestURI}</td>
 			</tr>
 		</c:forEach>
 		</c:if>
 	</tbody>
 </table>
 </div>
-
 <!-- folders -->
 <div>
 <table class="table">
@@ -164,6 +169,10 @@
 
 <script >
 	$(function(){
+		$('#testbutton').click(function(){
+			console.log(callback);
+			});
+		
 		$("a#insertFile").fancybox();
 		$('tr[id^="folder"]').click(showIcon);
 		$('tr[id^="file"]').click(showIcon);
@@ -185,7 +194,7 @@
 			 var session = {'list': []};
 			 $('tr[class^="listBackground"][id^="f"]').each(function(i, selected){ 
 				 session.list.push({ 'fileID' : $(selected).attr('id' ) });
-			 });	
+			 });//取得選取的id	
 			 console.log(session);
 			console.log(JSON.stringify(session));
 			$.ajax({
@@ -203,7 +212,15 @@
 				  }
 			  });//end of $.ajax({ 
 		}//end of function deletefile(){
-	});
+			
+		$("a#NewFolder").fancybox();
+// 		$('#NewFolder').click(newFolder);
+// 		function newFolder(){
+			
+				
+// 		}//end of function newFolder(){
+	
+	});//end of $(function(){
 </script>
 </body>
 </html>

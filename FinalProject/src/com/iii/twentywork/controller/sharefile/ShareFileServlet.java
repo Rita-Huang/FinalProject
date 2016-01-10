@@ -39,7 +39,7 @@ import com.iii.twentywork.model.bean.TeamUserIdBean;
 import com.iii.twentywork.model.daointerface.TeamUserDAO;
 import com.iii.twentywork.model.service.sharefile.ShareFileService;
 
-@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile"})
+@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile","/shareFile/newFolder"})
 public class ShareFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -150,12 +150,25 @@ public class ShareFileServlet extends HttpServlet {
             List<Map<String, String>> result = shareFileService.deleteFileFunction(list) ;
             
             
-            String jsonString = JSONValue.toJSONString(result); 
+            String jsonString = JSONValue.toJSONString(result);//[{"fileID":"folder904"},{"fileID":"folder937"},{"fileID":"file936"},{"fileID":"file928"}] 
             response.setContentType("text/html; charset=UTF-8");
             PrintWriter out = response.getWriter();
             out.println(jsonString);
             System.out.println(jsonString);                  
             
+	    }else if(servletPath.equals("/shareFile/newFolder"))
+	    {//新增Folder功能
+	    	System.out.println("ShareFileServlet--128--here is newFolder");
+	    	String folderName = request.getParameter("newfolderName");
+	    	int upperFolderId = (int) session.getAttribute("upperFolderId");
+	    	ShareFileBean result = shareFileService.insertFolder(teamUser,folderName,upperFolderId);
+//	    	System.out.println("+++++++"+result);
+	   	 
+	    	String jsonString = shareFileService.beanConvert2JSON(result,true); 
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println(jsonString);
+            System.out.println(jsonString);    
 	    }
 	    
 	    else{

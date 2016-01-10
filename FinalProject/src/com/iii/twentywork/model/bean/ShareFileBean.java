@@ -36,13 +36,13 @@ public class ShareFileBean implements Serializable
      * 此建構子會將fileName,fileType,fileSize,updateTime,userId,teamId,upperFolder設定好<br>
      * 沒設定的屬性:fileId
      */
-    public ShareFileBean(TeamUserBean teamUser,String filePath,ShareFileBean upperFolder) {
+    public ShareFileBean(TeamUserBean teamUser,String fileName,ShareFileBean upperFolder) {
     	this.setTeamBean(teamUser.getTeam());
     	this.setUserBean(teamUser.getUsers());
     	this.setUpperFolder(upperFolder);
-        insertSetFileName(filePath);
-        insertSetFileType(filePath);
-        insertSetFileSize(filePath);
+        insertSetFileName(fileName);
+        insertSetFileType(fileName);
+        insertSetFileSize(fileName);
         insertSetUpdateTime();
     }
     
@@ -56,13 +56,23 @@ public class ShareFileBean implements Serializable
      * @param folderName
      * @param upperFolderId
      */
-//    public ShareFileBean(int userId,int teamId,String folderName,int upperFolderId) {
-//    	userBean.setUserID(userId);
-//    	teamBean.setTeamId(teamId);
-//    	this.fileName = folderName;
-//        this.fileType = "資料夾";
-////        this.upperFolderId = upperFolderId;
-//    }
+    public ShareFileBean(TeamUserBean teamUser,String folderName,ShareFileBean upperFolder,boolean isFolder) {
+	    if(isFolder){
+	    	this.setTeamBean(teamUser.getTeam());
+	    	this.setUserBean(teamUser.getUsers());
+	    	this.setUpperFolder(upperFolder);
+	    	this.fileName = folderName;
+	        this.fileType = "資料夾";
+	    }else{
+	    	this.setTeamBean(teamUser.getTeam());
+	    	this.setUserBean(teamUser.getUsers());
+	    	this.setUpperFolder(upperFolder);
+	        insertSetFileName(folderName);
+	        insertSetFileType(folderName);
+	        insertSetFileSize(folderName);
+	        insertSetUpdateTime();
+	    }
+    }
 
     /**
      * vvvvvvvvv
