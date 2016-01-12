@@ -170,7 +170,7 @@ public class ShareFileService
 		ShareFileBean bean = new ShareFileBean(teamUser,folderName,upperFolder,true);
 		return shareFileDAO.insert(bean);
 	}
-    
+  //Web testing pass   
 	public String beanConvert2JSON(ShareFileBean bean,boolean isFolder){
 		List<Map<String, String>>  list = new ArrayList<Map<String, String>>();
   		 Map<String, String> m1 = new HashMap<String, String>();  
@@ -197,6 +197,10 @@ public class ShareFileService
    	return jsonString;
 	}
     
+	public ShareFileBean selectByFileId(int fileId){
+		return shareFileDAO.selectByFileId(fileId);
+	}
+	
     public static void main(String[] args)
     {
         ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");

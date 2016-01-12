@@ -164,7 +164,7 @@ window.onload = function () {
 	</tbody>
 </table>
 </div>
-
+<iframe id="downloadFrame" style="display:none"></iframe>
 
 
 <script >
@@ -214,11 +214,19 @@ window.onload = function () {
 		}//end of function deletefile(){
 			
 		$("a#NewFolder").fancybox();
-// 		$('#NewFolder').click(newFolder);
-// 		function newFolder(){
+		
+		$('#iconDownload').click(function(){
+			$('tr[class^="listBackground"][id^="f"]').each(function(i, selected){ 
+				 console.log( $(selected).attr('id' ) );
+				 var iframe = document.getElementById("downloadFrame");
+				 iframe .src = "<%= request.getContextPath() %>/shareFile/downloadfile?fileID="+$(selected).attr('id' );
+			 });//取得選取的id
+			 
+			 
 			
+		
+		});//end of $('#iconDownload').click(function(){
 				
-// 		}//end of function newFolder(){
 	
 	});//end of $(function(){
 </script>

@@ -48,16 +48,6 @@ public class ShareFileService_old_version{}
     
     
     /**
-     * 新增檔案夾
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param folderName
-     * @return ShareFileBean裡所有屬性都要放
-     */
-//   
-    
-    /**
      * 建立新的Group User的檔案分享根目錄Folder
      * @param userId
      * @param teamId
@@ -69,33 +59,6 @@ public class ShareFileService_old_version{}
 //    {//testing#4
 //        ShareFileBean bean =new ShareFileBean(userId,teamId,"Group"+teamId+"根目錄",1);
 //        return dao.insert(bean);
-//    }
-    
-    
-    /**
-     * 刪除單一檔案
-     * @param fileId
-     * @return 回傳刪除的檔案Id
-     */
-//    public int deleteFile(ShareFileBean bean) 
-//    {//testing#8
-//        return dao.deleteFile(bean.getFileId(),bean.getFileSize()==0);
-//    }
-    
-    
-    /**
-     * 刪除多個檔案
-     * @param fileId
-     * @return 回傳刪除的檔案Id陣列
-     */
-//    public int[] deleteFile(List<ShareFileBean> bean)
-//    {//testing#12
-//        int[] resultset = new int[bean.size()];
-//        for(int i =0;i<bean.size();i++){
-//            int fileId = deleteFile(bean.get(i));
-//            resultset[i]=fileId;
-//        }
-//        return resultset;
 //    }
     
     

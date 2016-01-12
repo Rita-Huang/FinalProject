@@ -1,6 +1,7 @@
 package com.iii.twentywork.controller.sharefile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ import com.iii.twentywork.model.bean.TeamUserIdBean;
 import com.iii.twentywork.model.daointerface.TeamUserDAO;
 import com.iii.twentywork.model.service.sharefile.ShareFileService;
 
-@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile","/shareFile/newFolder"})
+@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile","/shareFile/newFolder","/shareFile/downloadfile"})
 public class ShareFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -129,7 +130,7 @@ public class ShareFileServlet extends HttpServlet {
 	    
 	    else if(servletPath.equals("/shareFile/deletefile"))
 	    {//刪除檔案功能
-//	    	System.out.println("ShareFileServlet--128--here is deleteFile");
+	    	System.out.println("ShareFileServlet--132--here is deleteFile  & downloadfile");
 	    	String fileIdList = request.getParameter("list");
 	    	System.out.println("ShareFileServlet--fileIdList="+fileIdList);//{"list":[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]}
 	    	
@@ -147,18 +148,16 @@ public class ShareFileServlet extends HttpServlet {
                 list.add((String) fileId.get(0));
             }
             System.out.println("ShareFileServlet--arrayList:"+list);//arrayList:[folder904, folder905, folder906, file911]
-            List<Map<String, String>> result = shareFileService.deleteFileFunction(list) ;
-            
-            
-            String jsonString = JSONValue.toJSONString(result);//[{"fileID":"folder904"},{"fileID":"folder937"},{"fileID":"file936"},{"fileID":"file928"}] 
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println(jsonString);
-            System.out.println(jsonString);                  
-            
+			List<Map<String, String>> result = shareFileService.deleteFileFunction(list);
+
+			String jsonString = JSONValue.toJSONString(result);// [{"fileID":"folder904"},{"fileID":"folder937"},{"fileID":"file936"},{"fileID":"file928"}]
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println(jsonString);
+			System.out.println(jsonString);
 	    }else if(servletPath.equals("/shareFile/newFolder"))
 	    {//新增Folder功能
-	    	System.out.println("ShareFileServlet--128--here is newFolder");
+	    	System.out.println("ShareFileServlet--161--here is newFolder");
 	    	String folderName = request.getParameter("newfolderName");
 	    	int upperFolderId = (int) session.getAttribute("upperFolderId");
 	    	ShareFileBean result = shareFileService.insertFolder(teamUser,folderName,upperFolderId);
@@ -169,8 +168,25 @@ public class ShareFileServlet extends HttpServlet {
             PrintWriter out = response.getWriter();
             out.println(jsonString);
             System.out.println(jsonString);    
+	    }else if (servletPath.equals("/shareFile/downloadfile")){
+	    	System.out.println("downloadfile seconde level");
+			response.setContentType("text/html");
+		    String fileID = request.getParameter("fileID");
+		    System.out.println("++++"+fileID);
+            int fileId = Integer.parseInt(fileID.substring(4));
+        	ShareFileBean bean = shareFileService.selectByFileId(fileId);
+        	String fileName = bean.getFileName();
+        	        	
+    	    PrintWriter out = response.getWriter();
+    	    response.setContentType("APPLICATION/OCTET-STREAM");
+    	    response.setHeader("Content-Disposition", "attachment; filename=\""
+    	           + "7788" + "\"");
+    	    FileInputStream fis = new FileInputStream(UPLOAD_DIRECTORY+ "\\" + fileId+"."+bean.getFileType());    	    
+    	    int i;
+    	    while((i = fis.read()) != -1) {
+    	        out.write(i);
+    	    }        	
 	    }
-	    
 	    else{
 	    	System.out.println("What the Hall");
 	    }
