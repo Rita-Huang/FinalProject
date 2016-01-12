@@ -168,7 +168,8 @@ public class ShareFileServlet extends HttpServlet {
             PrintWriter out = response.getWriter();
             out.println(jsonString);
             System.out.println(jsonString);    
-	    }else if (servletPath.equals("/shareFile/downloadfile")){
+	    }else if (servletPath.equals("/shareFile/downloadfile"))
+	    {//下載檔案功能
 	    	System.out.println("downloadfile seconde level");
 			response.setContentType("text/html");
 		    String fileID = request.getParameter("fileID");
@@ -180,7 +181,7 @@ public class ShareFileServlet extends HttpServlet {
     	    PrintWriter out = response.getWriter();
     	    response.setContentType("APPLICATION/OCTET-STREAM");
     	    response.setHeader("Content-Disposition", "attachment; filename=\""
-    	           + "7788" + "\"");
+    	           + fileName + "\"");
     	    FileInputStream fis = new FileInputStream(UPLOAD_DIRECTORY+ "\\" + fileId+"."+bean.getFileType());    	    
     	    int i;
     	    while((i = fis.read()) != -1) {

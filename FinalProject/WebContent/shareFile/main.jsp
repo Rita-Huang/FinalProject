@@ -174,21 +174,44 @@ window.onload = function () {
 			});
 		
 		$("a#insertFile").fancybox();
-		$('tr[id^="folder"]').click(showIcon);
-		$('tr[id^="file"]').click(showIcon);
-		function showIcon(){
+		$('tr[id^="f"]').click(function(){
 			if($(this).hasClass('listBackground')){
 	 			 $(this).removeClass('listBackground');
-	 			 $('img[id^="icon"]').addClass('iconNotDisplay');
+	 			 test();
 	 		 }else{
-// 	 			 if($('tr[id^="f"]').hasClass('listBackground')){
-// 	 				$('tr[id^="f"]').removeClass('listBackground');
-// 	 			 }
+//	 			 if($('tr[id^="f"]').hasClass('listBackground')){
+//	 				$('tr[id^="f"]').removeClass('listBackground');
+//	 			 }單選
 	 			 $(this).addClass('listBackground');
-	 			 $('img[id^="icon"]').removeClass('iconNotDisplay');
+	 			test();
 	 		 }
-		 }
+		});	//end of $('tr[id^="f"]').click(function(){
 		
+// 		#iconDelete | #iconCopy | #iconMove | #iconRename | #iconDownload
+			//class="iconNotDisplay"
+		function test(){
+			if($('tr[class="listBackground"]').length==0){
+				$('img[id^=icon]').addClass('iconNotDisplay');
+			}else if($('tr[class="listBackground"]').length==1){
+				$('#iconDelete').removeClass('iconNotDisplay');
+				$('#iconCopy').removeClass('iconNotDisplay');
+				$('#iconMove').removeClass('iconNotDisplay');
+				$('#iconRename').removeClass('iconNotDisplay');
+				if($('tr[id^=folder][class="listBackground"]').length>=1){
+					$('#iconDownload').addClass('iconNotDisplay');
+				}else{
+					$('#iconDownload').removeClass('iconNotDisplay');
+				}
+			}else{
+				$('#iconDelete').removeClass('iconNotDisplay');
+				$('#iconCopy').removeClass('iconNotDisplay');
+				$('#iconMove').removeClass('iconNotDisplay');
+				$('#iconRename').addClass('iconNotDisplay');
+				$('#iconDownload').addClass('iconNotDisplay');
+			}
+		}	
+	
+	
 		$('#iconDelete').click(deletefile);
 		function deletefile(){
 			 var session = {'list': []};
@@ -221,13 +244,13 @@ window.onload = function () {
 				 var iframe = document.getElementById("downloadFrame");
 				 iframe .src = "<%= request.getContextPath() %>/shareFile/downloadfile?fileID="+$(selected).attr('id' );
 			 });//取得選取的id
-			 
-			 
-			
-		
 		});//end of $('#iconDownload').click(function(){
-				
-	
+		
+// 		$(#iconRename).click(function(){ 	
+// 			$()
+			
+// 		});	
+			
 	});//end of $(function(){
 </script>
 </body>
