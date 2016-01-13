@@ -169,10 +169,6 @@ window.onload = function () {
 
 <script >
 	$(function(){
-		$('#testbutton').click(function(){
-			console.log(callback);
-			});
-		
 		$("a#insertFile").fancybox();
 		$('tr[id^="f"]').click(function(){
 			if($(this).hasClass('listBackground')){
@@ -181,7 +177,7 @@ window.onload = function () {
 	 		 }else{
 //	 			 if($('tr[id^="f"]').hasClass('listBackground')){
 //	 				$('tr[id^="f"]').removeClass('listBackground');
-//	 			 }單選
+//	 			 }//單選
 	 			 $(this).addClass('listBackground');
 	 			icondisplay();
 	 		 }
@@ -222,7 +218,7 @@ window.onload = function () {
 			console.log(JSON.stringify(session));
 			$.ajax({
 				  'type':'post', 
-				  'url':'<%= request.getContextPath() %>/shareFile/deletefile',
+				  'url':'<%= request.getContextPath() %>/ShareFileServlet/deletefile',
 				  'dataType':'json',  
 				  'data':{list:JSON.stringify(session)},
 				  'success':function(data){
@@ -242,7 +238,7 @@ window.onload = function () {
 			$('tr[class^="listBackground"][id^="f"]').each(function(i, selected){ 
 				 console.log( $(selected).attr('id' ) );
 				 var iframe = document.getElementById("downloadFrame");
-				 iframe .src = "<%= request.getContextPath() %>/shareFile/downloadfile?fileID="+$(selected).attr('id' );
+				 iframe .src = "<%= request.getContextPath() %>/ShareFileServlet/downloadfile?fileID="+$(selected).attr('id' );
 			 });//取得選取的id
 		});//end of $('#iconDownload').click(function(){
 		

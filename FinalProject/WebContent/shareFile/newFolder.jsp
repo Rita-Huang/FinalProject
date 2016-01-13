@@ -16,7 +16,6 @@
 <body>
 	<div class="fancy">
 		<h4>請輸入資料夾名稱</h4>
-<%-- 		action="<%= request.getContextPath() %>/shareFile/newFolder" --%>
 		<form  method="post" enctype="multipart/form-data">
 			<div>
 			<input type="text" id="folderName" autofocus="autofocus"/>
@@ -46,7 +45,7 @@
 // 		console.log($('#folderName').val());
 		$.ajax({
 			  'type':'post', 
-			  'url':'<%= request.getContextPath() %>/shareFile/newFolder',
+			  'url':'<%= request.getContextPath() %>/ShareFileServlet/newFolder',
 			  'dataType':'json',  
 			  'data':{newfolderName:$('#folderName').val()},//{list:JSON.stringify(session)},
 			  'success':function(data){

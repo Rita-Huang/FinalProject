@@ -40,7 +40,7 @@ import com.iii.twentywork.model.bean.TeamUserIdBean;
 import com.iii.twentywork.model.daointerface.TeamUserDAO;
 import com.iii.twentywork.model.service.sharefile.ShareFileService;
 
-@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile","/shareFile/newFolder","/shareFile/downloadfile","/shareFile/renamefile"})
+@WebServlet({"/ShareFile/*","/ShareFileServlet/*"})
 public class ShareFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -99,7 +99,7 @@ public class ShareFileServlet extends HttpServlet {
                     return;
                 }
             }
-	    else if(servletPath.equals("/shareFile/fileUpload"))
+	    else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/fileUpload"))
 	    {//檔案上傳功能
 	    	System.out.println("ShareFileServlet--Line99--servletPath.equals(\"/shareFile/fileUpload\")");
 	    	String requestURI =(String) session.getAttribute("requestURI");
@@ -129,7 +129,7 @@ public class ShareFileServlet extends HttpServlet {
 		    response.sendRedirect(requestURI);
 	    }
 	    
-	    else if(servletPath.equals("/shareFile/deletefile"))
+	    else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/deletefile"))
 	    {//刪除檔案功能
 	    	System.out.println("ShareFileServlet--132--here is deleteFile  & downloadfile");
 	    	String fileIdList = request.getParameter("list");
@@ -156,7 +156,7 @@ public class ShareFileServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.println(jsonString);
 			System.out.println(jsonString);
-	    }else if(servletPath.equals("/shareFile/newFolder"))
+	    }else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/newFolder"))
 	    {//新增Folder功能
 	    	System.out.println("ShareFileServlet--161--here is newFolder");
 	    	String folderName = request.getParameter("newfolderName");
@@ -169,12 +169,10 @@ public class ShareFileServlet extends HttpServlet {
             PrintWriter out = response.getWriter();
             out.println(jsonString);
             System.out.println(jsonString);    
-	    }else if (servletPath.equals("/shareFile/downloadfile"))
+	    }else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/downloadfile"))
 	    {//下載檔案功能
-	    	System.out.println("downloadfile seconde level");
 			response.setContentType("text/html");
 		    String fileID = request.getParameter("fileID");
-		    System.out.println("++++"+fileID);
             int fileId = Integer.parseInt(fileID.substring(4));
         	ShareFileBean bean = shareFileService.selectByFileId(fileId);
         	String fileName = bean.getFileName();
