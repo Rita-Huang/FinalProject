@@ -105,14 +105,14 @@ window.onload = function () {
 <table class="table">
 	<thead>
 		<tr>
-			<td>fileId</td>
-			<td>fileName</td>
-			<td>fileType</td>
-			<td>updateTime</td>
-			<td>userId</td>
-			<td>userName</td>
-			<td>teamId</td>
-			<td>teamName</td>
+			<td style="display:none">fileId</td>
+			<td>檔案名稱</td>
+			<td style="display:none">fileType</td>
+			<td>上傳時間</td>
+			<td style="display:none">userId</td>
+			<td>上傳人員</td>
+			<td style="display:none">teamId</td>
+			<td style="display:none">teamName</td>
 		</tr>
 	</thead>
 	<tbody id = "fileList">
@@ -121,26 +121,26 @@ window.onload = function () {
 			<c:choose>
 				<c:when test="${fileList.fileType == '資料夾'}">
 					<tr id="folder${fileList.fileId}" >
-					<td>${fileList.fileId}</td>
+					<td style="display:none">${fileList.fileId}</td>
 					<td><a href ="${requestURI}/${fileList.fileName}"  class='fileName'>${fileList.fileName}</a></td>
-					<td>${fileList.fileType}</td>
+					<td style="display:none">${fileList.fileType}</td>
 					<td>-</td>
 				</c:when>
 			    <c:otherwise>
 			    	<tr id="file${fileList.fileId}">
-			    	<td>${fileList.fileId}</td>
+			    	<td style="display:none">${fileList.fileId}</td>
 			    	<td  class='fileName'>${fileList.fileName}</td>
-			    	<td>${fileList.fileType}</td>
+			    	<td style="display:none">${fileList.fileType}</td>
 			    	
 			    	<c:set var="string1" value='${fileList.updateTime}'/>
 					<c:set var="updateTime" value="${fn:substring(string1, 0, 16)}" />
 			    	<td>${updateTime}</td>
 			    </c:otherwise>
 			</c:choose>
-				<td>${fileList.userBean.userID}</td>
+				<td style="display:none">${fileList.userBean.userID}</td>
 				<td>${fileList.userBean.userName}</td>
-				<td>${fileList.teamBean.teamId}</td>
-				<td>${fileList.teamBean.teamName}</td>
+				<td style="display:none">${fileList.teamBean.teamId}</td>
+				<td style="display:none">${fileList.teamBean.teamName}</td>
 			</tr>
 		</c:forEach>
 		</c:if>
@@ -149,7 +149,7 @@ window.onload = function () {
 </div>
 <!-- folders -->
 <div>
-<table class="table">
+<table class="table" style="display:none">
 	<thead>
 		<tr>
 			<td>FileID</td>
@@ -174,47 +174,10 @@ window.onload = function () {
 <script >
 	$(function(){
 		$("#insertFile").fancybox();
+		$("#NewFolder").fancybox();
 		$("#renameFile").fancybox();
-		$('tr[id^="f"]').click(function(){
-			if($(this).hasClass('listBackground')){
-	 			 $(this).removeClass('listBackground');
-	 			icondisplay();
-	 		 }else{
-//	 			 if($('tr[id^="f"]').hasClass('listBackground')){
-//	 				$('tr[id^="f"]').removeClass('listBackground');
-//	 			 }//單選
-	 			 $(this).addClass('listBackground');
-	 			icondisplay();
-	 		 }
-		});	//end of $('tr[id^="f"]').click(function(){
-		
-// 		#iconDelete | #iconCopy | #iconMove | #iconRename | #iconDownload
-//		class="iconNotDisplay"
-		function icondisplay(){
-			if($('tr[class="listBackground"]').length==0){
-// 				console.log('length=0')
-				$('img[id^=icon]').addClass('iconNotDisplay');
-				$('#renameFile').addClass('iconNotDisplay');
-			}else if($('tr[class="listBackground"]').length==1){
-// 				console.log('length=1')
-				$('#iconDelete').removeClass('iconNotDisplay');
-				$('#iconCopy').removeClass('iconNotDisplay');
-				$('#iconMove').removeClass('iconNotDisplay');
-				$('#renameFile').removeClass('iconNotDisplay');
-				if($('tr[id^=folder][class="listBackground"]').length>=1){
-					$('#iconDownload').addClass('iconNotDisplay');
-				}else{
-					$('#iconDownload').removeClass('iconNotDisplay');
-				}
-			}else{
-// 				console.log('length>1')
-				$('#iconDelete').removeClass('iconNotDisplay');
-				$('#iconCopy').removeClass('iconNotDisplay');
-				$('#iconMove').removeClass('iconNotDisplay');
-				$('#renameFile').addClass('iconNotDisplay');
-				$('#iconDownload').addClass('iconNotDisplay');
-			}
-		}	
+		$('tr[id^="f"]').click(listBackGround);
+			
 	
 	
 		$('#iconDelete').click(deletefile);
@@ -241,7 +204,7 @@ window.onload = function () {
 			  });//end of $.ajax({ 
 		}//end of function deletefile(){
 			
-		$("a#NewFolder").fancybox();
+		
 		
 		$('#iconDownload').click(function(){
 			$('tr[class^="listBackground"][id^="f"]').each(function(i, selected){ 
@@ -270,6 +233,61 @@ window.onload = function () {
 		}); //end of $('#iconRename').click(function(){ 
 		
 		});//end of $(function(){
+	function listBackGround(){
+		console.log("listBackGround")
+		console.log($(this).hasClass('listBackground'))
+		console.log($(this));
+		if($(this).hasClass('listBackground')){
+ 			 $(this).removeClass('listBackground');
+ 			icondisplay();
+ 		 }else{
+// 			 if($('tr[id^="f"]').hasClass('listBackground')){
+// 				$('tr[id^="f"]').removeClass('listBackground');}//單選
+ 			 $(this).addClass('listBackground');
+ 			icondisplay();
+ 		 }
+ 	}//end of  function listBackGround(){
+ 		
+//		#iconDelete | #iconCopy | #iconMove | #iconRename | #iconDownload
+//	class="iconNotDisplay"
+	function icondisplay(){
+		if($('tr[class="listBackground"]').length==0){
+//				console.log('length=0')
+			$('img[id^=icon]').addClass('iconNotDisplay');
+			$('#renameFile').addClass('iconNotDisplay');
+		}else if($('tr[class="listBackground"]').length==1){
+//				console.log('length=1')
+			$('#iconDelete').removeClass('iconNotDisplay');
+			$('#iconCopy').removeClass('iconNotDisplay');
+			$('#iconMove').removeClass('iconNotDisplay');
+			$('#renameFile').removeClass('iconNotDisplay');
+			if($('tr[id^=folder][class="listBackground"]').length>=1){
+				$('#iconDownload').addClass('iconNotDisplay');
+			}else{
+				$('#iconDownload').removeClass('iconNotDisplay');
+			}
+		}else{
+//				console.log('length>1')
+			$('#iconDelete').removeClass('iconNotDisplay');
+			$('#iconCopy').removeClass('iconNotDisplay');
+			$('#iconMove').removeClass('iconNotDisplay');
+			$('#renameFile').addClass('iconNotDisplay');
+			$('#iconDownload').addClass('iconNotDisplay');
+		}
+	};
 </script>
+        <h4 id="m1" onclick="listBackGround()">method1</h4>
+<table>
+<tr id="folder1029" onclick="listBackGround()" class="">
+	<td style="display:none">1029</td>
+	<td><a href="/FinalProject/ShareFile/11111111" class="trtda">11111111</a></td>
+	<td style="display:none">資料夾</td>
+	<td>-</td>
+	<td style="display:none">105</td>
+	<td>Jimmy</td>
+	<td style="display:none">200</td>
+	<td style="display:none">KukuCoding</td>
+</tr>
+</table>
 </body>
 </html>

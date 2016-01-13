@@ -52,17 +52,19 @@
 				  $.fancybox.close();
 // 				  console.log($('tr[id^="folder"]>td>a:last').text());
 // 				  console.log(data);
-				  $.each(data,function(i,fileList){
+// 				$('#buttonAdd').bind("click",function(){	
 // 					  console.log(fileList.fileId);
-					  $('#fileList').prepend("<tr id='folder"+fileList.fileId+"'></tr>");
-					  $('#fileList>tr#folder'+fileList.fileId).append("<td>"+fileList.fileId+"</td>");
+					  var fileList = data[0];
+					  $('#fileList').prepend("<tr id='folder"+fileList.fileId+"'  onclick='listBackGround()' class></tr>"); 
+					  $('#folder'+fileList.fileId).click(listBackGround);
+					  $('#fileList>tr#folder'+fileList.fileId).append("<td  style='display:none'>"+fileList.fileId+"</td>");
 					  $('#fileList>tr#folder'+fileList.fileId).append("<td><a href ='"+$('#navPath>a:last').attr('href')+"/"+fileList.fileName+"' class='trtda'>"+fileList.fileName+"</a></td>");
-					  $('#fileList>tr#folder'+fileList.fileId).append("<td>"+fileList.fileType+"</td><td>-</td>");
-					  $('#fileList>tr#folder'+fileList.fileId).append("<td>"+fileList.userId+"</td>");
+					  $('#fileList>tr#folder'+fileList.fileId).append("<td  style='display:none'>"+fileList.fileType+"</td>");
+					  $('#fileList>tr#folder'+fileList.fileId).append("<td>-</td>");
+					  $('#fileList>tr#folder'+fileList.fileId).append("<td  style='display:none'>"+fileList.userId+"</td>");
 					  $('#fileList>tr#folder'+fileList.fileId).append("<td>"+fileList.userName+"</td>");
-					  $('#fileList>tr#folder'+fileList.fileId).append("<td>"+fileList.teamId+"</td>");
-					  $('#fileList>tr#folder'+fileList.fileId).append("<td>"+fileList.teamName+"</td>");
-				  })
+					  $('#fileList>tr#folder'+fileList.fileId).append("<td  style='display:none'>"+fileList.teamId+"</td>");
+					  $('#fileList>tr#folder'+fileList.fileId).append("<td  style='display:none'>"+fileList.teamName+"</td>");
 			  }
 		  });//end of $.ajax({ 
 	});
