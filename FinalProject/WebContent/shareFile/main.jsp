@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -130,7 +131,10 @@ window.onload = function () {
 			    	<td>${fileList.fileId}</td>
 			    	<td  class='fileName'>${fileList.fileName}</td>
 			    	<td>${fileList.fileType}</td>
-			    	<td>${fileList.updateTime}</td>
+			    	
+			    	<c:set var="string1" value='${fileList.updateTime}'/>
+					<c:set var="updateTime" value="${fn:substring(string1, 0, 16)}" />
+			    	<td>${updateTime}</td>
 			    </c:otherwise>
 			</c:choose>
 				<td>${fileList.userBean.userID}</td>

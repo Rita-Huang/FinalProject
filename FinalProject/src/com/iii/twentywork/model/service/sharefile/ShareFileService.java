@@ -200,10 +200,10 @@ public class ShareFileService
 	public ShareFileBean selectByFileId(int fileId){
 		return shareFileDAO.selectByFileId(fileId);
 	}
-
+	
+	//Web testing pass 
 	public ShareFileBean renameFile(int fileId,String newFileName){
 		return shareFileDAO.updateFileName(fileId,newFileName);
-//		
 	}
 	
 	public static void main(String[] args)

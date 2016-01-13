@@ -33,17 +33,15 @@ $('#renameSubmitButton').click(function(){
 	if(fileType!=='資料夾'){
 		rename=rename+"."+fileType;
 	}
-	console.log(rename)
-	console.log(fileType)
-	
+// 	console.log(rename)
+// 	console.log(fileType)
 	
 	$.fancybox.close();
-	
 	$.ajax({
 		  'type':'get', 
 		  'url':'<%= request.getContextPath() %>/ShareFileServlet/renamefile',
 		  'dataType':'json',  
-		  'data':{fileId:fileId,fileName:rename},//{list:JSON.stringify(session)},
+		  'data':{fileId:fileId,fileName:rename},
 		  'success':function(data){
 			  if($('tr[class="listBackground"]>td').hasClass('fileName')){
 				  

@@ -35,7 +35,6 @@ public class ShareFileDAOHibernate implements ShareFileDAO
     }
     public ShareFileDAOHibernate() {}
     
-    //vvvvvvvv
     //selectByFileId = "select * from ShareFile where fileId=?";
     @Override
     public ShareFileBean selectByFileId(int fileId)
@@ -45,17 +44,6 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return bean;
     }
     
-    private static final String SELECT_BY_TEAMID = "select * from ShareFile where teamId=? and upperFolderId=900";
-    @Override
-    public ShareFileBean getGroupRootBean(int teamId) {
-        SQLQuery query = getSession().createSQLQuery(SELECT_BY_TEAMID);
-        query.setParameter(0, teamId);
-        query.addEntity(ShareFileBean.class);
-        return (ShareFileBean) query.list();
-    }
-    
-    
-    //vvvvvvvv
     // INSERT = "insert into ShareFile values(?,?,?,?,?,?,?)";
     @Override
     public  ShareFileBean insert(ShareFileBean bean)
@@ -65,7 +53,6 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return selectByFileId(pk);//;
     }
    
-    //vvvvvvvv
     //select file list :"select * from ShareFile where upperFolderId=?"
     @Override
     public Set<ShareFileBean> getFileList(int upperFolderId)
@@ -75,7 +62,6 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return bean.getInnerFiles();
     }
     
-    //vvvvvvvv
     //create procedure gen_folder_tree ( @v_teamId  int)
     private static final String FOLDER_TREE = "{ call gen_folder_tree (?) }";
     @Override
@@ -89,21 +75,6 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return query.list();
     }
 
-    
-
-    //create procedure find_file_by_fileName ( @v_fileId  int,@v_queryString nvarchar(50))
-    private static final String FIND = "{call find_file_by_fileName (?,?)}";
-    @Override
-    public List<FileTreeBean> findFileByFileName(String queryString,int upperFolderId)
-    {//testing#5
-    	SQLQuery query = getSession().createSQLQuery(FIND);
-    	query.setParameter(0, upperFolderId);
-    	query.setParameter(1, queryString);
-    	query.addEntity(FileTreeBean.class);
-        return query.list();
-    }
-
-    //vvvvvvvv
     private static final String DELETE = "delete from ShareFile where fileId = ?";
     private static final String DELETE_FOLDER = "{call find_delete_files(?)}";
     /**
@@ -128,19 +99,9 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return -1;
     }
 
-    
-    private static final String UPDATE = "update ShareFile set fileName_ = ?, upperFolderId = ?  where fileId = ?";
     @Override
-    public ShareFileBean updateFile(int fileId, int newFolderId,String newFileName)
-    {//testing#7
-    	ShareFileBean newFolderBean = (ShareFileBean) getSession().get(ShareFileBean.class,fileId);
-    	newFolderBean.setUpperFolder(newFolderBean);
-    	newFolderBean.setFileName(newFileName);
-        return newFolderBean;
-    }
-    
     public ShareFileBean updateFileName(int fileId,String newFileName)
-    {//testing#7
+    {
     	ShareFileBean newFolderBean = (ShareFileBean) getSession().get(ShareFileBean.class,fileId);
     	newFolderBean.setFileName(newFileName);
         return newFolderBean;
@@ -251,5 +212,34 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         
         sessionFactory.getCurrentSession().getTransaction().commit();
     }
-
+    private static final String SELECT_BY_TEAMID = "select * from ShareFile where teamId=? and upperFolderId=900";
+    @Override
+    public ShareFileBean getGroupRootBean(int teamId) {
+        SQLQuery query = getSession().createSQLQuery(SELECT_BY_TEAMID);
+        query.setParameter(0, teamId);
+        query.addEntity(ShareFileBean.class);
+        return (ShareFileBean) query.list();
+    }
+    
+    
+    //create procedure find_file_by_fileName ( @v_fileId  int,@v_queryString nvarchar(50))
+    private static final String FIND = "{call find_file_by_fileName (?,?)}";
+    @Override
+    public List<FileTreeBean> findFileByFileName(String queryString,int upperFolderId)
+    {//testing#5
+    	SQLQuery query = getSession().createSQLQuery(FIND);
+    	query.setParameter(0, upperFolderId);
+    	query.setParameter(1, queryString);
+    	query.addEntity(FileTreeBean.class);
+        return query.list();
+    }
+    
+    @Override
+    public ShareFileBean updateFile(int fileId, int newFolderId,String newFileName)
+    {//testing#7
+    	ShareFileBean newFolderBean = (ShareFileBean) getSession().get(ShareFileBean.class,fileId);
+    	newFolderBean.setUpperFolder(newFolderBean);
+    	newFolderBean.setFileName(newFileName);
+        return newFolderBean;
+    }
 }

@@ -105,8 +105,8 @@ public class ShareFileServlet extends HttpServlet {
 	    	String requestURI =(String) session.getAttribute("requestURI");
 //	        List<FileTreeBean> folders = (List<FileTreeBean>) session.getAttribute("folders");  
 	    	int upperFolderId = (int) session.getAttribute("upperFolderId");
-//
-			if (ServletFileUpload.isMultipartContent(request)) {
+//	    	System.out.println(upperFolderId);
+	    	if (ServletFileUpload.isMultipartContent(request)) {
 					try {
 						List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 						for (FileItem item : multiparts)
@@ -114,7 +114,9 @@ public class ShareFileServlet extends HttpServlet {
 						    if (!item.isFormField())
 						    {
 						        String fileName = new File(item.getName()).getName();
+//						        System.out.println(fileName);
 						        ShareFileBean bean = shareFileService.insertFile(teamUser, fileName,upperFolderId);
+//						        System.out.println(bean);
 						        item.write(new File(UPLOAD_DIRECTORY+File.separator+bean.getFileId()+"."+bean.getFileType()));
 						    }
 						}
@@ -154,8 +156,11 @@ public class ShareFileServlet extends HttpServlet {
 	    }else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/newFolder"))
 	    {//新增Folder功能
 //	    	System.out.println("ShareFileServlet--161--here is newFolder");
+	    	response.setContentType("text/html; charset=UTF-8");
+	    	request.setCharacterEncoding("UTF-8");
 	    	String folderName = request.getParameter("newfolderName");
 	    	int upperFolderId = (int) session.getAttribute("upperFolderId");
+	    	System.out.println(folderName);
 	    	ShareFileBean result = shareFileService.insertFolder(teamUser,folderName,upperFolderId);
 	   	 
 	    	String jsonString = shareFileService.beanConvert2JSON(result,true); 
@@ -165,16 +170,17 @@ public class ShareFileServlet extends HttpServlet {
             System.out.println(jsonString);    
 	    }else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/downloadfile"))
 	    {//下載檔案功能
-			response.setContentType("text/html");
 		    String fileID = request.getParameter("fileID");
             int fileId = Integer.parseInt(fileID.substring(4));
         	ShareFileBean bean = shareFileService.selectByFileId(fileId);
         	String fileName = bean.getFileName();
+        	System.out.println(bean);
+        	System.out.println(fileName);
         	        	
     	    PrintWriter out = response.getWriter();
     	    response.setContentType("APPLICATION/OCTET-STREAM");
-    	    response.setHeader("Content-Disposition", "attachment; filename=\""
-    	           + fileName + "\"");
+    	    fileName = new String(fileName.getBytes(), "ISO8859-1");
+    	    response.setHeader("Content-Disposition", "attachment; filename=\""	+ fileName + "\"");
     	    FileInputStream fis = new FileInputStream(UPLOAD_DIRECTORY+ "\\" + fileId+"."+bean.getFileType());    	    
     	    int i;
     	    while((i = fis.read()) != -1) {
@@ -182,15 +188,14 @@ public class ShareFileServlet extends HttpServlet {
     	    }        	
 	    }else if (servletPath.equals("/ShareFileServlet") && pathInfo.equals("/renamefile"))
 	    {//重新命名功能
+	    	response.setContentType("text/html; charset=UTF-8");
+	    	request.setCharacterEncoding("UTF-8");
 	    	int fileId = Integer.parseInt(request.getParameter("fileId"));
 	    	String fileName = request.getParameter("fileName");
 	    	
 	    	System.out.println(fileId);
 	    	System.out.println(fileName);
-	    	ShareFileBean bean = shareFileService.renameFile(fileId,fileName);
-	    	System.out.println(bean);
-	    	
-	    	
+	    	shareFileService.renameFile(fileId,fileName);
 	    }
 	    else{
 	    	System.out.println("What the Hall");
