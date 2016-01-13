@@ -40,7 +40,7 @@ import com.iii.twentywork.model.bean.TeamUserIdBean;
 import com.iii.twentywork.model.daointerface.TeamUserDAO;
 import com.iii.twentywork.model.service.sharefile.ShareFileService;
 
-@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile","/shareFile/newFolder","/shareFile/downloadfile"})
+@WebServlet({"/ShareFile/*","/shareFile/fileUpload","/shareFile/deletefile","/shareFile/newFolder","/shareFile/downloadfile","/shareFile/renamefile"})
 public class ShareFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -53,10 +53,11 @@ public class ShareFileServlet extends HttpServlet {
         ServletContext application = this.getServletContext();
         WebApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(application);
         this.shareFileService = (ShareFileService) context.getBean("shareFileService");
-//        System.out.println("ShareFileServlet--1.init-shareFileService");
     }
+    
     private static final String UPLOAD_DIRECTORY="C:\\userFileUpload";
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 		//接收資料
 	    HttpSession session = request.getSession();
 	    String pathInfo = request.getPathInfo();

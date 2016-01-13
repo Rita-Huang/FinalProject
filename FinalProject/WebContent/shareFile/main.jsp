@@ -177,19 +177,19 @@ window.onload = function () {
 		$('tr[id^="f"]').click(function(){
 			if($(this).hasClass('listBackground')){
 	 			 $(this).removeClass('listBackground');
-	 			 test();
+	 			icondisplay();
 	 		 }else{
 //	 			 if($('tr[id^="f"]').hasClass('listBackground')){
 //	 				$('tr[id^="f"]').removeClass('listBackground');
 //	 			 }單選
 	 			 $(this).addClass('listBackground');
-	 			test();
+	 			icondisplay();
 	 		 }
 		});	//end of $('tr[id^="f"]').click(function(){
 		
 // 		#iconDelete | #iconCopy | #iconMove | #iconRename | #iconDownload
-			//class="iconNotDisplay"
-		function test(){
+//		class="iconNotDisplay"
+		function icondisplay(){
 			if($('tr[class="listBackground"]').length==0){
 				$('img[id^=icon]').addClass('iconNotDisplay');
 			}else if($('tr[class="listBackground"]').length==1){
@@ -246,12 +246,24 @@ window.onload = function () {
 			 });//取得選取的id
 		});//end of $('#iconDownload').click(function(){
 		
-// 		$(#iconRename).click(function(){ 	
-// 			$()
-			
-// 		});	
-			
-	});//end of $(function(){
+		$('#iconRename').click(function(){
+			var fildID = $('tr[class^="listBackground"]>td:eq(0)').text(); 
+			$.ajax({
+				  'type':'get', 
+				  'url':'<%= request.getContextPath() %>/shareFile/renamefile',
+				  'dataType':'json',  
+				  'data':{fileId:fildID},
+				  'success':function(data){
+					  console.log("here is response of #iconRename");
+					  console.log(data)
+					  $.each(data,function(i,product){
+						  console.log(product.fileID);
+					  })
+				  }
+			  });//end of $.ajax({ 
+		}); //end of $('#iconRename').click(function(){ 
+		
+		});//end of $(function(){
 </script>
 </body>
 </html>
