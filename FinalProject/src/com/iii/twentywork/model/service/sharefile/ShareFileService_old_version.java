@@ -10,42 +10,6 @@ import com.iii.twentywork.model.daointerface.ShareFileDAO;
 public class ShareFileService_old_version{}
 //    ShareFileDAO dao = new ShareFileDAOJdbc();
     
-    /**
-     * 新增單一檔案
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param filePath
-     * @return ShareFileBean裡所有屬性都要放
-     */
-//    public ShareFileBean insertFile(int userId, int teamId,int upperFolderId, String filePath) 
-//    {// testing#1
-//        ShareFileBean bean = new ShareFileBean(userId, teamId, upperFolderId,filePath);
-//
-//        return dao.insert(bean);
-//    }
-    
-    
-    
-    /**
-     * 新增多個檔案
-     * @param userId
-     * @param teamId
-     * @param upperFolderId
-     * @param filePath
-     * @return ShareFileBean裡所有屬性都要放
-     */
-//    public List<ShareFileBean> insertFile(int userId, int teamId,int upperFolderId, String[] filePath)
-//    {//testing#2
-//        List<ShareFileBean> beans = new ArrayList<ShareFileBean>();
-//        
-//        for(int i=0;i<filePath.length;i++) {
-//            ShareFileBean bean = new ShareFileBean (userId, teamId,upperFolderId, filePath[i]);
-//            beans.add(dao.insert(bean));
-//        }
-//        return beans;
-//    }
-    
     
     /**
      * 建立新的Group User的檔案分享根目錄Folder

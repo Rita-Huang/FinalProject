@@ -94,7 +94,7 @@ window.onload = function () {
 	<img id="iconDownload" class="iconNotDisplay" alt ="Download" title ="Download"  src="<%= request.getContextPath() %>/image/fileDownloadCloud134.png" />
 	<img id="iconCopy" class="iconNotDisplay" alt ="Copy" title ="Copy"  src="<%= request.getContextPath() %>/image/copyfile19857.png" />
 	<img id="iconDelete" class="iconNotDisplay" alt ="Delete" title ="Delete"  src="<%= request.getContextPath() %>/image/delete84453783.png" />
-	<img id="iconRename" class="iconNotDisplay" alt ="Rename" title ="Rename"   src="<%= request.getContextPath() %>/image/renameedit42.png" />
+	<a id="renameFile"  class="iconNotDisplay" href="<%= request.getContextPath() %>/shareFile/renameFile.jsp"><img  alt ="Rename" title ="Rename"   src="<%= request.getContextPath() %>/image/renameedit42.png" /></a>
 	<img id="iconMove" class="iconNotDisplay" alt ="Move" title ="Move"   src="<%= request.getContextPath() %>/image/movesend2.png" />
 	
 </div>
@@ -121,14 +121,14 @@ window.onload = function () {
 				<c:when test="${fileList.fileType == '資料夾'}">
 					<tr id="folder${fileList.fileId}" >
 					<td>${fileList.fileId}</td>
-					<td><a href ="${requestURI}/${fileList.fileName}"  class='trtda'>${fileList.fileName}</a></td>
+					<td><a href ="${requestURI}/${fileList.fileName}"  class='fileName'>${fileList.fileName}</a></td>
 					<td>${fileList.fileType}</td>
 					<td>-</td>
 				</c:when>
 			    <c:otherwise>
 			    	<tr id="file${fileList.fileId}">
 			    	<td>${fileList.fileId}</td>
-			    	<td>${fileList.fileName}</td>
+			    	<td  class='fileName'>${fileList.fileName}</td>
 			    	<td>${fileList.fileType}</td>
 			    	<td>${fileList.updateTime}</td>
 			    </c:otherwise>
@@ -169,7 +169,8 @@ window.onload = function () {
 
 <script >
 	$(function(){
-		$("a#insertFile").fancybox();
+		$("#insertFile").fancybox();
+		$("#renameFile").fancybox();
 		$('tr[id^="f"]').click(function(){
 			if($(this).hasClass('listBackground')){
 	 			 $(this).removeClass('listBackground');
@@ -187,22 +188,26 @@ window.onload = function () {
 //		class="iconNotDisplay"
 		function icondisplay(){
 			if($('tr[class="listBackground"]').length==0){
+// 				console.log('length=0')
 				$('img[id^=icon]').addClass('iconNotDisplay');
+				$('#renameFile').addClass('iconNotDisplay');
 			}else if($('tr[class="listBackground"]').length==1){
+// 				console.log('length=1')
 				$('#iconDelete').removeClass('iconNotDisplay');
 				$('#iconCopy').removeClass('iconNotDisplay');
 				$('#iconMove').removeClass('iconNotDisplay');
-				$('#iconRename').removeClass('iconNotDisplay');
+				$('#renameFile').removeClass('iconNotDisplay');
 				if($('tr[id^=folder][class="listBackground"]').length>=1){
 					$('#iconDownload').addClass('iconNotDisplay');
 				}else{
 					$('#iconDownload').removeClass('iconNotDisplay');
 				}
 			}else{
+// 				console.log('length>1')
 				$('#iconDelete').removeClass('iconNotDisplay');
 				$('#iconCopy').removeClass('iconNotDisplay');
 				$('#iconMove').removeClass('iconNotDisplay');
-				$('#iconRename').addClass('iconNotDisplay');
+				$('#renameFile').addClass('iconNotDisplay');
 				$('#iconDownload').addClass('iconNotDisplay');
 			}
 		}	
@@ -244,9 +249,10 @@ window.onload = function () {
 		
 		$('#iconRename').click(function(){
 			var fildID = $('tr[class^="listBackground"]>td:eq(0)').text(); 
+// 			console.log('${fileList}')
 			$.ajax({
 				  'type':'get', 
-				  'url':'<%= request.getContextPath() %>/shareFile/renamefile',
+				  'url':'<%= request.getContextPath() %>/ShareFileServlet/renamefile',
 				  'dataType':'json',  
 				  'data':{fileId:fildID},
 				  'success':function(data){

@@ -35,7 +35,7 @@ public class ShareFileDAOHibernate implements ShareFileDAO
     }
     public ShareFileDAOHibernate() {}
     
-    
+    //vvvvvvvv
     //selectByFileId = "select * from ShareFile where fileId=?";
     @Override
     public ShareFileBean selectByFileId(int fileId)
@@ -103,7 +103,7 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return query.list();
     }
 
-    
+    //vvvvvvvv
     private static final String DELETE = "delete from ShareFile where fileId = ?";
     private static final String DELETE_FOLDER = "{call find_delete_files(?)}";
     /**
@@ -131,13 +131,19 @@ public class ShareFileDAOHibernate implements ShareFileDAO
     
     private static final String UPDATE = "update ShareFile set fileName_ = ?, upperFolderId = ?  where fileId = ?";
     @Override
-    public ShareFileBean updateFile(ShareFileBean bean, int newFolderId,
-            String newFileName)
+    public ShareFileBean updateFile(int fileId, int newFolderId,String newFileName)
     {//testing#7
-    	ShareFileBean newFolderBean = (ShareFileBean) getSession().get(ShareFileBean.class,newFolderId);
-    	bean.setUpperFolder(newFolderBean);
-    	bean.setFileName(newFileName);
-        return bean;
+    	ShareFileBean newFolderBean = (ShareFileBean) getSession().get(ShareFileBean.class,fileId);
+    	newFolderBean.setUpperFolder(newFolderBean);
+    	newFolderBean.setFileName(newFileName);
+        return newFolderBean;
+    }
+    
+    public ShareFileBean updateFileName(int fileId,String newFileName)
+    {//testing#7
+    	ShareFileBean newFolderBean = (ShareFileBean) getSession().get(ShareFileBean.class,fileId);
+    	newFolderBean.setFileName(newFileName);
+        return newFolderBean;
     }
     
     public static void main(String[] args)

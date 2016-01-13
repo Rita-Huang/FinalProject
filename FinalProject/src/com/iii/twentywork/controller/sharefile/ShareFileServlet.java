@@ -131,38 +131,32 @@ public class ShareFileServlet extends HttpServlet {
 	    
 	    else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/deletefile"))
 	    {//刪除檔案功能
-	    	System.out.println("ShareFileServlet--132--here is deleteFile  & downloadfile");
-	    	String fileIdList = request.getParameter("list");
-	    	System.out.println("ShareFileServlet--fileIdList="+fileIdList);//{"list":[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]}
+//	    	System.out.println("ShareFileServlet--132--here is deleteFile  & downloadfile");
+	    	String fileIdList = request.getParameter("list");//{"list":[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]}
 	    	
 	    	JSONObject myjson = new JSONObject(fileIdList);
-            JSONArray valArray = myjson.toJSONArray(myjson.names()); //getValue Key對應的Value
-            System.out.println("ShareFileServlet--LV1 Value:"+valArray);// [[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]]
-            JSONArray lv2Array = (JSONArray)valArray.get(0);
-            System.out.println(lv2Array);//[{"fileID":"folder905"},{"fileID":"folder906"},{"fileID":"file922"}]
+            JSONArray valArray = myjson.toJSONArray(myjson.names()); //getValue Key對應的Value  [[{"fileID":"folder906"},{"fileID":"file911"},{"fileID":"file912"}]]
+            JSONArray lv2Array = (JSONArray)valArray.get(0);//[{"fileID":"folder905"},{"fileID":"folder906"},{"fileID":"file922"}]
             
             List<String> list = new ArrayList<String>();
             for(int i=0;i<lv2Array.length();i++) {
                 JSONObject element = lv2Array.getJSONObject(i);
                 JSONArray fileId = element.toJSONArray(element.names());
-                System.out.println(fileId.get(0));//file911
                 list.add((String) fileId.get(0));
             }
-            System.out.println("ShareFileServlet--arrayList:"+list);//arrayList:[folder904, folder905, folder906, file911]
 			List<Map<String, String>> result = shareFileService.deleteFileFunction(list);
 
 			String jsonString = JSONValue.toJSONString(result);// [{"fileID":"folder904"},{"fileID":"folder937"},{"fileID":"file936"},{"fileID":"file928"}]
 			response.setContentType("text/html; charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.println(jsonString);
-			System.out.println(jsonString);
+//			System.out.println(jsonString);
 	    }else if(servletPath.equals("/ShareFileServlet")  && pathInfo.equals("/newFolder"))
 	    {//新增Folder功能
-	    	System.out.println("ShareFileServlet--161--here is newFolder");
+//	    	System.out.println("ShareFileServlet--161--here is newFolder");
 	    	String folderName = request.getParameter("newfolderName");
 	    	int upperFolderId = (int) session.getAttribute("upperFolderId");
 	    	ShareFileBean result = shareFileService.insertFolder(teamUser,folderName,upperFolderId);
-//	    	System.out.println("+++++++"+result);
 	   	 
 	    	String jsonString = shareFileService.beanConvert2JSON(result,true); 
             response.setContentType("text/html; charset=UTF-8");
@@ -186,6 +180,17 @@ public class ShareFileServlet extends HttpServlet {
     	    while((i = fis.read()) != -1) {
     	        out.write(i);
     	    }        	
+	    }else if (servletPath.equals("/ShareFileServlet") && pathInfo.equals("/renamefile"))
+	    {//重新命名功能
+	    	int fileId = Integer.parseInt(request.getParameter("fileId"));
+	    	String fileName = request.getParameter("fileName");
+	    	
+	    	System.out.println(fileId);
+	    	System.out.println(fileName);
+	    	ShareFileBean bean = shareFileService.renameFile(fileId,fileName);
+	    	System.out.println(bean);
+	    	
+	    	
 	    }
 	    else{
 	    	System.out.println("What the Hall");

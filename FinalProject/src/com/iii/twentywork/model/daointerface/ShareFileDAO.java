@@ -28,8 +28,9 @@ public interface ShareFileDAO
     /**
      * 更新檔案位置或是檔案名稱
      */
-    public abstract ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName);
-
+//    public abstract ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName);
+    public abstract ShareFileBean updateFile(int fileId, int newFolderId,String newFileName);
+    public abstract ShareFileBean updateFileName(int fileId,String newFileName);
     
     
     /**

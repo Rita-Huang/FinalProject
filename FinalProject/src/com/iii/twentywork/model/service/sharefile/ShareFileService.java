@@ -31,7 +31,7 @@ public class ShareFileService
     public void setShareFileDAO(ShareFileDAO shareFileDAO)
     {
         this.shareFileDAO = shareFileDAO;
-        System.out.println("ShareFileService setShareFileDAO");
+//        System.out.println("ShareFileService setShareFileDAO");
     }
     
   //testing#2
@@ -138,7 +138,7 @@ public class ShareFileService
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
         for (String e : fileIdList)
         {
-            System.out.println(e);
+//            System.out.println(e);
             if (e.startsWith("file"))
             {
                 fileId = Integer.parseInt(e.substring(4));
@@ -152,7 +152,7 @@ public class ShareFileService
                 System.out.println("wrong entiry!!!!");
             }
             int resultId = shareFileDAO.deleteFile(fileId,isFolder);
-            System.out.println(fileId+","+isFolder+","+resultId);
+//            System.out.println(fileId+","+isFolder+","+resultId);
             if(resultId == fileId) {
                 Map<String, String> m1 = new HashMap<String, String>();       
                 m1.put("fileID",e);   
@@ -164,7 +164,7 @@ public class ShareFileService
         return result;
     }
    
-  //Web testing pass  (Old testing#3)
+  //Web testing pass
 	public ShareFileBean insertFolder(TeamUserBean teamUser, String folderName, int upperFolderId) {
 		ShareFileBean upperFolder = shareFileDAO.selectByFileId(upperFolderId);
 		ShareFileBean bean = new ShareFileBean(teamUser,folderName,upperFolder,true);
@@ -196,12 +196,17 @@ public class ShareFileService
    	String jsonString = JSONValue.toJSONString(list); 
    	return jsonString;
 	}
-    
+	//Web testing pass  
 	public ShareFileBean selectByFileId(int fileId){
 		return shareFileDAO.selectByFileId(fileId);
 	}
+
+	public ShareFileBean renameFile(int fileId,String newFileName){
+		return shareFileDAO.updateFileName(fileId,newFileName);
+//		
+	}
 	
-    public static void main(String[] args)
+	public static void main(String[] args)
     {
         ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
         SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
