@@ -38,9 +38,9 @@
 // 	console.log(folderName);
 	
 	$('#folderButton').click(function(){
-		console.log($('#navPath>a:eq(0)').attr('href'));
-		console.log($('#navPath>a:eq(1)').attr('href'));
-		console.log($('#navPath>a:last').attr('href'));
+// 		console.log($('#navPath>a:eq(0)').attr('href'));
+// 		console.log($('#navPath>a:eq(1)').attr('href'));
+// 		console.log($('#navPath>a:last').attr('href'));
 // 		console.log("click inside" +$('tr[id^="folder"]>td>a:last').text());
 // 		console.log($('#folderName').val());
 		$.ajax({

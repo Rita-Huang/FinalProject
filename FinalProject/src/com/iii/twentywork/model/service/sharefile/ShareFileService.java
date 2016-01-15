@@ -38,12 +38,13 @@ public class ShareFileService
     public CheckPathInfoBean checkPathInfo(String pathInfo, TeamUserBean teamUser)  {
         int teamId = teamUser.getTeam().getTeamId();
         List<FileTreeBean> folderTree = getGroupFolderTree(teamId);
+        
         List<FileTreeBean> folders = new ArrayList<FileTreeBean>();
         folders.add(folderTree.get(0));//group root folder
 //        System.out.println("ShareFileService--CheckPathInfoBean--"+folderTree);
         if(pathInfo==null) { //測過web
 //            System.out.println("pathInfo==null");
-            return new CheckPathInfoBean(true,folders);               
+            return new CheckPathInfoBean(true,folders,folderTree);               
         }
         String[] pathName = pathInfo.split("/");//取得各層folder名稱
         int folderTreeSize = folderTree.size();
@@ -57,13 +58,13 @@ public class ShareFileService
 //            System.out.println("不用比對path1:pathName.length==0"
 //                                +"  pathLevel= "+ (pathName.length-1)
 //                                +"  folderTreeMaxLevel= "+folderTreeMaxLevel);
-            return new CheckPathInfoBean(true,folders);
+            return new CheckPathInfoBean(true,folders,folderTree);
         }else if(folderTreeMaxLevel<(pathName.length-1)) 
         {//pathInfo階層高於 folderTree最高階層，path錯誤
 //            System.out.println("不用比對path2:folderTreeMaxLevel<pathName.length"
 //                    +"  pathLevel= "+ (pathName.length-1)
 //                    +"  folderTreeMaxLevel= "+folderTreeMaxLevel);
-            return new CheckPathInfoBean(false,folders);
+            return new CheckPathInfoBean(false,folders,folderTree);
         }else
         {//比對各階層目錄名稱
             int folderTreeIndex = 1;// folderTreeIndex=0:folder根目錄
@@ -77,6 +78,7 @@ public class ShareFileService
                 boolean isConformity=false;
                 do
                 {// 比對folderName
+//                	System.out.println("+++compared.getFileName()="+compared.getFileName());
                     if(pathElement.equals(compared.getFileName())) {
                        isConformity = true;
                        folders.add(compared);
@@ -88,14 +90,14 @@ public class ShareFileService
                     }else{
                     	break;
                     }
-                } while (comparedLevel == pathLevel && folderTreeIndex < folderTreeSize-1);
+                } while (comparedLevel == pathLevel && folderTreeIndex <= folderTreeSize-1);
                 if(!isConformity) {
 //                    System.out.println("找不到符合的Folder");
-                    return new CheckPathInfoBean(false,folders);
+                    return new CheckPathInfoBean(false,folders,folderTree);
                 }
             }
 //            System.out.println("final return all folders");
-            return new CheckPathInfoBean(true,folders);
+            return new CheckPathInfoBean(true,folders,folderTree);
         }
     }
   //testing#1
@@ -206,14 +208,40 @@ public class ShareFileService
 		return shareFileDAO.updateFileName(fileId,newFileName);
 	}
 	
+	
+	/**
+	 * getGroupFolder的list轉json
+	 */
+	public String fileTreeConvert2JSON(List<FileTreeBean> inputList)
+	{//testing#5
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		for(int i=1;i<inputList.size();i++){//
+			
+			FileTreeBean bean = inputList.get(i);
+			Map<String, String> e = new HashMap<String, String>();
+			e.put("fileId", Integer.toString(bean.getFileId()));
+			e.put("fileName", bean.getFileName()); 
+			e.put("fileLevel", Integer.toString(bean.getFileLevel()));
+			e.put("upperFolderId", Integer.toString(bean.getUpperFolderId()));
+			list.add(e);
+		}
+		String jsonString = JSONValue.toJSONString(list); 
+		return jsonString;
+ 	}
+	
+	
+	
 	public static void main(String[] args)
     {
         ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
         SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
         Session session = sessionFactory.getCurrentSession();
         sessionFactory.getCurrentSession().beginTransaction();
-        
-//        ShareFileService service = (ShareFileService) context.getBean("shareFileService");
+       
+      //testing#5
+        ShareFileService service = (ShareFileService) context.getBean("shareFileService");
+        System.out.println(service.getGroupFolderTree(201));
+        System.out.println(service.fileTreeConvert2JSON(service.getGroupFolderTree(201)));
 //       
       //testing#1
 //        System.out.println(service.getGroupFolderTree(201));

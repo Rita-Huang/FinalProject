@@ -85,9 +85,13 @@ public class ShareFileServlet extends HttpServlet {
                 session.setAttribute("upperFolderId", upperFolderId); //int
                 session.setAttribute("fileList", fileList);  //List<ShareFileBean>
                 session.setAttribute("folders", check.getFolders());//List<FileTreeBean>
-                
-              //呼叫View
+//                session.setAttribute("folderTree", check.getFolderTree());
+//                System.out.println("ShareFileServlet--check.isPass()-"+check.isPass());
+//                System.out.println("ShareFileServlet--check.getFolderTree()-"+check.getFolderTree());
+                //呼叫View
                 if(errors!=null && !errors.isEmpty()) {
+//                	System.out.println("hello here is ShareFile error ");
+                	errors.remove("pathError");
                     String path = request.getContextPath();
                     response.sendRedirect(path+"/ShareFile");
                     return;
@@ -196,6 +200,16 @@ public class ShareFileServlet extends HttpServlet {
 	    	System.out.println(fileId);
 	    	System.out.println(fileName);
 	    	shareFileService.renameFile(fileId,fileName);
+	    }else if (pathInfo.equals("/getFolderTree") && servletPath.equals("/ShareFileServlet") )
+	    {//getFolderTree
+	    	System.out.println("ShareFileServlet  - getFolderTree");
+	    	int teamId =teamUser.getTeam().getTeamId();
+	    	List<FileTreeBean> folderTree =  shareFileService.getGroupFolderTree(teamId);
+	    	String jsonString = shareFileService.fileTreeConvert2JSON(folderTree);
+	    	response.setContentType("text/html; charset=UTF-8");
+	    	PrintWriter out = response.getWriter();
+            out.println(jsonString);
+            System.out.println(jsonString);   
 	    }
 	    else{
 	    	System.out.println("What the Hall");
@@ -208,25 +222,32 @@ public class ShareFileServlet extends HttpServlet {
 	
 	
 	public static void main(String[] args) {
-	    ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
-        SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
-        Session session = sessionFactory.getCurrentSession();
-        sessionFactory.getCurrentSession().beginTransaction();
-        
-        TeamUserDAO dao = (TeamUserDAO) context.getBean("teamUserDAO");
-        TeamUserBean teamUser= dao.select(new TeamUserIdBean(100,200));
-        System.out.println(teamUser);
-        ShareFileService shareFileService = (ShareFileService) context.getBean("shareFileService");
-	    String pathInfo = "/Group1-1/Group1-1-1/sdsd";//  /0   /p1:[,p1]   /p1/p2/p3:[,p1,p2,p3]
-        
-        int teamId = teamUser.getTeam().getTeamId();
-        List<FileTreeBean> folderTree = shareFileService.getGroupFolderTree(teamId);
-        System.out.println(folderTree);
-        String[] pathName = pathInfo.split("/");//取得各層folder名稱
-        
-        int folderTreeSize = folderTree.size();
-        int folderTreeMaxLevel = folderTree.get(folderTreeSize-1).getFileLevel();
-        
+		char one = '1';
+		String two = "1";
+		int r  ;
+		
+		r = Character.getNumericValue(one)+Integer.parseInt(two);
+		System.out.println(r);
+		
+//	    ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
+//        SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
+//        Session session = sessionFactory.getCurrentSession();
+//        sessionFactory.getCurrentSession().beginTransaction();
+//        
+//        TeamUserDAO dao = (TeamUserDAO) context.getBean("teamUserDAO");
+//        TeamUserBean teamUser= dao.select(new TeamUserIdBean(100,200));
+//        System.out.println(teamUser);
+//        ShareFileService shareFileService = (ShareFileService) context.getBean("shareFileService");
+//	    String pathInfo = "/Group1-1/Group1-1-1/sdsd";//  /0   /p1:[,p1]   /p1/p2/p3:[,p1,p2,p3]
+//        
+//        int teamId = teamUser.getTeam().getTeamId();
+//        List<FileTreeBean> folderTree = shareFileService.getGroupFolderTree(teamId);
+//        System.out.println(folderTree);
+//        String[] pathName = pathInfo.split("/");//取得各層folder名稱
+//        
+//        int folderTreeSize = folderTree.size();
+//        int folderTreeMaxLevel = folderTree.get(folderTreeSize-1).getFileLevel();
+//        
 	}
 
 }

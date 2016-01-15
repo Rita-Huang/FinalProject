@@ -89,19 +89,26 @@ window.onload = function () {
 </div>
 <br>
 <!-- icon -->
-<div   class='padding'>
+<div class='padding'>
 	<a id="insertFile" href="<%= request.getContextPath() %>/shareFile/uploadFile.jsp"><img alt="Upload" title ="Upload" src="<%= request.getContextPath() %>/image/fileUploadcloud148.png" /></a>
 	<a id="NewFolder"  href="<%= request.getContextPath() %>/shareFile/newFolder.jsp"><img alt ="New Folder" title ="New Folder"  src="<%= request.getContextPath() %>/image/newfolder15.png"  /></a>
 	<img id="iconDownload" class="iconNotDisplay" alt ="Download" title ="Download"  src="<%= request.getContextPath() %>/image/fileDownloadCloud134.png" />
 	<img id="iconCopy" class="iconNotDisplay" alt ="Copy" title ="Copy"  src="<%= request.getContextPath() %>/image/copyfile19857.png" />
 	<img id="iconDelete" class="iconNotDisplay" alt ="Delete" title ="Delete"  src="<%= request.getContextPath() %>/image/delete84453783.png" />
 	<a id="renameFile"  class="iconNotDisplay" href="<%= request.getContextPath() %>/shareFile/renameFile.jsp"><img  alt ="Rename" title ="Rename"   src="<%= request.getContextPath() %>/image/renameedit42.png" /></a>
-	<img id="iconMove" class="iconNotDisplay" alt ="Move" title ="Move"   src="<%= request.getContextPath() %>/image/movesend2.png" />
-	
+	<a id="iconMove"  class="iconNotDisplay" href="<%= request.getContextPath() %>/shareFile/folderTree.jsp"><img  alt ="Move" title ="Move"   src="<%= request.getContextPath() %>/image/movesend2.png" /></a>
 </div>
+<table>
+<c:forEach var="folderTreeList" items="${folderTree}">
+<tr>
+				<td>${folderTreeList.fileId}</td>
+				<td>${folderTreeList.fileName}</td>
+				<td>${folderTreeList.fileLevel}</td>
+			</tr>
+</c:forEach></table>
 <br>
 <!-- file list -->
-<div   class='padding'>
+<div  id='fileListxxxxxx' class='padding'>
 <table class="table">
 	<thead>
 		<tr>
@@ -176,6 +183,7 @@ window.onload = function () {
 		$("#insertFile").fancybox();
 		$("#NewFolder").fancybox();
 		$("#renameFile").fancybox();
+		$("#iconMove").fancybox();
 		$('tr[id^="f"]').click(listBackGround);
 			
 	
@@ -233,6 +241,10 @@ window.onload = function () {
 		}); //end of $('#iconRename').click(function(){ 
 		
 		});//end of $(function(){
+			
+			
+			
+			
 	function listBackGround(){
 		console.log("listBackGround")
 		console.log($(this).hasClass('listBackground'))
@@ -274,20 +286,7 @@ window.onload = function () {
 			$('#renameFile').addClass('iconNotDisplay');
 			$('#iconDownload').addClass('iconNotDisplay');
 		}
-	};
+	}; //end of function icondisplay(){
 </script>
-        <h4 id="m1" onclick="listBackGround()">method1</h4>
-<table>
-<tr id="folder1029" onclick="listBackGround()" class="">
-	<td style="display:none">1029</td>
-	<td><a href="/FinalProject/ShareFile/11111111" class="trtda">11111111</a></td>
-	<td style="display:none">資料夾</td>
-	<td>-</td>
-	<td style="display:none">105</td>
-	<td>Jimmy</td>
-	<td style="display:none">200</td>
-	<td style="display:none">KukuCoding</td>
-</tr>
-</table>
 </body>
 </html>
