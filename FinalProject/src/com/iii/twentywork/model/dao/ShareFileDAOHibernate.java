@@ -107,6 +107,15 @@ public class ShareFileDAOHibernate implements ShareFileDAO
         return newFolderBean;
     }
     
+    @Override
+    public ShareFileBean updateFileUpperFolder(int fileId,int newUpperFolderId)
+    {
+    	ShareFileBean newFolderBean = (ShareFileBean) getSession().get(ShareFileBean.class,fileId);
+    	ShareFileBean upperFolderBean = selectByFileId(newUpperFolderId);
+    	newFolderBean.setUpperFolder(upperFolderBean);
+        return newFolderBean;
+    }
+    
     public static void main(String[] args)
     {
         // TODO Auto-generated method stub

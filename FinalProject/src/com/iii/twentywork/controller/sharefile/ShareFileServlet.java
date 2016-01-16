@@ -210,6 +210,31 @@ public class ShareFileServlet extends HttpServlet {
 	    	PrintWriter out = response.getWriter();
             out.println(jsonString);
             System.out.println(jsonString);   
+	    }else if(pathInfo.equals("/updateFolder") && servletPath.equals("/ShareFileServlet"))
+	    {//移動檔案功能
+	    	System.out.println("ShareFileServlet  - updateFolder");
+	    	String moveObj = request.getParameter("moveObj");
+	    	System.out.println(moveObj);
+	    	//{"list":[{"fileID":"folder1052"},{"fileID":"file1046"},{"fileID":"file1048"},{"fileID":"file1043"}],"newFolderId":"1053"}
+	    	JSONObject jsonObject = new JSONObject(moveObj);
+	    	JSONArray listArray = jsonObject.getJSONArray("list");//[{"fileID":"folder1051"},{"fileID":"file1044"},{"fileID":"file1042"},{"fileID":"file1040"},{"fileID":"file1041"}]
+	    	int newFolderId = Integer.parseInt((String)jsonObject.get("newFolderId"));
+	    	System.out.println(listArray);
+	    	
+	    	List<String> list = new ArrayList<String>();
+            for(int i=0;i<listArray.length();i++) {
+            	JSONObject fileIdObj =(JSONObject) listArray.get(i);
+            	String fileID = (String)fileIdObj.get("fileID");
+            	list.add(fileID);
+            }
+			List<Map<String, String>> result = shareFileService.moveFileFunction(list,newFolderId);
+
+			String jsonString = JSONValue.toJSONString(result);// [{"fileID":"folder904"},{"fileID":"folder937"},{"fileID":"file936"},{"fileID":"file928"}]
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println(jsonString);
+	    	
+	    	
 	    }
 	    else{
 	    	System.out.println("What the Hall");

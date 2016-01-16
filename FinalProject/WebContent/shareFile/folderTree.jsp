@@ -116,11 +116,11 @@ input{
 <h4 id="folderTreeTitle">請選擇要移動到的資料夾</h4>
 	<nav class="nav">
 	  	<ul class=list >
-    		<li class="level0"><span class="listBackground">Home</span></span></li>
+    		<li class="level0"><span class="listBackground">Home</span></li>
      	</ul>
    </nav>
    <div id="inputpadding">
-   		<input type = "button"  value = "確定">
+   		<input type = "button"  value = "確定"></a>
    </div>
    <script>
    $(function(){
@@ -130,22 +130,17 @@ input{
 			  'dataType':'json',  
 			  'data':{},
 			  'success':function(data){
-				  console.log("here is response");
+// 				  console.log("here is response");
 // 				  console.log(data)
 				  var folderLevel=0;
 				  $.each(data,function(i,folder){
-// 					  console.log(folder.fileLevel+","+folder.fileId+","+folder.fileName+","+folder.upperFolderId);
+					  console.log(folder.fileLevel+","+folder.fileId+","+folder.fileName+","+folder.upperFolderId);
 					  var nowLevel=folder.fileLevel;
 					
-					  if(nowLevel==1){
-						  if(nowLevel==folderLevel){
-							  $('li[class="level'+folderLevel+'"]:first').after("<li class='level"+nowLevel+"'><span>"+folder.fileName+"</span><ul id='"+folder.fileId+"'></ul></li>")
-						  }else{
-							  $('li[class="level'+folderLevel+'"]').append("<ul><li class='level"+nowLevel+"'><span>"+folder.fileName+"</span><ul id='"+folder.fileId+"'></ul></li></ul>")
-							  folderLevel=nowLevel;
-						  }
-					  }else{
+					  if(nowLevel>=1){
 						  $('ul#'+folder.upperFolderId).append("<li class='level"+nowLevel+"'><span>"+folder.fileName+"</span><ul id='"+folder.fileId+"'></ul></li>")
+					  }else{
+						  $('li[class="level'+folderLevel+'"]').append("<ul id='"+folder.fileId+"'></ul>")
 					  }
 				  
 				  })  // end of $.each(data,function(i,folder){
@@ -162,6 +157,39 @@ input{
 	 			 $(this).addClass('listBackground');
 	 		 }
 	 	}//end of  function listBackGround(){
+	 		
+	 		
+	 	$('#inputpadding>input').click(function(){
+	 		var nowFolderId = $('#folders>tbody>tr>td[class="fileId"]:last').text();
+	 		var newFolderId = $('span[class="listBackground"]').next().attr('id');
+	 		if(newFolderId==nowFolderId){
+	 			$.fancybox.close();
+	 		}else{
+		 		var session = {'list':[],'newFolderId':newFolderId};
+		 		$('tr[class^="listBackground"][id^="f"]').each(function(i,selected){
+		 			var selectedId = $(selected).attr('id')
+		 			if(selectedId!=newFolderId){
+		 				session.list.push({'fileID':selectedId})
+		 			}
+		 		});
+		 		console.log(JSON.stringify(session))
+				$.ajax({
+					'type':'get',
+					'url':'<%= request.getContextPath() %>/ShareFileServlet/updateFolder',
+					'dataType':'json',
+					'data':{moveObj:JSON.stringify(session)},
+					'success':function(data){
+						console.log("here is move file response");
+						console.log(data)
+						$.each(data,function(i,removeObj){
+							$('#'+removeObj.fileId).remove();
+						});
+						$.fancybox.close();
+					}
+				})//end of $.ajax({
+			}
+	 	});//end of $('#inputpadding>input').click(function(){	
+	 	
    });//end of $(function(){
    </script>
 </body>

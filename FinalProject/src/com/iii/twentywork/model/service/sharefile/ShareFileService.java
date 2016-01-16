@@ -215,7 +215,7 @@ public class ShareFileService
 	public String fileTreeConvert2JSON(List<FileTreeBean> inputList)
 	{//testing#5
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		for(int i=1;i<inputList.size();i++){//
+		for(int i=0;i<inputList.size();i++){//
 			
 			FileTreeBean bean = inputList.get(i);
 			Map<String, String> e = new HashMap<String, String>();
@@ -229,7 +229,37 @@ public class ShareFileService
 		return jsonString;
  	}
 	
-	
+	/**
+	 * 把"file1594"或"folder9876"截字轉回數字1594、9876
+	 */
+	public int fileIdConver2Int(String idString){
+		if (idString.startsWith("file"))
+        {
+            return Integer.parseInt(idString.substring(4));
+        } else if (idString.startsWith("folder"))
+        {
+        	return Integer.parseInt(idString.substring(6));
+        }else{
+        	return -1;
+        }
+	}
+	public List<Map<String, String>> moveFileFunction(List<String> listFileId,int newUpperFolderId){
+		List<Map<String, String>> listResult = new ArrayList<Map<String,String>>();
+		for(int i =0;i<listFileId.size();i++){
+			String fileID = listFileId.get(i);
+			int fileId = fileIdConver2Int(fileID);
+			if(fileId!=newUpperFolderId){
+				int feedBack = shareFileDAO.updateFileUpperFolder(fileId,newUpperFolderId).getFileId();
+				if(fileId==feedBack){
+					Map<String, String> e = new HashMap<String, String>();
+					e.put("fileId", fileID);
+					listResult.add(e);
+				}
+			}
+		}
+		
+		return listResult;
+	}
 	
 	public static void main(String[] args)
     {

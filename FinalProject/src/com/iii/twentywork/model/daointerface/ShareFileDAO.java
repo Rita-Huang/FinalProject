@@ -31,7 +31,7 @@ public interface ShareFileDAO
 //    public abstract ShareFileBean updateFile(ShareFileBean bean, int newFolderId,String newFileName);
     public abstract ShareFileBean updateFile(int fileId, int newFolderId,String newFileName);
     public abstract ShareFileBean updateFileName(int fileId,String newFileName);
-    
+    public abstract ShareFileBean updateFileUpperFolder(int fileId,int newUpperFolder);
     
     /**
      * 搜尋檔案,queryString為要搜尋的字串

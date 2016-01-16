@@ -52,11 +52,6 @@
 }
  
 </style>
-<script>
-window.onload = function () {
-}
-</script>
-
 
 </head>
 <body>
@@ -156,7 +151,7 @@ window.onload = function () {
 </div>
 <!-- folders -->
 <div>
-<table class="table" style="display:none">
+<table class="table" style="display:none" id="folders">
 	<thead>
 		<tr>
 			<td>FileID</td>
@@ -167,7 +162,7 @@ window.onload = function () {
 	<tbody>
 		<c:forEach var="fileTree" items="${folders}">
 			<tr>
-				<td>${fileTree.fileId}</td>
+				<td class='fileId'>${fileTree.fileId}</td>
 				<td>${fileTree.fileName}</td>
 				<td>${fileTree.fileLevel}</td>
 			</tr>
@@ -246,9 +241,9 @@ window.onload = function () {
 			
 			
 	function listBackGround(){
-		console.log("listBackGround")
-		console.log($(this).hasClass('listBackground'))
-		console.log($(this));
+// 		console.log("listBackGround")
+// 		console.log($(this).hasClass('listBackground'))
+// 		console.log($(this));
 		if($(this).hasClass('listBackground')){
  			 $(this).removeClass('listBackground');
  			icondisplay();
