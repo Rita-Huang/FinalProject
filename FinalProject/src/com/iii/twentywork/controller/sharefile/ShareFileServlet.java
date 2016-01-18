@@ -236,6 +236,13 @@ public class ShareFileServlet extends HttpServlet {
 	    	
 	    	
 	    }
+	    else if(pathInfo.equals("/sortedByTime") && servletPath.equals("/ShareFileServlet")){
+	    	int nowFolderId = Integer.parseInt(request.getParameter("nowFolderId"));
+	    	System.out.println(nowFolderId);
+	    	List<ShareFileBean> result = shareFileService.getSortedByTimeFileList(nowFolderId);
+	    	session.setAttribute("fileList", result);  //List<ShareFileBean>
+	    	request.getRequestDispatcher("/shareFile/main.jsp").forward(request, response);
+	    }
 	    else{
 	    	System.out.println("What the Hall");
 	    }

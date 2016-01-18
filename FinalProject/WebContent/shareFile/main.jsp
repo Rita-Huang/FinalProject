@@ -14,7 +14,9 @@
 <script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/css/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-	
+<script type='text/javascript' src='<%= request.getContextPath() %>/dwr/engine.js'> </script>
+<script type='text/javascript' src='<%= request.getContextPath() %>/dwr/util.js'> </script>	
+<script type='text/javascript' src='<%= request.getContextPath() %>/dwr/interface/ShareFileDWRUpdate.js'> </script>
 	
 <style>
 .padding {
@@ -64,6 +66,8 @@
 		<td class='padding2'>groupID:${teamUserBean.team.teamId}</td>
 	</tr></table>
 	<br>fileUploadMessage:${message}<br>
+	Server status: <span id="pollStatus"></span><br>
+	DWR Error:<span id="error"></span>
 </div>
 <hr>
 <!-- path -->
@@ -108,9 +112,9 @@
 	<thead>
 		<tr>
 			<td style="display:none">fileId</td>
-			<td>檔案名稱</td>
+			<td><a href="#" id = "sortedByName">檔案名稱</a></td>
 			<td style="display:none">fileType</td>
-			<td>上傳時間</td>
+			<td><a href="#" id = "sortedByTime">上傳時間</a></td>
 			<td style="display:none">userId</td>
 			<td>上傳人員</td>
 			<td style="display:none">teamId</td>
@@ -172,7 +176,29 @@
 </div>
 <iframe id="downloadFrame" style="display:none"></iframe>
 
+<script type="text/javascript">
+window.onload=function()
+{
+	var nowFolderId = $('#folders>tbody>tr>td[class="fileId"]:last').text();
+	  dwr.engine.setActiveReverseAjax(true); 
+	  dwr.engine.setErrorHandler(errorHandler); 
+	  dwr.engine.setPollStatusHandler(updatePollStatus);
+	  updatePollStatus(true); 
+	  dwr.engine.setNotifyServerOnPageUnload(true);   
+	  console.log(nowFolderId)
+	  ShareFileDWRUpdate.updateTableDisplay(nowFolderId);
+// 	  ShareFileDWRUpdate.addAttributeToScriptSession();
+}
 
+function errorHandler(message, ex) {
+    dwr.util.setValue("error", "<font color='red'>Cannot connect to server. Initializing retry logic.</font>", {escapeHtml:false});
+    setTimeout(function() { dwr.util.setValue("error", ""); }, 5000)
+  }
+  
+  function updatePollStatus(pollStatus) {
+  	dwr.util.setValue("pollStatus", pollStatus ? "<font color='green'>Online</font>" : "<font color='red'>Offline</font>", {escapeHtml:false});
+  }
+</script>
 <script >
 	$(function(){
 		$("#insertFile").fancybox();
@@ -235,6 +261,25 @@
 			  });//end of $.ajax({ 
 		}); //end of $('#iconRename').click(function(){ 
 		
+			$("#sortedByTime").click(function(){
+				var nowFolderId = $('#folders>tbody>tr>td[class="fileId"]:last').text();
+				$.ajax({
+					  'type':'post', 
+					  'url':'<%= request.getContextPath() %>/ShareFileServlet/sortedByTime',
+					  'dataType':'json',  
+					  'data':{nowFolderId:nowFolderId},
+					  'success':function(data){
+						  console.log("here is response");
+						  console.log(data)
+// 						  $.each(data,function(i,product){
+// 							  console.log(product.fileID);
+// 							  $('#'+product.fileID).remove();
+// 						  })
+					  }
+				  });//end of $.ajax({ 
+			});//end of $("#sortedByTime").click(function(){
+			
+			
 		});//end of $(function(){
 			
 			

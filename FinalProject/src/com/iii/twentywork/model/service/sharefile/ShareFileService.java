@@ -260,7 +260,23 @@ public class ShareFileService
 		
 		return listResult;
 	}
-	
+	public List<ShareFileBean> getSortedByTimeFileList(int upperFolderId)
+    {
+        Set<ShareFileBean> set = shareFileDAO.getFileList(upperFolderId);
+        List<ShareFileBean> list = new ArrayList<ShareFileBean>(set);
+        Collections.sort (list , new Comparator< ShareFileBean >(){
+            public int compare( ShareFileBean o1, ShareFileBean o2 ) {
+                int compareByFileType =- o1.getFileType().compareTo(o2.getFileType());
+                if(compareByFileType==0) {
+                    int compareByFileName = o1.getUpdateTime().compareTo(o2.getUpdateTime());
+                    return compareByFileName;
+                }else {
+                    return compareByFileType;
+                }
+          }
+        });
+        return list;
+    }
 	public static void main(String[] args)
     {
         ApplicationContext context = new ClassPathXmlApplicationContext("beans.config.xml");
